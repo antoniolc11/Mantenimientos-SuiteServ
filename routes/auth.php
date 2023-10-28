@@ -57,6 +57,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-//aplicado el middleware check.direction para que solo los usuarios del departamento de dirección puedan registrar usuarios
-Route::get('register', [RegisteredUserController::class, 'create'])
+//aplicado el middleware check.direction para que solo los usuarios del departamento de dirección de departamentos puedan registrar usuarios.
+/* Route::get('register', [RegisteredUserController::class, 'create'])
 ->middleware(['auth', 'verified', 'check.direction'])->name('register');
+ */

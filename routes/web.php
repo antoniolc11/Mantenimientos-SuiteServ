@@ -28,7 +28,7 @@ Route::get('/', function () {
 })->middleware('guest');
 
 
-
+//Página de inicio de sesión: donde se mostrarán las incidencias.
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [IncidenciaController::class, 'index'])->name('home');
 });
@@ -77,6 +77,7 @@ Route::resource('historiales', HistorialController::class);
 
 //Rutas Usuarios:
 Route::resource('users', UserController::class)->middleware(['auth', 'verified', 'check.direction']);
+
 
 
 require __DIR__.'/auth.php';

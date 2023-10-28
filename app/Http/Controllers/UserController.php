@@ -1,33 +1,44 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
+use App\Models\Departamento;
 use App\Models\User;
-use App\Providers\RouteServiceProvider;
+use App\Notifications\UserRegistered;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
-use Illuminate\View\View;
+use Illuminate\Support\Facades\Password;
 
-class RegisteredUserController extends Controller
+
+class UserController extends Controller
 {
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $usuarios = User::all();
+        return view('users.index', ['usuarios' => $usuarios]);
+    }
+
+
     /**
      * Display the registration view.
      */
-/*     public function create(): View
+    public function create()
     {
-        return view('auth.register');
-    } */
+        $departamentos = Departamento::all();
+        return view('users.create', ['departamentos' => $departamentos]);
+    }
 
-    /**
-     * Handle an incoming registration request.
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
+
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
@@ -48,6 +59,8 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        //TODO: enviar email de confirmación de registro
+
         event(new Registered($user));
 
         //coge el id del ultimo usuario registrado y realizar attach para meterlo en la tabla departamento_usuario
@@ -56,17 +69,45 @@ class RegisteredUserController extends Controller
 
         $usuario->departamentos()->attach($request->departamento); //Inserta el ultimo usuario registrado y su departamento en la tabla departamento_usuario
 
-        //Auth::login($user); loga al usuario directamente despues del registro
+        return redirect()->route('users.index');
+    }
+
+    public function show(User $user)
+    {
+        return view('users.show', ['usuario' => $user]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(User $user)
+    {
+        $departamentos = Departamento::all();
+        return view('users.edit', ['usuario' => $user]);
+    }
+
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(UpdateUserRequest $request, User $user)
+    {
+        $request->validate([
+            'nombre' => 'required',
+        ]);
+
+        $user->update($request->all());
 
         return redirect()->route('users.index');
     }
 
     /**
-     * Display the specified resource.
+     * Remove the specified resource from storage.
      */
-    public function show(User $usuario)
+    public function destroy(User $user)
     {
-        return view('users.show', ['usuario' => $usuario]);
+        $user->departamentos()->detach();
+        $user->delete();
+        return redirect()->route('users.index');
     }
 }
-
