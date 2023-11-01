@@ -48,7 +48,8 @@ Route::middleware('auth')->group(function () {
 Route::get('/aspirantes', [AspiranteController::class, 'index'])->name('aspirantes.index')->middleware(['auth', 'CheckDepartamentoRrhhDire']);
 Route::post('/aspirantes', [AspiranteController::class, 'store'])->name('aspirantes.store');
 Route::get('/aspirantes/create', [AspiranteController::class, 'create'])->name('aspirantes.create');
-Route::delete('/aspirantes/{id}', [AspiranteController::class, 'destroy'])->name('aspirantes.destroy');
+Route::delete('/aspirantes/{aspirante}', [AspiranteController::class, 'destroy'])->name('aspirantes.destroy');
+Route::get('/aspirantes/{id}', [AspiranteController::class, 'show'])->name('aspirantes.show');
 Route::get('/descargar-pdf/{id}', [AspiranteController::class, 'download'])->name('descargar.pdf');
 
 //Rutas Departamentos:
@@ -58,13 +59,10 @@ Route::resource('departamentos', DepartamentoController::class)->middleware(['au
 Route::resource('estados', EstadoController::class)->middleware(['auth', 'check.direction']);
 
 //Rutas Incidencias:
-//Route::resource('incidencias', IncidenciaController::class)->middleware(['auth', 'CheckDepartamentoSuperDire']);
-Route::get('/buscar-incidencia', [IncidenciaController::class, 'buscarIncidencia'])->name('buscar.incidencia');
 Route::get('/incidencias', [IncidenciaController::class, 'index'])->name('incidencias.index')->middleware(['auth', 'CheckDepartamentoSuperDire']);
 Route::post('/incidencias', [IncidenciaController::class, 'store'])->name('incidencias.store')->middleware(['auth', 'CheckDepartamentoSuperDire']);
 Route::get('/incidencias/create', [IncidenciaController::class, 'create'])->name('incidencias.create')->middleware(['auth', 'CheckDepartamentoSuperDire']);
 Route::get('/incidencias{incidencia}', [IncidenciaController::class, 'show'])->name('incidencias.show');
-Route::put('/incidencias/{incidencia}/cambiar-estado', [IncidenciaController::class, 'cambiarEstado'])->name('incidencias.cambiar-estado');
 
 //Rutas Categorías:
 Route::resource('categorias', CategoriaController::class)->middleware(['auth', 'check.direction']);

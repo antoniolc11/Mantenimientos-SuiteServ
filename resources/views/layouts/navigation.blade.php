@@ -17,18 +17,24 @@
                     </x-nav-link>
                 </div>
 
-                <!-- Muestra las opciones del menú solo para los usuarios con rol de dirección -->
+                <div class="hidden space-x-5 sm:-my-px sm:ml-8 sm:flex">
 
+                    <!-- Muestra en el menú nav los aspirantes solo para los usuarios con rol de dirección y RRHH -->
+                    @if (auth()->user()->esDepartamentoDireccion() ||
+                            auth()->user()->esDepartamentoRrhh())
+                        <x-nav-link :href="route('aspirantes.index')" :active="request()->routeIs('aspirantes.index')">
+                            {{ __('Aspirantes') }}
+                        </x-nav-link>
+                        @endif
 
-                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
-                        {{ __('Operarios') }}
-                    </x-nav-link>
+                    <!-- Muestra las opciones del menú solo para los usuarios con rol de dirección -->
+                    @if (auth()->user()->esDepartamentoDireccion())
+                        <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
+                            {{ __('Operarios') }}
+                        </x-nav-link>
+                    @endif
+                </div>
 
-
-                    <x-nav-link :href="route('ubicaciones.index')" :active="request()->routeIs('ubicaciones.index')">
-                        {{ __('Ubicaciones') }}
-                    </x-nav-link>
-            
             </div>
 
             <!-- Settings Dropdown -->
@@ -37,7 +43,7 @@
                     <x-slot name="trigger">
                         <button
                             class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->name }}</div>
+                            <div>{{ Auth::user()->nombre }}</div>
 
                             <div class="ml-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
