@@ -33,7 +33,26 @@ class AspiranteController extends Controller
      */
     public function store(StoreAspiranteRequest $request)
     {
-        $aspirante = Aspirante::create($request->all());
+        // Validación de campos del formulario.
+        $request->validate([
+            'nombre' => 'required|string|max:255',
+            'curriculum' => 'required|mimes:pdf,doc,docx|max:2048', // Asegúrate de que solo se acepten ciertos tipos de archivos
+        ]);
+
+        if ($request->hasFile('curriculum')) {
+            $curriculumPath = $request->file('curriculum')->store('public/curriculums');
+            $aspirante = new Aspirante([
+                'nombre' => $request->input('nombre'),
+                'primer_apellido' => $request->input('primer_apellido'),
+                'segundo_apellido' => $request->input('segundo_apellido'),
+                'nif' => $request->input('nif'),
+                'telefono' => $request->input('telefono'),
+                'email' => $request->input('email'),
+                'curriculum' => $curriculumPath,
+            ]);
+        }
+
+        $aspirante->save();
         return redirect()->route('login')->with('success', 'Tu solicitud se ha mandado correctamente. ¡Gracias!');
     }
 

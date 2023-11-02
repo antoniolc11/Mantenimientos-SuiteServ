@@ -16,6 +16,6 @@ class Aspirante extends Model
         'nif',
         'telefono',
         'email',
-        'pdf',
+        'curriculum',
     ];
 }
