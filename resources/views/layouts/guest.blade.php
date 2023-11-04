@@ -21,7 +21,6 @@
             font-family: karla;
         }
     </style>
-
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 

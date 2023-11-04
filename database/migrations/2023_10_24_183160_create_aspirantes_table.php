@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('nif', 9)->unique();
             $table->string('telefono', 20);
             $table->string('email')->unique();
-            $table->binary('pdf');
+            $table->string('curriculum');
             $table->rememberToken();
             $table->timestamps();
         });
