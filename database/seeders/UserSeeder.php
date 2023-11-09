@@ -36,6 +36,7 @@ class UserSeeder extends Seeder
         ]);
 
         $usuario1->departamentos()->attach($depart_direccion->id);
+        $usuario1->departamentos()->attach($depart_informatica->id);
 
         $usuario2 = User::create([
             'nombre' => 'Roberto',

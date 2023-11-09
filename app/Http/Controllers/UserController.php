@@ -83,7 +83,7 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $departamentos = Departamento::all();
-        return view('users.edit', ['usuario' => $user]);
+        return view('users.edit', ['usuario' => $user, 'departamentos' => $departamentos]);
     }
 
 
@@ -92,14 +92,30 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
-        $request->validate([
-            'nombre' => 'required',
-        ]);
+        //return redirect()->route('users.index');
 
-        $user->update($request->all());
+        $userId = $request->input('user_id');
+        $nuevosDatos = $request->only(['nombre', 'primer_apellido', 'segundo_apellido', 'telefono', 'email', 'nif']); // Obtener datos para actualizar nombre
+        $nuevosDepartamentos = $request->input('departamento'); // Obtener departamentos nuevos
 
-        return redirect()->route('users.index');
+
+
+        $usuario = $user;
+        if ($usuario) {
+            // Actualizar el nombre del usuario
+            $usuario->update($nuevosDatos);
+
+            // Actualizar los departamentos asociados al usuario
+
+
+            $usuario->departamentos()->sync($nuevosDepartamentos);
+
+            return "Usuario actualizado con éxito con los nuevos datos.";
+        }
+
+        return "Usuario no encontrado.";
     }
+
 
     /**
      * Remove the specified resource from storage.

@@ -74,7 +74,17 @@ Route::resource('ubicaciones', UbicacionController::class)->middleware(['auth', 
 Route::resource('historiales', HistorialController::class);
 
 //Rutas Usuarios:
-Route::resource('users', UserController::class)->middleware(['auth', 'verified', 'check.direction']);
+Route::get('/usuarios', [UserController::class, 'index'])->name('users.index')->middleware(['auth', 'verified', 'check.direction']);
+Route::get('/usuarios/create', [UserController::class, 'create'])->name('users.create')->middleware(['auth', 'verified', 'check.direction']);
+Route::post('/usuarios', [UserController::class, 'store'])->name('users.store');
+Route::get('/usuarios/{user}', [UserController::class, 'show'])->name('users.show')->middleware(['auth', 'verified', 'check.direction']);
+Route::get('/usuarios/{user}/editar', [UserController::class, 'edit'])->name('users.edit');
+Route::put('/edit/{user}', [UserController::class, 'update'])->name('users.update');
+//Route::resource('users', UserController::class)->middleware(['auth', 'verified', 'check.direction']);
+
+Route::put('users/{id}', function ($id) {
+
+});
 
 
 
