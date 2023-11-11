@@ -56,10 +56,12 @@
                 <x-input-error :messages="$errors->get('email')" class="mt-2" />
             </div>
 
-            <div class="mt-4">
+            <!-- TODO: hace falta cambiar esto, la idea es mandar un correo cuando se registre la solicitud al correo,
+                 con un boton que vaya a una vista donde tenga la posibilidad de adjuntar su curriculum -->
+{{--             <div class="mt-4">
                 <input type="file" name="curriculum" accept=".pdf, .doc, .docx">
             </div>
- 
+  --}}
 
             <div class="mt-4 mx-auto text-center">
                 <x-primary-button class="ml-4 mt-4 mx-auto text-center">

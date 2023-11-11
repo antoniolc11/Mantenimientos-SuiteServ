@@ -1,7 +1,6 @@
 <x-app-layout>
     <form method="POST" action="{{ route('users.store') }}">
         @csrf
-
         <!-- Nombre -->
         <div>
             <x-input-label for="nombre" :value="__('Nombre')" />

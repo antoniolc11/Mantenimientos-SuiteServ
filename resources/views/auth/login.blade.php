@@ -1,13 +1,10 @@
 <x-guest-layout>
     <div x-data="{ showMessage: true }" x-init="setTimeout(() => showMessage = false, 10000)" class="w-full">
-        <div x-show="showMessage" x-cloak
-            x-transition:enter="transition ease-out duration-300"
+        <div x-show="showMessage" x-cloak x-transition:enter="transition ease-out duration-300"
             x-transition:enter-start="opacity-0 transform scale-90"
-            x-transition:enter-end="opacity-100 transform scale-100"
-            x-transition:leave="transition ease-in duration-300"
+            x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-300"
             x-transition:leave-start="opacity-100 transform scale-100 h-auto"
-            x-transition:leave-end="opacity-0 transform scale-90 h-0"
-            class="alert alert-success">
+            x-transition:leave-end="opacity-0 transform scale-90 h-0" class="alert alert-success">
 
             <!-- Mostrar mensajes de sesión usando el componente x-auth-session-status -->
             <x-auth-session-status class="mb-4" :status="session('status')" />
@@ -15,16 +12,20 @@
         </div>
     </div>
 
-   {{--  <x-alert :message="session('success')" /> --}}
+    {{--  <x-alert :message="session('success')" /> --}}
 
     <div class="w-full flex flex-wrap">
 
         <!-- Login Section -->
         <div class="w-full md:w-1/2 flex flex-col">
 
-            <div class="flex justify-center mr-14 pt-12 md:pl-12 md:-mb-24">
-                <img src="{{ asset('imagenes/logo.png') }}" alt="Mi Logo" class="w-40 h-auto">
+            <div class="flex items-center justify-center md:justify-start md:-mb-24 mt-9">
+                <div class="mx-auto">
+                    <img src="{{ asset('imagenes/logo.png') }}" alt="Mi Logo" class="w-40 h-auto">
+                </div>
             </div>
+
+
 
             <div class="flex flex-col justify-center md:justify-start my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32">
                 <p class="text-center text-3xl mt-8">Bienvenido.</p>
