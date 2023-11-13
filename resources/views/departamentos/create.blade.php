@@ -55,7 +55,6 @@ class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overf
                     class="cursor-pointer bg-black hover:bg-gray-700 text-white font-bold w-24 py-2 rounded">Cancelar</button>
             </div>
         </form>
-
     </div>
 </div>
 </div>
