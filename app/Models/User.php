@@ -52,14 +52,12 @@ class User extends Authenticatable implements CanResetPassword
     ];
 
     //Relación uno a muchos
-    public function incidencias()
-    {
+    public function incidencias(){
         return $this->hasMany(Incidencia::class);
     }
 
     //Relación muchos a muchos
-    public function departamentos()
-    {
+    public function departamentos(){
         return $this->belongsToMany(Departamento::class);
     }
 
@@ -69,9 +67,14 @@ class User extends Authenticatable implements CanResetPassword
         return $this->departamentos->contains('nombre', 'Dirección');
     }
 
-    //Verifica si el usuario es del departamento de RRHH.
+    public function esDepartamentoSupervision()
+    {
+        return $this->departamentos->contains('nombre', 'Supervisión');
+    }
+
     public function esDepartamentoRrhh()
     {
         return $this->departamentos->contains('nombre', 'Recursos humanos');
     }
+
 }

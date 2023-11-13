@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Response;
 
-
 use App\Http\Requests\StoreAspiranteRequest;
 use App\Http\Requests\UpdateAspiranteRequest;
 use App\Models\Aspirante;
+use Illuminate\Support\Facades\Storage;
 
 class AspiranteController extends Controller
 {
@@ -85,6 +85,12 @@ class AspiranteController extends Controller
      */
     public function destroy(Aspirante $aspirante)
     {
+
+/*     if($contents = Storage::get(public_path($aspirante->pdf))){
+       Storage::delete(public_path($aspirante->pdf));
+       Storage::delete('file.jpg');
+    } */
+    //TODO: borrar archivo pdf del storage
         $aspirante->delete();
         return redirect()->route('aspirantes.index')->with('success', 'Aspirante eliminado exitosamente.');
     }
