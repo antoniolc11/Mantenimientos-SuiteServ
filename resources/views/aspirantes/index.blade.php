@@ -35,7 +35,7 @@
                             </tr>
                         </thead>
 
-                        <tbody x-html="resultados">
+                        <tbody>
 
                             @if ($aspirantes->isEmpty())
                             <tr>

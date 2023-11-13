@@ -27,7 +27,7 @@
                         <div class="flex justify-end p-2">
                             <a href="{{ route('users.create') }}">
                                 <input type="submit" value="Nuevo usuario"
-                                class="cursor-pointer bg-black hover:bg-gray-700 text-white font-bold w-32 py-3 rounded" />
+                                    class="cursor-pointer bg-black hover:bg-gray-700 text-white font-bold w-32 py-3 rounded" />
                             </a>
                         </div>
                     @endif

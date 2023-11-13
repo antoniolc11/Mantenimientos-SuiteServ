@@ -14,7 +14,7 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.0/dist/js/multi-select-tag.js"></script> {{-- //js para añadir multiples departamento a la hora de crear un usuario. --}}
-    @vite(['resources/css/app.css','resources/js/multiselecttag.js', 'resources/js/app.js'])
+    @vite(['resources/css/app.css',  'resources/js/app.js'])
 
 
     <!-- Tailwind -->

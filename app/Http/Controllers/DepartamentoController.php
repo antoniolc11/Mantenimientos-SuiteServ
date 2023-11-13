@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreDepartamentoRequest;
 use App\Http\Requests\UpdateDepartamentoRequest;
 use App\Models\Departamento;
+use App\Models\User;
 
 class DepartamentoController extends Controller
 {
@@ -13,7 +14,8 @@ class DepartamentoController extends Controller
      */
     public function index()
     {
-        //
+        $departamentos = Departamento::all();
+        return view('departamentos.index', ['departamentos' => $departamentos]);
     }
 
     /**
@@ -21,7 +23,7 @@ class DepartamentoController extends Controller
      */
     public function create()
     {
-        //
+        return view('departamentos.create');
     }
 
     /**
@@ -29,7 +31,8 @@ class DepartamentoController extends Controller
      */
     public function store(StoreDepartamentoRequest $request)
     {
-        //
+        $departamento = Departamento::create($request->all());
+        return redirect()->route('departamentos.index')->with('success', 'El departamento se ha creado correctamente.');
     }
 
     /**
@@ -37,7 +40,7 @@ class DepartamentoController extends Controller
      */
     public function show(Departamento $departamento)
     {
-        //
+        return view('departamentos.show', ['departamento' => $departamento]);
     }
 
     /**
@@ -45,7 +48,7 @@ class DepartamentoController extends Controller
      */
     public function edit(Departamento $departamento)
     {
-        //
+        return view('departamentos.edit', ['departamento' => $departamento]);
     }
 
     /**
@@ -53,7 +56,13 @@ class DepartamentoController extends Controller
      */
     public function update(UpdateDepartamentoRequest $request, Departamento $departamento)
     {
-        //
+        $request->validate([
+            'nombre' => 'required',
+        ]);
+
+        $departamento->update($request->all());
+
+        return redirect()->route('departamentos.index')->with('success', 'Departamento modificado correctamente.');;
     }
 
     /**
@@ -61,6 +70,13 @@ class DepartamentoController extends Controller
      */
     public function destroy(Departamento $departamento)
     {
-        //
+        $usuariosEnDepartamento = $departamento->users()->count();
+
+        if ($usuariosEnDepartamento > 0) {
+            return redirect()->route('departamentos.index')->with('error', 'No se puede eliminar el departamento, hay usuarios asignados a él.');
+        }
+
+        $departamento->delete();
+        return redirect()->route('departamentos.index')->with('success', 'Se ha borrado correctamente el departamento.');
     }
 }
