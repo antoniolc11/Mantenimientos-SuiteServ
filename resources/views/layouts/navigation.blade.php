@@ -36,6 +36,11 @@
                         <x-nav-link :href="route('departamentos.index')" :active="request()->routeIs('departamentos.index')">
                             {{ __('Departamentos') }}
                         </x-nav-link>
+
+
+                        <x-nav-link :href="route('estados.index')" :active="request()->routeIs('estados.index')">
+                            {{ __('Estados') }}
+                        </x-nav-link>
                     @endif
                 </div>
 
