@@ -13,7 +13,8 @@ class UbicacionController extends Controller
      */
     public function index()
     {
-        //
+        $ubicaciones = Ubicacion::all();
+        return view('ubicaciones.index', ['ubicaciones' => $ubicaciones]);
     }
 
     /**
@@ -21,7 +22,7 @@ class UbicacionController extends Controller
      */
     public function create()
     {
-        //
+        return view('ubicaciones.create');
     }
 
     /**
@@ -29,13 +30,14 @@ class UbicacionController extends Controller
      */
     public function store(StoreUbicacionRequest $request)
     {
-        //
+        $ubicacion = Ubicacion::create($request->all());
+        return redirect()->route('ubicaciones.index')->with('success', 'La ubicación se ha creado correctamente.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Ubicacion $ubicacion)
+    public function show(ubicacion $ubicacione)
     {
         //
     }
@@ -43,24 +45,31 @@ class UbicacionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Ubicacion $ubicacion)
+    public function edit(Ubicacion $ubicacione)
     {
-        //
+        return view('ubicaciones.edit', ['ubicacion' => $ubicacione]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUbicacionRequest $request, Ubicacion $ubicacion)
+    public function update(UpdateUbicacionRequest $request, ubicacion $ubicacione)
     {
-        //
+        $request->validate([
+            'nombre' => 'required',
+        ]);
+
+        $ubicacione->update($request->all());
+
+        return redirect()->route('ubicaciones.index')->with('success', 'La ubicación se ha modificado correctamente.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Ubicacion $ubicacion)
+    public function destroy(Ubicacion $ubicacione)
     {
-        //
+        $ubicacione->delete();
+        return redirect()->route('ubicaciones.index');
     }
 }

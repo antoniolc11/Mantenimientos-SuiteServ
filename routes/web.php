@@ -10,6 +10,7 @@ use App\Http\Controllers\HistorialController;
 use App\Http\Controllers\IncidenciaController;
 use App\Http\Controllers\UbicacionController;
 use App\Http\Controllers\PDFController;
+use App\Models\Ubicacion;
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -34,15 +35,13 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-
+//Rutas del perfíl.
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
-//Mis rutas:
 
 //Rutas Aspirantes:
 Route::get('/aspirantes', [AspiranteController::class, 'index'])->name('aspirantes.index')->middleware(['auth', 'CheckDepartamentoRrhhDire']);
@@ -54,9 +53,6 @@ Route::get('/descargar-pdf/{id}', [AspiranteController::class, 'download'])->nam
 
 //Rutas Departamentos:
 Route::resource('departamentos', DepartamentoController::class)->middleware(['auth', 'check.direction']);
-
-//Rutas Estados:
-Route::resource('estados', EstadoController::class)->middleware(['auth', 'check.direction']);
 
 //Rutas Incidencias:
 Route::get('/incidencias', [IncidenciaController::class, 'index'])->name('incidencias.index')->middleware(['auth', 'CheckDepartamentoSuperDire']);
@@ -70,8 +66,12 @@ Route::resource('categorias', CategoriaController::class)->middleware(['auth', '
 //Rutas Ubicaciones
 Route::resource('ubicaciones', UbicacionController::class)->middleware(['auth', 'check.direction']);
 
+
 //Rutas Historiales:
 Route::resource('historiales', HistorialController::class);
+
+//Rutas Estados:
+Route::resource('estados', EstadoController::class)->middleware(['auth', 'check.direction']);
 
 //Rutas Usuarios:
 Route::get('/usuarios', [UserController::class, 'index'])->name('users.index')->middleware(['auth', 'verified', 'check.direction']);
@@ -80,11 +80,7 @@ Route::post('/usuarios', [UserController::class, 'store'])->name('users.store');
 Route::get('/usuarios/{user}', [UserController::class, 'show'])->name('users.show')->middleware(['auth', 'verified', 'check.direction']);
 Route::get('/usuarios/{user}/editar', [UserController::class, 'edit'])->name('users.edit');
 Route::put('/edit/{user}', [UserController::class, 'update'])->name('users.update');
-//Route::resource('users', UserController::class)->middleware(['auth', 'verified', 'check.direction']);
 
-Route::put('users/{id}', function ($id) {
-
-});
 
 
 

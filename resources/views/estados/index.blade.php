@@ -8,14 +8,14 @@
 
     <div class="py-12">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
-                    {{-- Mostrar los mensajes de exito. --}}
-                    @if (session('success'))
-                    <x-auth-session-status class="mb-4" :status="session('success')" />
-                    @endif
+            {{-- Mostrar los mensajes de exito. --}}
+            @if (session('success'))
+                <x-success-alert class="mb-4" :status="session('success')" />
+            @endif
 
             {{-- Mostrar los mensajes de error. --}}
             @if (session('error'))
-            <x-input-error class="mb-4" :messages="session('error')" />
+                <x-error-alert class="mb-4" :messages="session('error')" />
             @endif
 
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -69,7 +69,6 @@
     @foreach ($estados as $estado)
         <!-- Ventana modal para editar un estado -->
         @include('estados.edit')
-
     @endforeach
 
 </x-app-layout>

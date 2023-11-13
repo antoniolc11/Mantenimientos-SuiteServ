@@ -41,6 +41,10 @@
                         <x-nav-link :href="route('estados.index')" :active="request()->routeIs('estados.index')">
                             {{ __('Estados') }}
                         </x-nav-link>
+
+                        <x-nav-link :href="route('ubicaciones.index')" :active="request()->routeIs('ubicaciones.index')">
+                            {{ __('Ubicaciones') }}
+                        </x-nav-link>
                     @endif
                 </div>
 
