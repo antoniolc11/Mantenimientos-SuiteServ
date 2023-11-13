@@ -41,7 +41,7 @@
                             <tr>
                                 <td colspan="6" class="h-full">
                                     <div class="flex items-center justify-center h-full mt-6">
-                                        <p class="text-center font-bold text-red-500">No hay aspirantes aún</p>
+                                        <p class="text-center font-bold text-gray-800">No hay aspirantes aún</p>
                                     </div>
                                 </td>
                             </tr>
