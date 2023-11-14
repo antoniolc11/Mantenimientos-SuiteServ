@@ -31,7 +31,7 @@ class EstadoController extends Controller
     public function store(StoreEstadoRequest $request)
     {
         $estado = Estado::create($request->all());
-        return redirect()->route('estados.index')->with('success', 'El estado se ha creado correctamente.');;
+        return redirect()->route('estados.index')->with('success', 'El estado se ha creado correctamente.');
     }
 
     /**
