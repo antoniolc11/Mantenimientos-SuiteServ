@@ -36,7 +36,7 @@
                         <thead
                             class="border-b bg-neutral-800 font-medium text-white dark:border-neutral-500 dark:bg-neutral-900">
                             <tr>
-                                <th scope="col" class=" px-6 py-4">Nombre</th>
+                                <th scope="col" class=" px-6 py-4">Departamentos</th>
                                 <th scope="col" class=" px-6 py-4">Acciones</th>
                             </tr>
                         </thead>

@@ -19,7 +19,7 @@
                 </div>
 
                 <div class="hidden space-x-5 sm:-my-px sm:ml-8 sm:flex">
-                    <!-- Muestra en el menú nav los aspirantes solo para los usuarios con rol de dirección y RRHH -->
+                    <!-- Muestra en el menú nav los aspirantes solo para los usuarios con rol de dirección o RRHH -->
                     @if (auth()->user()->esDepartamentoDireccion() ||
                             auth()->user()->esDepartamentoRrhh())
                         <x-nav-link :href="route('aspirantes.index')" :active="request()->routeIs('aspirantes.index')">
@@ -44,6 +44,10 @@
 
                         <x-nav-link :href="route('ubicaciones.index')" :active="request()->routeIs('ubicaciones.index')">
                             {{ __('Ubicaciones') }}
+                        </x-nav-link>
+
+                        <x-nav-link :href="route('categorias.index')" :active="request()->routeIs('categorias.index')">
+                            {{ __('Categorias') }}
                         </x-nav-link>
                     @endif
                 </div>
