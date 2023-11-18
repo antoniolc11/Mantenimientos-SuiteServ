@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('nif', 9)->unique();
             $table->string('telefono', 20);
             $table->string('email')->unique();
+            $table->string('fotoperfil')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
