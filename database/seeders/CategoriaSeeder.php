@@ -16,6 +16,7 @@ class CategoriaSeeder extends Seeder
         Categoria::create(['nombre' => 'Avería']);
         Categoria::create(['nombre' => 'Mantenimiento']);
         Categoria::create(['nombre' => 'Reunión']);
+        Categoria::create(['nombre' => 'Busqueda de personal']);
 
     }
 }

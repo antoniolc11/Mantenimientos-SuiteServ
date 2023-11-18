@@ -57,6 +57,7 @@ class UserController extends Controller
             'telefono' => $request->telefono,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            //TODO poner la url de la imagen
         ]);
 
         //TODO: enviar email de confirmación de registro
@@ -125,5 +126,49 @@ class UserController extends Controller
         $user->departamentos()->detach();
         $user->delete();
         return redirect()->route('users.index');
+    }
+
+    public function editarImagen(Request $request)
+    {
+
+        // Obtiene la imagen
+        $imagenPath = $request->file('imagen')->store('public/curriculums');
+        $usuario = User::findOrFail(auth()->user());
+        $usuario->fotoperfil = $imagenPath;
+        $usuario->save();
+
+        // Redirecciona al usuario a la página de perfil
+        return view('users.show', ['usuario' => $usuario]);
+    }
+
+
+    public function buscadorUsuario(Request $request)
+    {
+        // Obtenemos los datos de búsqueda.
+        $nombre = $request->input('nombre');
+        $primer_apellido = $request->input('primer_apellido');
+        $email = $request->input('email');
+
+        // Creamos la consulta SQL.
+
+        // Creamos la consulta SQL.
+
+        $query = User::query();
+
+        if ($nombre !== '') {
+            $query->where('nombre', 'ILIKE', '%' . strtolower($nombre) . '%');
+        }
+
+        if ($primer_apellido !== '') {
+            $query->where('primer_apellido', 'ILIKE', '%' . strtolower($primer_apellido) . '%');
+        }
+
+        if ($email !== '') {
+            $query->where('email', 'ILIKE', '%' . strtolower($email) . '%');
+        }
+
+        // Devolvemos los resultados de la búsqueda.
+        $view = view('users._busquedaUsuarios', ['usuarios' => $query->get()]);
+        return $view->render();
     }
 }

@@ -11,6 +11,7 @@ use App\Http\Controllers\IncidenciaController;
 use App\Http\Controllers\UbicacionController;
 use App\Http\Controllers\PDFController;
 use App\Models\Ubicacion;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -80,6 +81,11 @@ Route::post('/usuarios', [UserController::class, 'store'])->name('users.store');
 Route::get('/usuarios/{user}', [UserController::class, 'show'])->name('users.show')->middleware(['auth', 'verified', 'check.direction']);
 Route::get('/usuarios/{user}/editar', [UserController::class, 'edit'])->name('users.edit');
 Route::put('/edit/{user}', [UserController::class, 'update'])->name('users.update');
+Route::get('/buscador/user', [UserController::class, 'buscadorUsuario'])->name('buscadorUser.index');
+
+// routes/web.php
+Route::post('/user/editar/foto', [UserController::class, 'editarImagen'])->name('user.editar.foto');
+
 
 
 
