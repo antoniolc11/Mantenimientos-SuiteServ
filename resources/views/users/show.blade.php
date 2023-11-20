@@ -31,35 +31,44 @@
                     <div class="flex flex-col relative">
                         {{-- Imagen del usuario --}}
                         <div>
-                            <img class="h-48 w-48 border-2 border-black rounded-t"
-                                src="{{ $usuario->fotoperfil }}" alt="usuario avatar" />
+                            <img class="h-48 w-48 border-2 border-black rounded-t" id="imgPerfil"
+                                src="{{$usuario->fotoperfil ? Storage::url($usuario->fotoperfil) : 'https://st3.depositphotos.com/4111759/13425/v/1600/depositphotos_134255588-stock-illustration-empty-photo-of-male-profile.jpg' }}"
+                                alt="usuario avatar" />
                         </div>
 
                         {{-- Boton para modificar la imagen del usuario. --}}
-                        <div class="relative group">
-                            <button
-                                class="text-default flex items-center justify-center cursor-pointer bg-black hover:bg-gray-700 text-white w-full p-0.5 rounded-b">
-                                <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16"
-                                    data-view-component="true"
-                                    class="octicon octicon-pencil fill-current text-white mr-1">
-                                    <path fill="#fff"
-                                        d="M11.013 1.427a1.75 1.75 0 0 1 2.474 0l1.086 1.086a1.75 1.75 0 0 1 0 2.474l-8.61 8.61c-.21.21-.47.364-.756.445l-3.251.93a.75.75 0 0 1-.927-.928l.929-3.25c.081-.286.235-.547.445-.758l8.61-8.61Zm.176 4.823L9.75 4.81l-6.286 6.287a.253.253 0 0 0-.064.108l-.558 1.953 1.953-.558a.253.253 0 0 0 .108-.064Zm1.238-3.763a.25.25 0 0 0-.354 0L10.811 3.75l1.439 1.44 1.263-1.263a.25.25 0 0 0 0-.354Z">
-                                    </path>
-                                </svg>
-                                Editar
-                            </button>
+                        <div class="relative group form-group">
+                            <form action="{{ route('user.editar.foto', $usuario) }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <label
+                                    class=" text-default flex items-center justify-center cursor-pointer bg-black hover:bg-gray-700 text-white w-full p-0.5 rounded-b"
+                                    for="editarImagen">
+                                    <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1"
+                                        width="16" data-view-component="true"
+                                        class="octicon octicon-pencil fill-current text-white mr-1">
+                                        <path fill="#fff"
+                                            d="M11.013 1.427a1.75 1.75 0 0 1 2.474 0l1.086 1.086a1.75 1.75 0 0 1 0 2.474l-8.61 8.61c-.21.21-.47.364-.756.445l-3.251.93a.75.75 0 0 1-.927-.928l.929-3.25c.081-.286.235-.547.445-.758l8.61-8.61Zm.176 4.823L9.75 4.81l-6.286 6.287a.253.253 0 0 0-.064.108l-.558 1.953 1.953-.558a.253.253 0 0 0 .108-.064Zm1.238-3.763a.25.25 0 0 0-.354 0L10.811 3.75l1.439 1.44 1.263-1.263a.25.25 0 0 0 0-.354Z">
+                                        </path>
+                                    </svg>
+                                    Editar</label>
+                                <input name="imagen" class="hidden" type="file" id="editarImagen" accept="image/*">
+                                <button id="guardarImagen"
+                                    class="absolute hidden bg-black border text-white border-gray-300 rounded mt-0 space-y-2"
+                                    type="submit">Guardar</button>
+                            </form>
 
-                            {{-- Menú desplegable --}}
-                            <div
-                                class="absolute hidden bg-black border text-white border-gray-300 rounded mt-0 space-y-2">
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-primary" id="editar-imagen">
-                                        Editar imagen
-                                    </button>
-                                </div>
 
-                                <a href="#" class="block px-4 py-2 hover:bg-gray-700">Borrar imagen</a>
-                            </div>
+
+                            @if ($usuario->fotoperfil)
+                                <form action="{{ route('user.borrar.foto', $usuario) }}" method="POST">
+                                    @method('DELETE')
+                                    @csrf
+                                    <button id="borrarImagen"
+                                        class="absolute bg-black border text-white border-gray-300 rounded mt-0 space-y-2"
+                                        type="submit">Eliminar foto</button>
+                                </form>
+                            @endif
+
                             {{-- Fin Menú desplegable --}}
                         </div>
                     </div>
@@ -68,17 +77,27 @@
 
                 <!-- Script para controlar la visibilidad del menú desplegable para editar o borrar la foto de perfíl -->
                 <script>
-                    /* selecciona el boton de  editar imagen y crea un input tipo file */
-                    document.querySelector('#editar-imagen').addEventListener('click', function() {
-                        // Abre un cuadro de diálogo para seleccionar una imagen
-                        var input = document.createElement('input');
-                        input.type = 'file';
-                        input.click();
-                        // Obtiene la imagen seleccionada
-                        var file = input.files[0];
+                    const imgPerfil = document.querySelector('#imgPerfil');
+                    const editarImagen = document.querySelector('#editarImagen');
+                    const defaulFile = imgPerfil.src;
+                    const guardarImagen = document.querySelector('#guardarImagen')
+                    editarImagen.addEventListener('change', (e) => {
+                        if (e.target.files[0] != undefined) {
+                            const reader = new FileReader();
+                            reader.onload = (e) => {
+                                imgPerfil.src = e.target.result;
+                            }
+                            reader.readAsDataURL(e.target.files[0]);
+                            guardarImagen.classList.remove('hidden');
+                            borrarImagen.classList.add('hidden');
+                        } else {
+                            imgPerfil.src = defaulFile;
+                            guardarImagen.classList.add('hidden');
+                            borrarImagen.classList.remove('hidden');
+                        }
+                    });
 
-                        //Crear formulario que vaya a la ruta editar.imagen, pasando la imagen seleccionada en el cuadro de digalogo
-                        });
+
 
                     //Abre el desplegable de editar la imagen.
                     document.addEventListener('DOMContentLoaded', function() {

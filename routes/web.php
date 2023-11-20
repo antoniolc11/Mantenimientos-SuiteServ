@@ -60,6 +60,7 @@ Route::get('/incidencias', [IncidenciaController::class, 'index'])->name('incide
 Route::post('/incidencias', [IncidenciaController::class, 'store'])->name('incidencias.store')->middleware(['auth', 'CheckDepartamentoSuperDire']);
 Route::get('/incidencias/create', [IncidenciaController::class, 'create'])->name('incidencias.create')->middleware(['auth', 'CheckDepartamentoSuperDire']);
 Route::get('/incidencias{incidencia}', [IncidenciaController::class, 'show'])->name('incidencias.show');
+Route::put('/incidencias/{incidencia}/cambiar-estado', [IncidenciaController::class, 'cambiarEstado'])->name('incidencias.cambiar-estado');
 
 //Rutas Categorías:
 Route::resource('categorias', CategoriaController::class)->middleware(['auth', 'check.direction']);
@@ -82,9 +83,12 @@ Route::get('/usuarios/{user}', [UserController::class, 'show'])->name('users.sho
 Route::get('/usuarios/{user}/editar', [UserController::class, 'edit'])->name('users.edit');
 Route::put('/edit/{user}', [UserController::class, 'update'])->name('users.update');
 Route::get('/buscador/user', [UserController::class, 'buscadorUsuario'])->name('buscadorUser.index');
+Route::get('/usuarios-por-departamento/{departamentoId}', [UserController::class, 'usuariosPorDepartamento']); //Busca los usuarios por un determinado departamento.
 
 // routes/web.php
-Route::post('/user/editar/foto', [UserController::class, 'editarImagen'])->name('user.editar.foto');
+Route::post('/user/editar/foto/{user}', [UserController::class, 'editarImagen'])->name('user.editar.foto');
+Route::delete('/user/borrar/{user}', [UserController::class, 'borrarImagen'])->name('user.borrar.foto');
+
 
 
 

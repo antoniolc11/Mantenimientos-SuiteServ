@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Password;
-
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -128,17 +128,24 @@ class UserController extends Controller
         return redirect()->route('users.index');
     }
 
-    public function editarImagen(Request $request)
+    public function editarImagen(Request $request, User $user)
     {
-
         // Obtiene la imagen
-        $imagenPath = $request->file('imagen')->store('public/curriculums');
-        $usuario = User::findOrFail(auth()->user());
-        $usuario->fotoperfil = $imagenPath;
-        $usuario->save();
+        $imagenPath = $request->file('imagen')->store('public/imagenesperfil');
+        $user->fotoperfil = $imagenPath;
+        $user->save();
 
         // Redirecciona al usuario a la página de perfil
-        return view('users.show', ['usuario' => $usuario]);
+        return view('users.show', ['usuario' => $user]);
+    }
+
+    public function borrarImagen(Request $request, User $user)
+    {
+        Storage::delete($user->fotoperfil);
+        $user->fotoperfil = null;
+        $user->save();
+        // Redirecciona al usuario a la página de perfil
+        return view('users.show', ['usuario' => $user]);
     }
 
 
@@ -170,5 +177,20 @@ class UserController extends Controller
         // Devolvemos los resultados de la búsqueda.
         $view = view('users._busquedaUsuarios', ['usuarios' => $query->get()]);
         return $view->render();
+    }
+
+    /* Consulta los usuarios que pertenecen a un determinado departamento pasado por parametro, para cargar el desplegable
+        al seleccionar el departamento, cuando se va a crear una incidencia. */
+    public function usuariosPorDepartamento($departamentoId)
+    {
+        $departamento = Departamento::find($departamentoId);
+
+        if ($departamento) {
+            $usuarios = $departamento->users;
+            // Aquí tienes la colección de usuarios que pertenecen al departamento
+        } else {
+            // El departamento no fue encontrado
+        }
+        return response()->json($usuarios); // Asegúrate de devolver los datos en formato JSON
     }
 }
