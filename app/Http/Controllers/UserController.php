@@ -141,9 +141,16 @@ class UserController extends Controller
 
     public function borrarImagen(Request $request, User $user)
     {
-        Storage::delete($user->fotoperfil);
-        $user->fotoperfil = null;
-        $user->save();
+        // Verifica si el usuario tiene una imagen de perfil antes de intentar borrarla
+        if ($user->fotoperfil) {
+            // Elimina la imagen almacenada en el sistema de archivos
+            Storage::delete($user->fotoperfil);
+
+            // Actualiza el campo de fotoperfil en la base de datos
+            $user->fotoperfil = null;
+            $user->save();
+        }
+
         // Redirecciona al usuario a la página de perfil
         return view('users.show', ['usuario' => $user]);
     }
