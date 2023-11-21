@@ -84,7 +84,17 @@ class IncidenciaController extends Controller
      */
     public function edit(Incidencia $incidencia)
     {
-        //
+        $departamentos = Departamento::all();
+        $estados = Estado::all();
+        $ubicaciones = Ubicacion::all();
+        $categorias = Categoria::all();
+        return view('incidencias.edit', [
+            'departamentos' => $departamentos,
+            'estados' => $estados,
+            'ubicaciones' => $ubicaciones,
+            'categorias' => $categorias,
+            'incidencia' => $incidencia,
+        ]);
     }
 
     /**
@@ -92,7 +102,9 @@ class IncidenciaController extends Controller
      */
     public function update(UpdateIncidenciaRequest $request, Incidencia $incidencia)
     {
-        //
+        $incidencia->update($request->all());
+
+        return redirect()->route('incidencias.show', $incidencia)->with('success', 'Incidencia modificada con exito.');
     }
 
     /**

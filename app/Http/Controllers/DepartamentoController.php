@@ -62,7 +62,7 @@ class DepartamentoController extends Controller
 
         $departamento->update($request->all());
 
-        return redirect()->route('departamentos.index')->with('success', 'Departamento modificado correctamente.');;
+        return redirect()->route('departamentos.index')->with('success', 'Departamento modificado correctamente.');
     }
 
     /**

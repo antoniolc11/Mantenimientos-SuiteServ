@@ -10,6 +10,7 @@ use App\Http\Controllers\HistorialController;
 use App\Http\Controllers\IncidenciaController;
 use App\Http\Controllers\UbicacionController;
 use App\Http\Controllers\PDFController;
+use App\Models\Incidencia;
 use App\Models\Ubicacion;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -61,6 +62,8 @@ Route::post('/incidencias', [IncidenciaController::class, 'store'])->name('incid
 Route::get('/incidencias/create', [IncidenciaController::class, 'create'])->name('incidencias.create')->middleware(['auth', 'CheckDepartamentoSuperDire']);
 Route::get('/incidencias{incidencia}', [IncidenciaController::class, 'show'])->name('incidencias.show');
 Route::put('/incidencias/{incidencia}/cambiar-estado', [IncidenciaController::class, 'cambiarEstado'])->name('incidencias.cambiar-estado');
+Route::get('/incidencias/editar/{incidencia}', [IncidenciaController::class, 'edit'])->name('incidencias.edit');
+Route::put('/incidencias/update/{incidencia}', [IncidenciaController::class, 'update'])->name('incidencias.update');
 
 //Rutas Categorías:
 Route::resource('categorias', CategoriaController::class)->middleware(['auth', 'check.direction']);
