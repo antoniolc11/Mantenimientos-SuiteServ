@@ -11,6 +11,7 @@ use App\Models\Estado;
 use App\Models\Historial;
 use App\Models\Ubicacion;
 use App\Models\User;
+use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 
 class IncidenciaController extends Controller
@@ -34,7 +35,7 @@ class IncidenciaController extends Controller
         } else {
             $incidencias = Incidencia::whereIn('departamento_id', $departamentos->pluck('id'))
                 ->with(['creador', 'asignado'])
-                ->whereNotIn('estado_id', [3]) // Excluir las incidencias con estado_id igual a 3
+                ->whereNotIn('estado_id', [3]) // Excluir las incidencias con estado_id igual a (3 Finalizado)
                 ->orderBy('categoria_id')
                 ->get();
         }
@@ -65,9 +66,17 @@ class IncidenciaController extends Controller
     public function store(StoreIncidenciaRequest $request)
     {
         $incidencia = Incidencia::create($request->all());
+
+        // Crear un registro en la tabla de historial
+        Historial::create([
+            'incidencia_id' => $incidencia->id,
+            'user_id'  => $incidencia->usuario_asignado,
+            'trabajo_realizado' => $incidencia->descripcion,
+            'estado_id' => $incidencia->estado_id,
+            'hora_inicio' => Carbon::now(),
+        ]);
+
         return redirect()->route('incidencias.index');
-
-
     }
 
     /**
@@ -130,7 +139,16 @@ class IncidenciaController extends Controller
             $incidencia->save();
         }
 
-        //TODO: Crear un nuevo registro en la tabla de historial donde se registre el nuevo estado de la incidencia.
+        // Crea un nuevo registro en la tabla de historial
+        $historial =
+            Historial::create([
+                'incidencia_id' => $incidencia->id,
+                'user_id'  => $incidencia->usuario_asignado,
+                'trabajo_realizado' => $nombreEstado == 'Pendiente' ? $incidencia->descripcion : $request->descripcion,
+                'estado_id' => $incidencia->estado_id,
+                'hora_inicio' => $nombreEstado == 'Pendiente' ? Carbon::now() : null,
+                'hora_fin' => $nombreEstado == 'En curso' ? Carbon::now() : null,
+            ]);
 
         return redirect()->route('incidencias.index')->with('success', 'Estado de la incidencia cambiado exitosamente');
     }
