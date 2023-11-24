@@ -21,7 +21,7 @@
                                 {{-- Campo de busqueda por nombre --}}
                                 <div class="flex flex-col">
                                     <x-input-label for="nombre" :value="__('Nombre')" />
-                                    <x-text-input id="nombre" class="block mt-1 w-full" type="text" name="nombre"
+                                    <x-text-input id="nombre" class="block mt-2" type="text" name="nombre"
                                         :value="old('nombre')" required autofocus autocomplete="nombre"
                                         placeholder="Ingresa un nombre" x-model="nombre" x-on:keyup="buscarUsuario2" />
                                 </div>
@@ -29,7 +29,7 @@
                                 {{-- Campo de busqueda por primer apellido --}}
                                 <div class="flex flex-col">
                                     <x-input-label for="primer_apellido" :value="__('Primer apellido')" />
-                                    <x-text-input id="primer_apellido" class="block mt-1 w-full" type="text"
+                                    <x-text-input id="primer_apellido" class="block mt-2 w-full" type="text"
                                         name="primer_apellido" :value="old('primer_apellido')" required autofocus
                                         autocomplete="primer_apellido" placeholder="Ingresa el primer apellido"
                                         x-model="primer_apellido" x-on:keyup="buscarUsuario2" />
@@ -38,7 +38,7 @@
                                 {{-- Campo de busqueda por email --}}
                                 <div class="flex flex-col">
                                     <x-input-label for="email" :value="__('Email')" />
-                                    <x-text-input id="email" class="block mt-1 w-full" type="email" name="email"
+                                    <x-text-input id="email" class="block mt-2 w-full" type="email" name="email"
                                         :value="old('email')" required autocomplete="username"
                                         placeholder="tu@email.com" x-model="email" x-on:keyup="buscarUsuario2"/>
                                 </div>

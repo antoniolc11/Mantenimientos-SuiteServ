@@ -25,22 +25,8 @@ class IncidenciaController extends Controller
         $estados = Estado::all();
         $categorias = Categoria::all();
         $departamentosall = Departamento::all();
-        // Optiene los departamentos a los que el usuario pertenece.
-        $departamentos = $user->departamentos;
-        // Verifica si el usuario es del departamento de dirección
-        $esDepartamentoDireccion = $user->departamentos->contains('nombre', 'Dirección');
 
-        if ($user->esDepartamentoDireccion() || $user->esDepartamentoSupervision()) {
-            $incidencias = Incidencia::whereNotIn('estado_id', [3])->orderBy('categoria_id')->get();
-        } else {
-            $incidencias = Incidencia::whereIn('departamento_id', $departamentos->pluck('id'))
-                ->with(['creador', 'asignado'])
-                ->whereNotIn('estado_id', [3]) // Excluir las incidencias con estado_id igual a (3 Finalizado)
-                ->orderBy('categoria_id')
-                ->get();
-        }
-
-        return view('home', compact(['estados', 'categorias', 'departamentosall', 'incidencias']));
+        return view('home', compact(['estados', 'categorias', 'departamentosall']));
     }
 
     /**
@@ -151,5 +137,98 @@ class IncidenciaController extends Controller
             ]);
 
         return redirect()->route('incidencias.index')->with('success', 'Estado de la incidencia cambiado exitosamente');
+    }
+
+        /*
+        Metodo que realiza la logíca del formulario de busqueda de la pagina /home, donde se podrá filtrar los resultados por
+        varios campos
+    */
+    public function buscarIncidencia(Request $request)
+    {
+        //Recoge los datos del formulario de busqueda.
+        $numero = $request->input('search');
+        $estado = $request->input('estado');
+        $prioridad = $request->input('prioridad');
+        $categoria = $request->input('categoria');
+        $departamento = $request->input('departamento');
+
+
+        //$resultados = Incidencia::where('numero', 'like', '%' . $numero . '%');
+
+
+        $user = User::find(auth()->user()->id); //Realiza una consulta que obtiene el id del usuario logado.
+        $departamentos = $user->departamentos; //Realiza la busqueda de los departamentos a los que pertenece el usuario.
+
+
+        //$esDepartamentoDireccion = $user->departamentos->contains('nombre', 'Dirección');
+
+        if ($user->esDepartamentoDireccion() || $user->esDepartamentoSupervision()) {
+            //Consulta base para aplicar a los filtros de busqueda a los usuarios que son de dirección ni supervisión.
+            $query = Incidencia::query()->where('numero', 'like', '%' . $numero . '%')->orderBy('categoria_id')->get();
+        }
+
+        if (!$user->esDepartamentoDireccion() && !$user->esDepartamentoSupervision()) {
+            //Consulta base para aplicar a los filtros de busqueda a los usuarios que no son de dirección ni supervisión.
+            $query = Incidencia::query()->whereIn('departamento_id', $departamentos->pluck('id'))
+                ->with(['creador', 'asignado'])
+                ->where('numero', 'like', '%' . $numero . '%')
+                ->orderBy('categoria_id')
+                ->get();
+        }
+
+
+
+        if ($estado !== null && $estado !== '' && $prioridad !== null && $prioridad !== '' && $categoria !== null && $categoria !== '' && $departamento !== null && $departamento !== '') {
+            $resultados = $query->where('estado_id', $estado)->where('prioridad', $prioridad)->where('categoria_id', $categoria)->where('departamento_id', $departamento);
+        } elseif ($estado !== null && $estado !== '' && $prioridad !== null && $prioridad !== '' && $categoria !== null && $categoria !== '') {
+            $resultados = $query->where('estado_id', $estado)->where('prioridad', $prioridad)->where('categoria_id', $categoria);
+        } elseif ($prioridad !== null && $prioridad !== '' && $categoria !== null && $categoria !== '' && $departamento !== null && $departamento !== '') {
+            $resultados = $query->where('prioridad', $prioridad)->where('categoria_id', $categoria)->where('departamento_id', $departamento);
+        } elseif ($estado !== null && $estado !== '' && $categoria !== null && $categoria !== '' && $departamento !== null && $departamento !== '') {
+            $resultados = $query->where('estado_id', $estado)->where('categoria_id', $categoria)->where('departamento_id', $departamento);
+        } elseif ($prioridad !== null && $prioridad !== '' && $estado !== null && $estado !== '' && $departamento !== null && $departamento !== '') {
+            $resultados = $query->where('estado_id', $estado)->where('prioridad', $prioridad)->where('departamento_id', $departamento);
+        } elseif ($prioridad !== null && $prioridad !== '' && $departamento !== '' && $departamento !== null) {
+            $resultados = $query->where('prioridad', $prioridad)->where('departamento_id', $departamento);
+        } elseif ($categoria !== null && $categoria !== '' && $departamento !== null && $departamento !== '') {
+            $resultados = $query->where('categoria_id', $categoria)->where('departamento_id', $departamento);
+        } elseif ($estado !== null && $estado !== '' && $departamento !== null && $departamento !== '') {
+            $resultados = $query->where('estado_id', $estado)->where('departamento_id', $departamento);
+        } elseif ($estado !== null && $estado !== '' && $prioridad !== null && $prioridad !== '') {
+            $resultados = $query->where('estado_id', $estado)->where('prioridad', $prioridad);
+        } elseif ($estado !== null && $estado !== ''  && $categoria !== null && $categoria !== '') {
+            $resultados = $query->where('estado_id', $estado)->where('categoria_id', $categoria);
+        } elseif ($prioridad !== null && $prioridad !== ''  && $categoria !== null && $categoria !== '') {
+            $resultados = $query->where('prioridad', $prioridad)->where('categoria_id', $categoria);
+        } elseif ($estado !== null && $estado !== '') {
+            $resultados = $query->where('estado_id', $estado);
+        } elseif ($prioridad !== null && $prioridad !== '') {
+            $resultados = $query->where('prioridad', $prioridad);
+        } elseif ($categoria !== null && $categoria !== '') {
+            $resultados = $query->where('categoria_id', $categoria);
+        } elseif ($departamento !== null && $departamento !== '') {
+            $resultados = $query->where('departamento_id', $departamento);
+        } else {
+            if ($numero == null && $numero == '') {
+                $resultados = $query->whereNotIn('estado_id', [3]);
+            }else {
+                $resultados = $query;
+            }
+        }
+
+        //Comprueba las incidencias que pertenecen al usuario logado
+        $resultados2 = [];
+        foreach ($resultados as $incidencia) {
+            if ($incidencia->usuario_asignado === $user->id) {
+                $resultados2[] = $incidencia;
+            }
+        }
+
+
+
+        $resultados = $user->esDepartamentoDireccion() || $user->esDepartamentoSupervision() ? $resultados : $resultados2;
+        $view = view('incidencias._busqueda', ['incidencias' => $resultados]);
+
+        return $view->render();
     }
 }
