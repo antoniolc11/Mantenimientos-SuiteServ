@@ -83,8 +83,7 @@
                 <!-- Departamento -->
                 <div>
                     <label for="departamento">Departamento:</label>
-                    <select multiple name="departamento[]" id="departamento"
-                        class="block w-full px-4 py-2 mt-1 text-gray-700 bg-white border border-black rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent hover:border-gray-300 hover:bg-transparent">
+                    <select multiple name="departamento[]" id="departamento">
                         @foreach ($departamentos as $departamento)
                         <option value="{{$departamento->id}}">{{$departamento->nombre}}</option>
                         @endforeach

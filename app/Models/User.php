@@ -77,4 +77,14 @@ class User extends Authenticatable implements CanResetPassword
         return $this->departamentos->contains('nombre', 'Recursos humanos');
     }
 
+
+    public function perteneceAlDepartamento(Departamento $departamento)
+    {
+        return $this->departamentos->contains($departamento);
+    }
+
+    public function tieneMasDeUnDepartamento()
+    {
+        return $this->departamentos->count() > 1;
+    }
 }
