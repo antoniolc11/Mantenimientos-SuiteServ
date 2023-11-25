@@ -57,12 +57,12 @@ class IncidenciaController extends Controller
         Historial::create([
             'incidencia_id' => $incidencia->id,
             'user_id'  => $incidencia->usuario_asignado,
-            'trabajo_realizado' => $incidencia->descripcion,
+            'trabajo_realizado' => null,
             'estado_id' => $incidencia->estado_id,
             'hora_inicio' => Carbon::now(),
         ]);
 
-        return redirect()->route('incidencias.index');
+        return redirect()->route('incidencias.show', $incidencia)->with('success', 'Incidencia creada con exito.');
     }
 
     /**
@@ -126,20 +126,19 @@ class IncidenciaController extends Controller
         }
 
         // Crea un nuevo registro en la tabla de historial
-        $historial =
-            Historial::create([
-                'incidencia_id' => $incidencia->id,
-                'user_id'  => $incidencia->usuario_asignado,
-                'trabajo_realizado' => $nombreEstado == 'Pendiente' ? $incidencia->descripcion : $request->descripcion,
-                'estado_id' => $incidencia->estado_id,
-                'hora_inicio' => $nombreEstado == 'Pendiente' ? Carbon::now() : null,
-                'hora_fin' => $nombreEstado == 'En curso' ? Carbon::now() : null,
-            ]);
+        Historial::create([
+            'incidencia_id' => $incidencia->id,
+            'user_id'  => $incidencia->usuario_asignado,
+            'trabajo_realizado' => $nombreEstado == 'Pendiente' ? $incidencia->descripcion : $request->descripcion,
+            'estado_id' => $incidencia->estado_id,
+            'hora_inicio' => $nombreEstado == 'Pendiente' ? Carbon::now() : null,
+            'hora_fin' => $nombreEstado == 'En curso' ? Carbon::now() : null,
+        ]);
 
         return redirect()->route('incidencias.index')->with('success', 'Estado de la incidencia cambiado exitosamente');
     }
 
-        /*
+    /*
         Metodo que realiza la logíca del formulario de busqueda de la pagina /home, donde se podrá filtrar los resultados por
         varios campos
     */
@@ -211,7 +210,7 @@ class IncidenciaController extends Controller
         } else {
             if ($numero == null && $numero == '') {
                 $resultados = $query->whereNotIn('estado_id', [3]);
-            }else {
+            } else {
                 $resultados = $query;
             }
         }

@@ -35,13 +35,26 @@
                                         'width': 'max-content'
                                     }">
                                     <!-- Contenido del menú desplegable -->
-                                    <li class="text-black w-full p-1 hover:bg-gray-200 font-normal text-start">
-                                        <a href="{{ route('incidencias.edit', $incidencia) }}">Editar</a>
-                                    </li>
+                                    @if (auth()->user()->esDepartamentoDireccion() ||
+                                            auth()->user()->esDepartamentosupervision())
+                                        <li class="text-black w-full p-1 hover:bg-gray-200 font-normal text-start">
+                                            <a href="{{ route('incidencias.edit', $incidencia) }}">Editar</a>
+                                        </li>
+                                    @endif
                                     {{-- TODO: barajar la opción de cerrar incidencia directamente --}}
                                     <li class="text-black w-full p-1 hover:bg-gray-200 font-normal">
                                         <a href="{{ route('incidencias.edit', $incidencia) }}">Pasar a resuelta</a>
                                     </li>
+
+                                    @if ($incidencia->estado_id == 3)
+                                        <li class="text-black w-full p-1 hover:bg-gray-200 font-normal">
+                                            <a href="{{ route('generate-pdf', $incidencia) }}" target="_blank"
+                                                class="btn btn-primary">
+                                                <button data-modal-hide="defaultModal" type="button">Parte
+                                                    de trabajo</button>
+                                            </a>
+                                        </li>
+                                    @endif
                                     <!-- Agrega más elementos según sea necesario -->
                                 </ul>
 
@@ -135,7 +148,7 @@
                 <tr class="border-t border-gray-200">
                     <th class="text-left w-48 text-xs font-medium text-gray-500 uppercase tracking-wider">Descripción:
                     </th>
-                    <td class="px-6 py-4 whitespace-nowrap">
+                    <td class="px-6 py-4 whitespace">
                         {{ $incidencia->descripcion }}
                     </td>
                 </tr>
@@ -206,8 +219,8 @@
                         <button type="button"
                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                             data-modal-hide="defaultModal">
-                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 14 14">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 14 14">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                             </svg>
@@ -273,7 +286,8 @@
 
 
                         @if ($incidencia->estado_id == 3)
-                            <a href="#" target="_blank" class="btn btn-primary">
+                            <a href="{{ route('generate-pdf', $incidencia) }}" target="_blank"
+                                class="btn btn-primary">
                                 <button data-modal-hide="defaultModal" type="button"
                                     class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Parte
                                     de trabajo</button>

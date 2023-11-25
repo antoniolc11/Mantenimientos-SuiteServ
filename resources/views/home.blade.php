@@ -55,7 +55,7 @@
                             <div class="pt-6 md:pt-0 md:pl-6">
                                 <select x-on:change="buscarIncidencia2" x-model="pordepartamento" name="departamento"
                                     id="departamento"
-                                    class="border p-2 rounded appearance-none focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent" />
+                                    class="border p-2 rounded appearance-none focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent">
                                 <option value="">Selecciona departamento</option>
                                 @foreach ($departamentosall as $departamento)
                                     @if (auth()->user()->esDepartamentoDireccion() ||

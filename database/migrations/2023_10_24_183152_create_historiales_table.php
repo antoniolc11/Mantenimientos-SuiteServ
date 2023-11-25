@@ -18,7 +18,7 @@ return new class extends Migration
             $table->date('fecha')->default(now());
             $table->time('hora_inicio')->nullable();
             $table->time('hora_fin')->nullable();
-            $table->text('trabajo_realizado');
+            $table->text('trabajo_realizado')->nullable();
             $table->primary(['incidencia_id', 'user_id', 'estado_id']);
         });
     }
