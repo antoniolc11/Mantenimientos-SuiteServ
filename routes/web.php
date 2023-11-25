@@ -33,7 +33,7 @@ Route::get('/', function () {
 
 //Página de inicio de sesión: donde se mostrarán las incidencias.
 Route::middleware(['auth'])->group(function () {
-    Route::get('/home', [IncidenciaController::class, 'index'])->name('home');
+    Route::get('/home', [IncidenciaController::class, 'index'])->name('home')->middleware('CheckBanned');
 });
 
 

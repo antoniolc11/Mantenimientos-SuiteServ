@@ -29,9 +29,12 @@
 
             <div class="flex flex-col justify-center md:justify-start my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32">
                 <p class="text-center text-3xl mt-8">Bienvenido.</p>
+
+
                 <form class="flex flex-col pt-3 md:pt-8" method="POST" action="{{ route('login') }}">
                     @csrf
                     <!-- Email Address -->
+                    <x-input-error :messages="session('error')" class="" />
                     <div class="flex flex-col pt-4">
                         <x-input-label for="email" :value="__('Email')" />
                         <x-text-input id="email" type="email" name="email" :value="old('email')"
