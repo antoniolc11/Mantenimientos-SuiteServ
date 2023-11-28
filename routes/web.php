@@ -53,6 +53,7 @@ Route::delete('/aspirantes/{aspirante}', [AspiranteController::class, 'destroy']
 Route::get('/aspirantes/{id}', [AspiranteController::class, 'show'])->name('aspirantes.show');
 Route::get('/descargar-pdf/{id}', [AspiranteController::class, 'download'])->name('descargar.pdf');
 
+
 //Rutas Departamentos:
 Route::resource('departamentos', DepartamentoController::class)->middleware(['auth', 'check.direction']);
 
@@ -87,6 +88,9 @@ Route::get('/usuarios/{user}', [UserController::class, 'show'])->name('users.sho
 Route::get('/usuarios/{user}/editar', [UserController::class, 'edit'])->name('users.edit');
 Route::put('/edit/{user}', [UserController::class, 'update'])->name('users.update');
 Route::get('/buscador/user', [UserController::class, 'buscadorUsuario'])->name('buscadorUser.index');
+Route::get('/usuario/addbanned/{user}', [UserController::class, 'addBanned'])->name('users.addbanned')->middleware(['auth', 'verified', 'check.direction']);
+Route::get('/usuario/outbanned/{user}', [UserController::class, 'outBanned'])->name('users.outbanned')->middleware(['auth', 'verified', 'check.direction']);
+
 
 //Busca los usuarios por un determinado departamento.
 Route::get('/usuarios-por-departamento/{departamentoId}', [UserController::class, 'usuariosPorDepartamento']);

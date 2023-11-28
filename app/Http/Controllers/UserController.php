@@ -200,4 +200,21 @@ class UserController extends Controller
         }
         return response()->json($usuarios); // Asegúrate de devolver los datos en formato JSON
     }
+
+    public function addBanned(User $user) {
+
+        $user->status = 0; // Asignar el nuevo valor directamente al atributo
+        $user->save(); // Guardar el modelo en la base de datos
+
+
+        return redirect()->route('users.index')->with('success', 'Estado del usuario actualizado exitosamente.');
+    }
+
+    public function outBanned(User $user) {
+        $user->status = 1; // Asignar el nuevo valor directamente al atributo
+        $user->save(); // Guardar el modelo en la base de datos
+
+
+        return redirect()->route('users.index')->with('success', 'Estado del usuario actualizado exitosamente.');
+    }
 }

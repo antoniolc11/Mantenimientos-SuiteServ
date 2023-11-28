@@ -27,7 +27,7 @@
                                 </div>
 
                                 {{-- Campo de busqueda por primer apellido --}}
-                                <div class="flex flex-col">
+                                <div class="flex flex-col" >
                                     <x-input-label for="primer_apellido" :value="__('Primer apellido')" />
                                     <x-text-input id="primer_apellido" class="block mt-2 w-full" type="text"
                                         name="primer_apellido" :value="old('primer_apellido')" required autofocus
@@ -72,7 +72,7 @@
                                             })
                                             .then(response => {
                                                 this.resultados = response.data;
-                                                console.log(response.data)
+
                                             })
                                             .catch(error => {
                                                 console.error(error);
@@ -111,6 +111,7 @@
                                     <th scope="col" class=" px-6 py-4">Nombre</th>
                                     <th scope="col" class=" px-6 py-4">Telefono</th>
                                     <th scope="col" class=" px-6 py-4">Email</th>
+                                    <th scope="col" class=" px-6 py-4">Acciones</th>
                                 </tr>
                             </thead>
 
