@@ -61,11 +61,11 @@
             <div class="mt-4">
                 <input type="file" name="curriculum" accept=".pdf, .doc, .docx">
             </div>
- 
+
 
             <div class="mt-4 mx-auto text-center">
                 <x-primary-button class="ml-4 mt-4 mx-auto text-center">
-                    {{ __('Register') }}
+                    {{ __('Enviar') }}
                 </x-primary-button>
             </div>
         </form>

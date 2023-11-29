@@ -1,5 +1,16 @@
 <x-app-layout>
-    <section class="max-w-2xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800 mt-20 ">
+    <div class="max-w-2xl h-9 mt-5 mb-2 mx-auto">
+        {{-- Mostrar los mensajes de exito. --}}
+        @if (session('success'))
+            <x-success-alert :status="session('success')" />
+        @endif
+
+        {{-- Mostrar los mensajes de error. --}}
+        @if (session('error'))
+            <x-error-alert :messages="session('error')" />
+        @endif
+    </div>
+    <section class="max-w-2xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800">
         <table class="min-w-full">
             <thead class="border-b">
                 <tr>
@@ -35,16 +46,24 @@
                                         'width': 'max-content'
                                     }">
                                     <!-- Contenido del menú desplegable -->
+
+                                    {{-- TODO: barajar la opción de cerrar incidencia directamente --}}
+                                    @if ($incidencia->estado_id != 3)
                                     @if (auth()->user()->esDepartamentoDireccion() ||
                                             auth()->user()->esDepartamentosupervision())
                                         <li class="text-black w-full p-1 hover:bg-gray-200 font-normal text-start">
                                             <a href="{{ route('incidencias.edit', $incidencia) }}">Editar</a>
                                         </li>
                                     @endif
-                                    {{-- TODO: barajar la opción de cerrar incidencia directamente --}}
-                                    <li class="text-black w-full p-1 hover:bg-gray-200 font-normal">
-                                        <a href="{{ route('incidencias.edit', $incidencia) }}">Pasar a resuelta</a>
-                                    </li>
+
+                                    <form action="{{ route('incidencias.cerrar', $incidencia) }}" method="post">
+                                        @csrf 
+                                        @method('put')
+                                        <li class="text-black w-full p-1 hover:bg-gray-200 font-normal">
+                                            <button type="submit">Pasar a resuelta</button>
+                                        </li>
+                                    </form>
+                                    @endif
 
                                     @if ($incidencia->estado_id == 3)
                                         <li class="text-black w-full p-1 hover:bg-gray-200 font-normal">
@@ -57,7 +76,6 @@
                                     @endif
                                     <!-- Agrega más elementos según sea necesario -->
                                 </ul>
-
                             </div>
 
                             <div class="w-full">

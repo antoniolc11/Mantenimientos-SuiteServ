@@ -45,14 +45,14 @@
                             class="flex items-center justify-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
                             <!-- Botón "Crear" -->
                             <button type="submit"
-                                class="cursor-pointer bg-black hover:bg-gray-700 text-white font-bold w-24 py-2 rounded">Guardar</button>
+                                class="cursor-pointer bg-green-600 hover:bg-gray-700 text-white font-bold w-24 py-2 rounded">Guardar</button>
 
                             <!-- Espacio entre botones -->
                             <div class="w-4"></div>
 
                             <!-- Botón "Cancelar" -->
                             <button data-modal-hide="modalEdit{{ $categoria->id }}" type="button"
-                                class="cursor-pointer bg-black hover:bg-gray-700 text-white font-bold w-24 py-2 rounded">Cancelar</button>
+                                class="cursor-pointer bg-red-600 hover:bg-gray-700 text-white font-bold w-24 py-2 rounded">Cancelar</button>
                         </div>
                     </form>
                 </div>

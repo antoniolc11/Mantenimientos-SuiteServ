@@ -65,6 +65,7 @@ Route::get('/incidencias{incidencia}', [IncidenciaController::class, 'show'])->n
 Route::put('/incidencias/{incidencia}/cambiar-estado', [IncidenciaController::class, 'cambiarEstado'])->name('incidencias.cambiar-estado');
 Route::get('/incidencias/editar/{incidencia}', [IncidenciaController::class, 'edit'])->name('incidencias.edit')->middleware(['auth', 'CheckDepartamentoSuperDire']);
 Route::put('/incidencias/update/{incidencia}', [IncidenciaController::class, 'update'])->name('incidencias.update');
+Route::put('/incidencias/cerrar/{incidencia}', [IncidenciaController::class, 'cerrarInc'])->name('incidencias.cerrar');
 Route::get('/buscar-incidencia', [IncidenciaController::class, 'buscarIncidencia'])->name('buscar.incidencia');
 
 //Rutas Categorías:

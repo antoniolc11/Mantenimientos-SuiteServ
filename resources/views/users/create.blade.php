@@ -97,7 +97,7 @@
             </div>
             <div class="flex justify-center">
                 <input type="submit" value="Registrar operario"
-                    class="bg-black text-white font-bold text-lg hover:bg-gray-700 py-2 mt-8  px-2 w-52" />
+                class="cursor-pointer bg-black hover:bg-gray-700 text-white font-bold w-44 py-3 mt-14 mb-2 rounded" />
             </div>
         </form>
         </div>

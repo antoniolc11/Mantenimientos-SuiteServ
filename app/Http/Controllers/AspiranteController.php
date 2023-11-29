@@ -85,25 +85,16 @@ class AspiranteController extends Controller
      */
     public function destroy(Aspirante $aspirante)
     {
-
-/*     if($contents = Storage::get(public_path($aspirante->pdf))){
-       Storage::delete(public_path($aspirante->pdf));
-       Storage::delete('file.jpg');
-    } */
-    //TODO: borrar archivo pdf del storage
-        $aspirante->delete();
-        return redirect()->route('aspirantes.index')->with('success', 'Aspirante eliminado exitosamente.');
+        if ($aspirante->curriculum) {
+            # code...
+            Storage::delete($aspirante->curriculum);
+            $aspirante->delete();
+            // Elimina la imagen almacenada en el sistema de archivos
+            return redirect()->route('aspirantes.index')->with('success', 'Aspirante eliminado exitosamente.');
+        }
     }
 
-/*     public function download($id)
-    {
-        $aspirante = Aspirante::findOrFail($id);
 
-        return response($aspirante->pdf, 200, [
-            'Content-Type' => 'application/octet-stream',
-            'Content-Disposition' => 'attachment; filename="'.$aspirante->nombre.'"'
-        ]);
-    } */
 
     public function download($id)
     {
@@ -116,4 +107,3 @@ class AspiranteController extends Controller
         }, 'documento.pdf');
     }
 }
-

@@ -45,14 +45,14 @@ class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overf
                 class="flex items-center justify-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
                 <!-- Botón "Crear" -->
                 <button type="submit"
-                    class="cursor-pointer bg-black hover:bg-gray-700 text-white font-bold w-24 py-2 rounded">Crear</button>
+                    class="cursor-pointer bg-green-600 hover:bg-gray-700 text-white font-bold w-24 py-2 rounded">Crear</button>
 
                 <!-- Espacio entre botones -->
                 <div class="w-4"></div>
 
                 <!-- Botón "Cancelar" -->
                 <button data-modal-hide="defaultModal" type="button"
-                    class="cursor-pointer bg-black hover:bg-gray-700 text-white font-bold w-24 py-2 rounded">Cancelar</button>
+                    class="cursor-pointer bg-red-600 hover:bg-gray-700 text-white font-bold w-24 py-2 rounded">Cancelar</button>
             </div>
         </form>
     </div>

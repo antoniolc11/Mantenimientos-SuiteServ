@@ -29,7 +29,7 @@
                 {{-- Botón para editar el perfil del usuario. --}}
                 <div class="w-full text-center">
                     <a href="{{ route('users.edit', $usuario) }}">
-                        <button type="submit">
+                        <button title="Editar" type="submit">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500 hover:text-green-700"
                                 viewBox="0 0 512 512">
                                 <path
@@ -40,14 +40,9 @@
                     @if ($usuario->status == 1)
                                         {{-- Botón para editar el perfil del usuario. --}}
                     <a href="{{ route('users.addbanned', $usuario) }}">
-                        <button type="submit" class="ml-4">
+                        <button title="Bloquear" type="submit" class="ml-4">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500 hover:text-green-700"
                                 viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
-                                <style>
-                                    svg {
-                                        fill: #000000
-                                    }
-                                </style>
                                 <path fill="#ff0000"
                                     d="M367.2 412.5L99.5 144.8C77.1 176.1 64 214.5 64 256c0 106 86 192 192 192c41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3C434.9 335.9 448 297.5 448 256c0-106-86-192-192-192c-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z" />
                             </svg>
@@ -56,7 +51,7 @@
                     @else
                     {{-- Botón para editar el perfil del usuario. --}}
                     <a href="{{ route('users.outbanned', $usuario) }}">
-                        <button type="submit" class="ml-4">
+                        <button title="Desbloquear" class="ml-4">
                             <svg xmlns="http://www.w3.org/2000/svg"
                                 class="h-6 w-6 text-green-500 hover:text-green-700" viewBox="0 0 448 512">
                                 <path fill="#1b5e0d"
@@ -65,10 +60,6 @@
                         </button>
                     </a>
                     @endif
-
-
-
-
                 </div>
             </td>
         </tr>
