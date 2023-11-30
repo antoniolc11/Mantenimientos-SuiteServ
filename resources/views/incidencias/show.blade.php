@@ -49,20 +49,20 @@
 
                                     {{-- TODO: barajar la opción de cerrar incidencia directamente --}}
                                     @if ($incidencia->estado_id != 3)
-                                    @if (auth()->user()->esDepartamentoDireccion() ||
-                                            auth()->user()->esDepartamentosupervision())
-                                        <li class="text-black w-full p-1 hover:bg-gray-200 font-normal text-start">
-                                            <a href="{{ route('incidencias.edit', $incidencia) }}">Editar</a>
-                                        </li>
-                                    @endif
+                                        @if (auth()->user()->esDepartamentoDireccion() ||
+                                                auth()->user()->esDepartamentosupervision())
+                                            <li class="text-black w-full p-1 hover:bg-gray-200 font-normal text-start">
+                                                <a href="{{ route('incidencias.edit', $incidencia) }}">Editar</a>
+                                            </li>
+                                        @endif
 
-                                    <form action="{{ route('incidencias.cerrar', $incidencia) }}" method="post">
-                                        @csrf 
-                                        @method('put')
-                                        <li class="text-black w-full p-1 hover:bg-gray-200 font-normal">
-                                            <button type="submit">Pasar a resuelta</button>
-                                        </li>
-                                    </form>
+                                        <form action="{{ route('incidencias.cerrar', $incidencia) }}" method="post">
+                                            @csrf
+                                            @method('put')
+                                            <li class="text-black w-full p-1 hover:bg-gray-200 font-normal">
+                                                <button type="submit">Pasar a resuelta</button>
+                                            </li>
+                                        </form>
                                     @endif
 
                                     @if ($incidencia->estado_id == 3)
@@ -195,7 +195,21 @@
             <tfoot>
                 <tr>
                     <td colspan="2" class="text-center py-4">
-                        @if ($incidencia->estado->nombre != 'Finalizado')
+
+
+
+
+
+                        <div class="w-full relative h-32 flex flex-row items-center justify-center">
+                            <a href="{{ route('incidencias.index') }}" class="absolute left-6 py-2 mt-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                                    class="w-10 h-10 mb-2 mt-auto hover:scale-110">
+                                    <path
+                                        d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160zm352-160l-160 160c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L301.3 256 438.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0z" />
+                                </svg>
+                            </a>
+
+                            @if ($incidencia->estado->nombre != 'Finalizado')
                             <a href="{{ route('incidencias.cambiar-estado', ['incidencia' => $incidencia->id]) }}">
                                 <button type="submit"
                                     class="bg-neutral-800 hover:bg-gray-700 text-white font-bold w-32 py-3 rounded">
@@ -208,13 +222,15 @@
                             </a>
                         @endif
 
-                        </form>
-                        {{-- Boton que abre la modal, que muestra los historiales de la incidencia. --}}
-                        <button type="button"
-                            class="bg-neutral-800 hover:bg-gray-700 text-white font-bold w-32 py-3 rounded"
-                            data-modal-target="defaultModal" data-modal-toggle="defaultModal" Toggle modal>
-                            Ver Historial
-                        </button>
+                            {{-- Boton que abre la modal, que muestra los historiales de la incidencia. --}}
+                            <button type="button"
+                                class="bg-neutral-800 hover:bg-gray-700 text-white font-bold w-32 py-3 rounded ml-3"
+                                data-modal-target="defaultModal" data-modal-toggle="defaultModal" Toggle modal>
+                                Ver Historial
+                            </button>
+
+                        </div>
+                    </form>
                     </td>
 
                 </tr>
