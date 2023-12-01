@@ -16,5 +16,6 @@ class EstadoSeeder extends Seeder
         Estado::create(['nombre' => 'Pendiente']);
         Estado::create(['nombre' => 'En curso']);
         Estado::create(['nombre' => 'Finalizado']);
+        Estado::create(['nombre' => 'Reabierta']);
     }
 }

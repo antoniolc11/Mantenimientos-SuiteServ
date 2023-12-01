@@ -56,16 +56,17 @@
                                             </li>
                                         @endif
 
-                                        <form action="{{ route('incidencias.cerrar', $incidencia) }}" method="post">
-                                            @csrf
-                                            @method('put')
-                                            <li class="text-black w-full p-1 hover:bg-gray-200 font-normal">
-                                                <button type="submit">Pasar a resuelta</button>
-                                            </li>
-                                        </form>
+
                                     @endif
 
                                     @if ($incidencia->estado_id == 3)
+                                        <form action="{{ route('incidencias.reabrir', $incidencia) }}" method="post">
+                                            @csrf
+                                            @method('put')
+                                            <li class="text-black w-full p-1 hover:bg-gray-200 font-normal text-start">
+                                                <button type="submit">Reabrir</button>
+                                            </li>
+                                        </form>
                                         <li class="text-black w-full p-1 hover:bg-gray-200 font-normal">
                                             <a href="{{ route('generate-pdf', $incidencia) }}" target="_blank"
                                                 class="btn btn-primary">
@@ -74,7 +75,7 @@
                                             </a>
                                         </li>
                                     @endif
-                                    <!-- Agrega más elementos según sea necesario -->
+                                    <!-- Agregar más elementos al desplegable según sea necesario -->
                                 </ul>
                             </div>
 
@@ -177,7 +178,7 @@
                     @csrf
                     @method('PUT')
 
-                    @if ($incidencia->estado->nombre == 'En curso')
+                    @if ($incidencia->estado->nombre == 'En curso' || $incidencia->estado->nombre == 'Reabierta')
                         <tr class="border-t border-gray-200">
                             <th class="text-left w-48 text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Trabajo realizado:
@@ -210,17 +211,17 @@
                             </a>
 
                             @if ($incidencia->estado->nombre != 'Finalizado')
-                            <a href="{{ route('incidencias.cambiar-estado', ['incidencia' => $incidencia->id]) }}">
-                                <button type="submit"
-                                    class="bg-neutral-800 hover:bg-gray-700 text-white font-bold w-32 py-3 rounded">
-                                    @if ($incidencia->estado->nombre == 'Pendiente')
-                                        Iniciar
-                                    @else
-                                        Finalizar
-                                    @endif
-                                </button>
-                            </a>
-                        @endif
+                                <a href="{{ route('incidencias.cambiar-estado', ['incidencia' => $incidencia->id]) }}">
+                                    <button type="submit"
+                                        class="bg-neutral-800 hover:bg-gray-700 text-white font-bold w-32 py-3 rounded">
+                                        @if ($incidencia->estado->nombre == 'Pendiente')
+                                            Iniciar
+                                        @else
+                                            Finalizar
+                                        @endif
+                                    </button>
+                                </a>
+                            @endif
 
                             {{-- Boton que abre la modal, que muestra los historiales de la incidencia. --}}
                             <button type="button"
@@ -230,7 +231,7 @@
                             </button>
 
                         </div>
-                    </form>
+                        </form>
                     </td>
 
                 </tr>
@@ -263,7 +264,7 @@
                     </div>
 
                     <!-- Modal body -->
-                    <div class="p-6 space-y-6">
+                    <div class="p-6 space-y-6 overflow-y-auto max-h-[calc(100vh-200px)]">
 
                         @foreach ($historiales as $historial)
                             @if ($historial['estado_id'] == 1)
@@ -295,6 +296,22 @@
                                 </div>
                             @endif
 
+                            @if ($historial['estado_id'] == 4)
+                                <h5 class="text-s font-semibold text-gray-900 dark:text-white">
+                                    Reabierta.
+                                </h5>
+                                <div
+                                    class="flex items-center space-x-2 border-b border-gray-200 rounded-b dark:border-gray-600">
+
+
+                                    <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400 mb-6">
+                                        La incidencia ha sido reabierta con fecha: {{ $historial->fecha }} Finalizada a
+                                        las:
+                                        {{ $historial->hora_inicio }}.
+                                    </p>
+                                </div>
+                            @endif
+
                             @if ($historial['estado_id'] == 3)
                                 <h5 class="text-s font-semibold text-gray-900 dark:text-white">
                                     Finalizada.
@@ -311,6 +328,9 @@
                             @endif
                         @endforeach
 
+
+
+
                     </div>
                     <!-- Modal footer -->
                     <div
@@ -320,13 +340,21 @@
 
 
                         @if ($incidencia->estado_id == 3)
-                            <a href="{{ route('generate-pdf', $incidencia) }}" target="_blank"
-                                class="btn btn-primary">
-                                <button data-modal-hide="defaultModal" type="button"
-                                    class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Parte
-                                    de trabajo</button>
-                            </a>
+                            <button id="openParteTrabajo" type="button"
+                            class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Parte de trabajo</button>
                         @endif
+
+                        <script>
+                            // Agrega un evento de clic al botón "Parte de trabajo"
+                            document.getElementById('openParteTrabajo').addEventListener('click', function () {
+                                // Obtiene el ancho y el alto de la pantalla
+                                var screenWidth = window.screen.width;
+                                var screenHeight = window.screen.height;
+
+                                // Abre una nueva ventana (pop-up) que ocupa el 100% de la pantalla
+                                window.open("{{ route('generate-pdf', $incidencia) }}", "ParteDeTrabajo", "width=" + screenWidth + ",height=" + screenHeight);
+                            });
+                        </script>
 
                     </div>
                 </div>

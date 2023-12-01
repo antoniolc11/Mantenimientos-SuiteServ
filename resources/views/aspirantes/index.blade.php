@@ -68,9 +68,8 @@
                                         </td>
                                         <td class="whitespace-nowrap  px-6 py-4">{{ $aspirante->email }}</td>
                                         <td>
-                                            <a href="{{ Storage::url($aspirante->curriculum) }}" target="_blank">
-                                                <i class="fas fa-file-pdf"></i> Descargar el Curriculum
-                                            </a>
+                                            <button id="OpenCurriculum" type="button"
+                                            class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">observar el Curriculum</button>
                                         </td>
                                         <td class="px-6 text-center">
 
@@ -92,6 +91,20 @@
         </div>
     </div>
 
+
+    <script>
+        // Agrega un evento de clic al botón "Descargar el Curriculum"
+        document.getElementById('OpenCurriculum').addEventListener('click', function() {
+            // Obtiene el ancho y el alto de la pantalla
+            var screenWidth = window.screen.width;
+            var screenHeight = window.screen.height;
+
+            // Abre una nueva ventana (pop-up) que ocupa el 100% de la pantalla
+            window.open("{{ Storage::url($aspirante->curriculum) }}", "Curriculum", "width=" + screenWidth +
+                ",height=" + screenHeight);
+        });
+    </script>
+
     @foreach ($aspirantes as $aspirante)
         <!-- Ventana modal para editar un aspirante -->
 
@@ -112,10 +125,12 @@
                         <span class="sr-only">Cerrar ventana</span>
                     </button>
                     <div class="p-6 text-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-hidden="true" class="mx-auto mb-4 w-10 h-10 text-red-400 dark:text-gray-200"
-                            fill="#ff0000" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-hidden="true"
+                            class="mx-auto mb-4 w-10 h-10 text-red-400 dark:text-gray-200" fill="#ff0000"
+                            stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <!--!Font Awesome Free 6.5.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
-                            <path fill="#d20404" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/>
+                            <path fill="#d20404"
+                                d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z" />
                         </svg>
                         <h3 class="mb-5 text-lg font-normal text-black  dark:text-gray-400">¿Seguro que desea descartar
                             este

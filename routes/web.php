@@ -66,6 +66,7 @@ Route::put('/incidencias/{incidencia}/cambiar-estado', [IncidenciaController::cl
 Route::get('/incidencias/editar/{incidencia}', [IncidenciaController::class, 'edit'])->name('incidencias.edit')->middleware(['auth', 'CheckDepartamentoSuperDire']);
 Route::put('/incidencias/update/{incidencia}', [IncidenciaController::class, 'update'])->name('incidencias.update');
 Route::put('/incidencias/cerrar/{incidencia}', [IncidenciaController::class, 'cerrarInc'])->name('incidencias.cerrar');
+Route::put('/incidencias/reabrir/{incidencia}', [IncidenciaController::class, 'reabrirInc'])->name('incidencias.reabrir');
 Route::get('/buscar-incidencia', [IncidenciaController::class, 'buscarIncidencia'])->name('buscar.incidencia');
 
 //Rutas Categorías:
@@ -102,6 +103,11 @@ Route::delete('/user/borrar/{user}', [UserController::class, 'borrarImagen'])->n
 
 //Generación del pdf como parte de trabajo:
 Route::get('/generate-pdf/{incidencia}', [PDFController::class, 'generatePDF'])->name('generate-pdf');
+
+//Mostrar politica de cookies, mediante el enlace "Mas información en el form de trabaja con nosotros."
+Route::get('/politica-cookies', function () {
+    return view('cookies.politica-cookies');
+})->name('politica.privacidad');
 
 
 require __DIR__.'/auth.php';

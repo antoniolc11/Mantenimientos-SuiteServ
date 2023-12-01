@@ -31,7 +31,7 @@
                 <p class="text-center text-3xl">Bienvenido.</p>
 
 
-                <form class="flex flex-col pt-3 md:pt-8" method="POST" action="{{ route('login') }}">
+                <form class="flex flex-col pt-3 md:pt-8" method="POST" action="{{ route('login') }}" >
                     @csrf
                     <!-- Email Address -->
                     <x-input-error :messages="session('error')" class="" />
@@ -88,4 +88,6 @@
             <img class="object-cover w-full h-screen hidden md:block" src="https://source.unsplash.com/IXUM4cJynP0">
         </div>
     </div>
+
+
 </x-guest-layout>
