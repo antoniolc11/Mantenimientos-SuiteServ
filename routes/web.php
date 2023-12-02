@@ -68,6 +68,8 @@ Route::put('/incidencias/update/{incidencia}', [IncidenciaController::class, 'up
 Route::put('/incidencias/cerrar/{incidencia}', [IncidenciaController::class, 'cerrarInc'])->name('incidencias.cerrar');
 Route::put('/incidencias/reabrir/{incidencia}', [IncidenciaController::class, 'reabrirInc'])->name('incidencias.reabrir');
 Route::get('/buscar-incidencia', [IncidenciaController::class, 'buscarIncidencia'])->name('buscar.incidencia');
+Route::put('/reasignar-incidencia/{incidencia}', [IncidenciaController::class, 'reasignarIncidencia'])->name('reasignar.incidencia');
+
 
 //Rutas Categorías:
 Route::resource('categorias', CategoriaController::class)->middleware(['auth', 'check.direction']);

@@ -1,4 +1,7 @@
 <x-app-layout>
+@php
+    $usuarios = $incidencia->departamento->users;
+@endphp
     <div class="max-w-2xl h-9 mt-5 mb-2 mx-auto">
         {{-- Mostrar los mensajes de exito. --}}
         @if (session('success'))
@@ -54,6 +57,11 @@
                                             <li class="text-black w-full p-1 hover:bg-gray-200 font-normal text-start">
                                                 <a href="{{ route('incidencias.edit', $incidencia) }}">Editar</a>
                                             </li>
+                                            
+
+                                            <button type="submit" class="text-black w-full p-1 hover:bg-gray-200 font-normal text-start"
+                                                data-modal-target="modalReasigmaniento{{ $usuarios }}_{{ $incidencia->id }}"
+                                                data-modal-toggle="modalReasigmaniento{{ $usuarios }}_{{ $incidencia->id }}">Reasignar</button>
                                         @endif
 
 
@@ -184,7 +192,7 @@
                                 Trabajo realizado:
                             </th>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <textarea name="descripcion" id="descripcion" rows="4"
+                                <textarea name="descripcion" id="descripcion" rows="4" placeholder="Describe aquí el trabajo realizado"
                                     class="'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent"></textarea>
                             </td>
                         </tr>
@@ -341,18 +349,20 @@
 
                         @if ($incidencia->estado_id == 3)
                             <button id="openParteTrabajo" type="button"
-                            class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Parte de trabajo</button>
+                                class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Parte
+                                de trabajo</button>
                         @endif
 
                         <script>
                             // Agrega un evento de clic al botón "Parte de trabajo"
-                            document.getElementById('openParteTrabajo').addEventListener('click', function () {
+                            document.getElementById('openParteTrabajo').addEventListener('click', function() {
                                 // Obtiene el ancho y el alto de la pantalla
                                 var screenWidth = window.screen.width;
                                 var screenHeight = window.screen.height;
 
                                 // Abre una nueva ventana (pop-up) que ocupa el 100% de la pantalla
-                                window.open("{{ route('generate-pdf', $incidencia) }}", "ParteDeTrabajo", "width=" + screenWidth + ",height=" + screenHeight);
+                                window.open("{{ route('generate-pdf', $incidencia) }}", "ParteDeTrabajo", "width=" + screenWidth +
+                                    ",height=" + screenHeight);
                             });
                         </script>
 
@@ -360,5 +370,9 @@
                 </div>
             </div>
         </div>
+
+
+    <!-- Ventana modal para crear un nuevo estado -->
+    @include('incidencias.modalReasignamiento')
     </section>
 </x-app-layout>

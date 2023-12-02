@@ -1,6 +1,6 @@
 # Mantenimientos SuiteServ
 
-<a href="https://imgbb.com/"><img src="https://i.ibb.co/qy5564Z/Captura-de-pantalla-de-2023-12-02-11-50-14.png" alt="Captura-de-pantalla-de-2023-12-02-11-50-14" border="0"></a><br /><a target='_blank' href='https://imgbb.com/'>search album ru</a><br />
+<a href="https://imgbb.com/"><img src="https://i.ibb.co/qy5564Z/Captura-de-pantalla-de-2023-12-02-11-50-14.png" alt="Captura-de-pantalla-de-2023-12-02-11-50-14" border="0"></a><br /><a target='_blank' href='https://imgbb.com/'></a><br />
 
 ## Antonio Fernando Román Curso 2023/24
 

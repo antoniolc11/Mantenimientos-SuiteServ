@@ -127,26 +127,26 @@ class IncidenciaController extends Controller
         return redirect()->route('incidencias.show', $incidencia)->with('success', 'La Incidencia fue cerrada directamente.');
     }
 
-        //Reabrir la incidencia.
-        public function reabrirInc(Incidencia $incidencia)
-        {
-            $estadoEnCurso = Estado::where('nombre', 'Reabierta')->first();
-            $incidencia->estado_id = $estadoEnCurso->id;
-            $incidencia->save();
+    //Reabrir la incidencia.
+    public function reabrirInc(Incidencia $incidencia)
+    {
+        $estadoEnCurso = Estado::where('nombre', 'Reabierta')->first();
+        $incidencia->estado_id = $estadoEnCurso->id;
+        $incidencia->save();
 
-            // Crear un registro en la tabla de historial
+        // Crear un registro en la tabla de historial
 
-            Historial::create([
-                'incidencia_id' => $incidencia->id,
-                'user_id'  => $incidencia->usuario_asignado,
-                'trabajo_realizado' => "La incidencia ha sido reabierta.",
-                'estado_id' => $incidencia->estado_id,
-                'fecha_actualizacion' => Carbon::now(),
-                'hora_inicio' => Carbon::now(),
-            ]);
+        Historial::create([
+            'incidencia_id' => $incidencia->id,
+            'user_id'  => $incidencia->usuario_asignado,
+            'trabajo_realizado' => "La incidencia ha sido reabierta.",
+            'estado_id' => $incidencia->estado_id,
+            'fecha_actualizacion' => Carbon::now(),
+            'hora_inicio' => Carbon::now(),
+        ]);
 
-            return redirect()->route('incidencias.show', $incidencia)->with('success', 'La Incidencia fue reabierta.');
-        }
+        return redirect()->route('incidencias.show', $incidencia)->with('success', 'La Incidencia fue reabierta.');
+    }
 
 
     /**
@@ -157,7 +157,7 @@ class IncidenciaController extends Controller
         //
     }
 
-/* Cambia de estado cada vez que se actualiza el formulario del show de incidencias */
+    /* Cambia de estado cada vez que se actualiza el formulario del show de incidencias */
     public function cambiarEstado(StoreIncidenciaRequest $request, Incidencia $incidencia)
     {
         $nombreEstado = $incidencia->estado->nombre;
@@ -188,6 +188,23 @@ class IncidenciaController extends Controller
         ]);
 
         return redirect()->route('incidencias.show', $incidencia)->with('success', $mensaje);
+    }
+
+    /* Reasigna una incidencia a un user  */
+    public function reasignarIncidencia($incidenciaId, StoreIncidenciaRequest $request)
+    {
+        $user = $request->usuario;
+        $incidencia = Incidencia::find($incidenciaId);
+        $user = User::find($user);
+
+
+        if ($incidencia && $user) {
+            $incidencia->usuario_asignado = $user->id;
+            $incidencia->save();
+            return redirect()->route('incidencias.show', $incidencia)->with('success', 'Incidencia reasignada correctamente a ' . $user->nombre);
+        } else {
+            return redirect()->route('incidencias.show', $incidencia)->with('error', 'No se pudo reasignar la incidencia.');
+        }
     }
 
     /*
