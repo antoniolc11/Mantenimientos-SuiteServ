@@ -1,5 +1,6 @@
 <div
-    class="cookie-notice-container bg-black text-white p-4 fixed bottom-0 left-0 w-full h-60 hidden opacity-90 transition-opacity duration-500 ease-in-out">
+    class="cookie-notice-container bg-black text-white p-4 fixed bottom-0 left-0 w-full h-auto
+     hidden opacity-80 transition-opacity duration-500 ease-in-out">
     <span id="cn-notice-text" class="cn-text-container block mb-4 ">
         <p class="leading-relaxed">
             En Mantenimientos SuiteServ Solutions, nos tomamos en serio tu privacidad y queremos asegurarte que tu
@@ -13,7 +14,7 @@
             Gracias por confiar en nosotros. Si tienes alguna pregunta o inquietud, no dudes en ponerte en contacto con
             nuestro equipo de recursos humanos.
         </p>
-        <a id="masInfo" class="text-blue-200 underline">Más información</a>
+        <a id="masInfo" class="text-blue-200 underline cursor-help">Más información</a>
     </span>
     <span id="cn-notice-buttons" class="cn-buttons-container mr-4">
         <a href="#" id="cn-accept-cookie" data-cookie-set="accept"
