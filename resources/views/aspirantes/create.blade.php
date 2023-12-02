@@ -58,11 +58,7 @@
                     <x-input-error :messages="$errors->get('email')" class="mt-2" />
                 </div>
 
-                <!-- TODO: hace falta cambiar esto, la idea es mandar un correo cuando se registre la solicitud al correo,
-                 con un boton que vaya a una vista donde tenga la posibilidad de adjuntar su curriculum -->
-                <div class="mt-4">
-                    <input type="file" name="curriculum" accept=".pdf, .doc, .docx">
-                </div>
+
 
                 <div class="w-full relative h-32 flex flex-row items-center justify-center">
                     <a href="{{ route('login') }}" class="absolute left-6 py-2 mt-2">

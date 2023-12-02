@@ -53,6 +53,11 @@ Route::delete('/aspirantes/{aspirante}', [AspiranteController::class, 'destroy']
 Route::get('/aspirantes/{id}', [AspiranteController::class, 'show'])->name('aspirantes.show');
 Route::get('/descargar-pdf/{id}', [AspiranteController::class, 'download'])->name('descargar.pdf');
 
+//Rutas para el envio de correo para enviar el CV de los aspirantes:
+Route::get('/formulario/curriculum/{aspirante}', [AspiranteController::class, 'showForm'])->name('formulario.curriculum');
+Route::post('/formulario/curriculum', [AspiranteController::class, 'upload'])->name('upload.curriculum');
+
+
 
 //Rutas Departamentos:
 Route::resource('departamentos', DepartamentoController::class)->middleware(['auth', 'check.direction']);

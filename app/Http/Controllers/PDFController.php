@@ -37,10 +37,6 @@ class PDFController extends Controller
             ->pluck('hora_fin')->first();
 
 
-   /*      $trabajo_realizado = Historial::where('incidencia_id', $incidencia->id)
-            ->where('estado_id', 3)
-            ->pluck('trabajo_realizado')->first(); */
-
         $trabajo_realizado = Historial::where('incidencia_id', $incidencia->id)
             ->where('estado_id', 3)
             ->orderByDesc('fecha_actualizacion') // Ajusta 'fecha' al nombre real de la columna temporal que estás utilizando

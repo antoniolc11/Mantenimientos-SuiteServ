@@ -8,6 +8,8 @@ use App\Http\Requests\StoreAspiranteRequest;
 use App\Http\Requests\UpdateAspiranteRequest;
 use App\Models\Aspirante;
 use Illuminate\Support\Facades\Storage;
+use App\Mail\SendCurriculum;
+use Illuminate\Support\Facades\Mail;
 
 class AspiranteController extends Controller
 {
@@ -36,23 +38,29 @@ class AspiranteController extends Controller
         // Validación de campos del formulario.
         $request->validate([
             'nombre' => 'required|string|max:255',
-            'curriculum' => 'required|mimes:pdf,doc,docx|max:2048', // Asegúrate de que solo se acepten ciertos tipos de archivos
         ]);
 
-        if ($request->hasFile('curriculum')) {
-            $curriculumPath = $request->file('curriculum')->store('public/curriculums');
-            $aspirante = new Aspirante([
-                'nombre' => $request->input('nombre'),
-                'primer_apellido' => $request->input('primer_apellido'),
-                'segundo_apellido' => $request->input('segundo_apellido'),
-                'nif' => $request->input('nif'),
-                'telefono' => $request->input('telefono'),
-                'email' => $request->input('email'),
-                'curriculum' => $curriculumPath,
-            ]);
-        }
+        $aspirante = new Aspirante([
+            'nombre' => $request->input('nombre'),
+            'primer_apellido' => $request->input('primer_apellido'),
+            'segundo_apellido' => $request->input('segundo_apellido'),
+            'nif' => $request->input('nif'),
+            'telefono' => $request->input('telefono'),
+            'email' => $request->input('email'),
+            'curriculum' => null,
+        ]);
 
         $aspirante->save();
+        // Después de guardar el aspirante en la base de datos enviamos la notificación para completar el registro adjuntando el cv.
+        // Verifica si el aspirante existe
+        if ($aspirante) {
+            // Crea una nueva instancia de SendCurriculum y pasa el aspirante al constructor
+            $mail = new SendCurriculum($aspirante);
+
+            // Envía el correo electrónico
+            Mail::to($aspirante->email)->send($mail);
+        }
+
         return redirect()->route('login')->with('success', 'Tu solicitud se ha mandado correctamente. ¡Gracias!');
     }
 
@@ -87,11 +95,11 @@ class AspiranteController extends Controller
     {
         if ($aspirante->curriculum) {
             # code...
+            // Elimina el curriculum almacenado en el sistema de archivos
             Storage::delete($aspirante->curriculum);
-            $aspirante->delete();
-            // Elimina la imagen almacenada en el sistema de archivos
-            return redirect()->route('aspirantes.index')->with('success', 'Aspirante eliminado exitosamente.');
         }
+        $aspirante->delete();
+        return redirect()->route('aspirantes.index')->with('success', 'Aspirante descartado exitosamente.');
     }
 
 
@@ -105,5 +113,38 @@ class AspiranteController extends Controller
         return response()->streamDownload(function () use ($pdfContent) {
             echo $pdfContent;
         }, 'documento.pdf');
+    }
+
+    public function showForm($aspiranteId)
+    {
+        // Obtén el aspirante según su ID
+        $aspirante = Aspirante::find($aspiranteId);
+
+        if (!$aspirante) {
+            // Manejar el caso en el que el aspirante no se encuentre
+            return redirect()->back()->with('error', 'Aspirante no encontrado.');
+        }
+
+        return view('aspirantes.formularioCurriculum', ['aspirante' => $aspirante]);
+    }
+
+    public function upload(StoreAspiranteRequest $request)
+    {
+        $aspirante = Aspirante::find($request->aspirante_id);
+        // Lógica para manejar la subida del currículum
+        // Puedes guardar el currículum en el servidor, en una base de datos, etc.
+
+        $request->validate([
+            'curriculum' => 'required|mimes:pdf,doc,docx|max:2048', // Asegúrate de que solo se acepten ciertos tipos de archivos
+        ]);
+
+        if ($request->hasFile('curriculum')) {
+            $curriculumPath = $request->file('curriculum')->store('public/curriculums');
+            $aspirante->curriculum = $curriculumPath;
+            $aspirante->save();
+        }
+
+        // Después de manejar la subida, podrías redirigir al aspirante a una página de agradecimiento
+        return redirect()->route('login')->with('success', 'Tu registro en nuestro sistema se ha completado correctamente. ¡Gracias!');
     }
 }
