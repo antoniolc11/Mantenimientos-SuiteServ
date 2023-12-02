@@ -80,10 +80,20 @@
                 </div>
             </div>
 
-            <div class="flex justify-center">
-                <input type="submit" value="Guardar cambios"
-                    class="bg-black text-white font-bold text-lg hover:bg-gray-700 py-2 mt-8  px-2 w-56" />
+            <div class="relative h-32 flex flex-row items-center justify-center">
+                <a  href="{{route('incidencias.show', $incidencia)}}" class="absolute left-3 py-2 mt-2 ">
+                    <svg class="h-11 hover:scale-110" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path fill="#000000" d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160zm352-160l-160 160c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L301.3 256 438.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0z"/></svg>
+                </a>
+
+
+
+                    <input type="submit" value="Guardar incidencia"
+                        class="cursor-pointer bg-black hover:bg-gray-700 text-white font-bold w-48 py-3 mt-2 mb-2 rounded" />
+
+
             </div>
+
+
 
         </form>
     </section>
@@ -117,5 +127,7 @@
         }
 
     </script>
+
+
 
 </x-app-layout>

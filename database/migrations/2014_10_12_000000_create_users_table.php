@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('fotoperfil')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->unsignedInteger('status')->default(1);
             $table->rememberToken();
             $table->timestamps();
         });

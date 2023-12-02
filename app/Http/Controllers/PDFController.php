@@ -21,25 +21,27 @@ class PDFController extends Controller
         // para crear el contenido del PDF.
 
         $fecha_inicio = Historial::where('incidencia_id', $incidencia->id)
-        ->where('estado_id', 2)
-        ->pluck('fecha')->first();
+            ->where('estado_id', 2)
+            ->pluck('fecha')->first();
 
         $fecha_fin = Historial::where('incidencia_id', $incidencia->id)
-        ->where('estado_id', 3)
-        ->pluck('fecha')->first();
+            ->where('estado_id', 3)
+            ->pluck('fecha')->first();
 
         $hora_inicio = Historial::where('incidencia_id', $incidencia->id)
-        ->where('estado_id', 2)
-        ->pluck('hora_inicio')->first();
+            ->where('estado_id', 2)
+            ->pluck('hora_inicio')->first();
 
         $hora_fin = Historial::where('incidencia_id', $incidencia->id)
-        ->where('estado_id', 3)
-        ->pluck('hora_fin')->first();
-        
+            ->where('estado_id', 3)
+            ->pluck('hora_fin')->first();
+
 
         $trabajo_realizado = Historial::where('incidencia_id', $incidencia->id)
-        ->where('estado_id', 3)
-        ->pluck('trabajo_realizado')->first();
+            ->where('estado_id', 3)
+            ->orderByDesc('fecha_actualizacion') // Ajusta 'fecha' al nombre real de la columna temporal que estás utilizando
+            ->pluck('trabajo_realizado')
+            ->first();
 
         // Crea una instancia de mPDF
         $mpdf = new Mpdf();

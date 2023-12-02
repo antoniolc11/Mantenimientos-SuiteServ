@@ -6,7 +6,6 @@
                 <div class="w-full md:w-1/2 flex flex-col pr-4"> <!-- Añadir clase pr-4 para el margen derecho -->
                     <h2 class="text-xl font-semibold" style="text-decoration: underline; solid black;">Datos personales
                     </h2>
-
                     <p class="text-gray-700 mt-8">Nombre: <span class="font-bold">{{ $usuario->nombre }}</span></p>
                     <p class="text-gray-700 mt-4">Apellidos: <span class="font-bold">
                             {{ $usuario->primer_apellido . ' ' . $usuario->segundo_apellido }}</span></p>
@@ -15,18 +14,12 @@
                             {{ substr($usuario->telefono, 0, 3) }}
                             {{ substr($usuario->telefono, 3, 3) }}
                             {{ substr($usuario->telefono, 6) }}</span></p>
-
                     <p class="text-gray-700 mt-4">Departamento: <span class="font-bold">
-
                             {{ $usuario->departamentos->implode('nombre', ', ') }}
-
-
-
-
                         </span></p>
                     <p class="text-gray-700 mt-4 mb-9">Nif: <span class="font-bold">{{ $usuario->nif }}</span></p>
                 </div>
-
+                {{-- imagen y Menú desplegable --}}
                 <div class="md:w-1/2 flex justify-end pl-4 relative">
                     <div class="flex flex-col relative">
                         {{-- Imagen del usuario --}}
@@ -35,8 +28,7 @@
                                 src="{{ $usuario->fotoperfil ? Storage::url($usuario->fotoperfil) : 'https://mastermdi.com/files/students/noImage.jpg' }}"
                                 alt="usuario avatar" />
                         </div>
-
-
+                        {{-- Boton de editar la imagen que abre el menú desplegable --}}
                         <div class="relative group">
                             <button
                                 class="text-default flex items-center justify-center cursor-pointer bg-black hover:bg-gray-700 text-white w-full p-0.5 rounded-b">
@@ -49,7 +41,6 @@
                                 </svg>
                                 Editar
                             </button>
-
                             {{-- Menú desplegable --}}
                             <div
                                 class="absolute hidden bg-black border text-white border-gray-300 rounded mt-0 space-y-2">
@@ -85,7 +76,6 @@
                                 </div>
                             </div>
                             {{-- Fin Menú desplegable --}}
-
                             <!-- Script para controlar la visibilidad del menú desplegable para editar o borrar la foto de perfíl -->
                             <script>
                                 //Abre el desplegable de editar la imagen.
@@ -145,16 +135,10 @@
                                     }
                                 });
                             </script>
-
                         </div>
                     </div>
                 </div>
             </div>
-
-
-            <!-- Script para controlar la visibilidad del menú desplegable para editar o borrar la foto de perfíl -->
-            <script></script>
-
             {{-- Botón para editar el perfil del usuario. --}}
             <div class="w-full mt-4 text-center">
                 <a href="{{ route('users.edit', $usuario) }}"><button
@@ -163,7 +147,4 @@
             </div>
         </div>
     </div>
-
-
-
 </x-app-layout>

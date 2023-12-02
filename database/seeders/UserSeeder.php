@@ -33,6 +33,7 @@ class UserSeeder extends Seeder
             'telefono' => 675523834,
             'email' => 'antoniolc11@hotmail.com',
             'password' => Hash::make('1234'),
+            'status'    => 1,
         ]);
 
         $usuario1->departamentos()->attach($depart_direccion->id);
@@ -46,6 +47,7 @@ class UserSeeder extends Seeder
             'telefono' => 752186347,
             'email' => 'roberto@suiteserv.com',
             'password' => Hash::make('1234'),
+            'status'    => 1,
         ]);
 
         $usuario2->departamentos()->attach($depart_supervision->id);
@@ -58,6 +60,7 @@ class UserSeeder extends Seeder
             'telefono' => 657914665,
             'email' => 'cristina@suiteserv.com',
             'password' => Hash::make('1234'),
+            'status'    => 0,
         ]);
 
         $usuario3->departamentos()->attach($depart_RRHH->id);
@@ -70,6 +73,7 @@ class UserSeeder extends Seeder
             'telefono' => 752444387,
             'email' => 'mariano@suiteserv.com',
             'password' => Hash::make('1234'),
+            'status'    => 1,
         ]);
 
         $usuario5 = User::create([
@@ -80,6 +84,7 @@ class UserSeeder extends Seeder
             'telefono' => 752444334,
             'email' => 'sergio@suiteserv.com',
             'password' => Hash::make('1234'),
+            'status'    => 1,
         ]);
 
         $usuario4->departamentos()->attach($depart_informatica->id);
@@ -93,6 +98,7 @@ class UserSeeder extends Seeder
             'telefono' => 675523834,
             'email' => 'manuel@suiteserv.com',
             'password' => Hash::make('1234'),
+            'status'    => 1,
         ]);
 
         $usuario6->departamentos()->attach($depart_telecomunicaciones->id);

@@ -60,9 +60,10 @@ class IncidenciaController extends Controller
             'trabajo_realizado' => null,
             'estado_id' => $incidencia->estado_id,
             'hora_inicio' => Carbon::now(),
+            'fecha_actualizacion' => Carbon::now(),
         ]);
 
-        return redirect()->route('incidencias.show', $incidencia)->with('success', 'Incidencia creada con exito.');
+        return redirect()->route('incidencias.show', $incidencia)->with('success', 'Incidencia generada con exito.');
     }
 
     /**
@@ -79,6 +80,9 @@ class IncidenciaController extends Controller
      */
     public function edit(Incidencia $incidencia)
     {
+        if ($incidencia->estado->id != 1) {
+            return redirect()->route('incidencias.show', $incidencia)->with('error', 'Incidencia ya iniciada, debes de generar una nueva.');
+        }
         $departamentos = Departamento::all();
         $estados = Estado::all();
         $ubicaciones = Ubicacion::all();
@@ -89,7 +93,7 @@ class IncidenciaController extends Controller
             'ubicaciones' => $ubicaciones,
             'categorias' => $categorias,
             'incidencia' => $incidencia,
-        ]);
+        ])->with('success', 'Incidencia modificada con exito.');
     }
 
     /**
@@ -102,6 +106,49 @@ class IncidenciaController extends Controller
         return redirect()->route('incidencias.show', $incidencia)->with('success', 'Incidencia modificada con exito.');
     }
 
+
+    //Cierra la incidencia sin necesidad de iniciarla en el caso de que se creara por error.
+    public function cerrarInc(Incidencia $incidencia)
+    {
+        $estado = Estado::where('nombre', 'Finalizado')->first();
+        $incidencia->estado_id = $estado->id;
+        $incidencia->save();
+
+        // Crear un registro en la tabla de historial
+        Historial::create([
+            'incidencia_id' => $incidencia->id,
+            'user_id'  => $incidencia->usuario_asignado,
+            'trabajo_realizado' => "La incidencia no requiere intervención",
+            'estado_id' => $incidencia->estado_id,
+            'fecha_actualizacion' => Carbon::now(),
+        ]);
+
+
+        return redirect()->route('incidencias.show', $incidencia)->with('success', 'La Incidencia fue cerrada directamente.');
+    }
+
+    //Reabrir la incidencia.
+    public function reabrirInc(Incidencia $incidencia)
+    {
+        $estadoEnCurso = Estado::where('nombre', 'Reabierta')->first();
+        $incidencia->estado_id = $estadoEnCurso->id;
+        $incidencia->save();
+
+        // Crear un registro en la tabla de historial
+
+        Historial::create([
+            'incidencia_id' => $incidencia->id,
+            'user_id'  => $incidencia->usuario_asignado,
+            'trabajo_realizado' => "La incidencia ha sido reabierta.",
+            'estado_id' => $incidencia->estado_id,
+            'fecha_actualizacion' => Carbon::now(),
+            'hora_inicio' => Carbon::now(),
+        ]);
+
+        return redirect()->route('incidencias.show', $incidencia)->with('success', 'La Incidencia fue reabierta.');
+    }
+
+
     /**
      * Remove the specified resource from storage.
      */
@@ -110,19 +157,23 @@ class IncidenciaController extends Controller
         //
     }
 
-
+    /* Cambia de estado cada vez que se actualiza el formulario del show de incidencias */
     public function cambiarEstado(StoreIncidenciaRequest $request, Incidencia $incidencia)
     {
         $nombreEstado = $incidencia->estado->nombre;
 
         if ($nombreEstado == 'Pendiente') {
-            $incidencia->estado_id = Estado::where('nombre', 'En curso')->first()->id;
+            $estado = Estado::where('nombre', 'En curso')->first();
+            $incidencia->estado_id = $estado->id;
             $incidencia->save();
+            $mensaje = "Estado de la incidencia cambiado a {$estado->nombre}";
         }
 
-        if ($nombreEstado == 'En curso') {
-            $incidencia->estado_id = Estado::where('nombre', 'Finalizado')->first()->id;
+        if ($nombreEstado == 'En curso' || $nombreEstado == 'Reabierta') {
+            $estado = Estado::where('nombre', 'Finalizado')->first();
+            $incidencia->estado_id = $estado->id;
             $incidencia->save();
+            $mensaje = "La incidencia ha sido cerrada.";
         }
 
         // Crea un nuevo registro en la tabla de historial
@@ -132,10 +183,28 @@ class IncidenciaController extends Controller
             'trabajo_realizado' => $nombreEstado == 'Pendiente' ? $incidencia->descripcion : $request->descripcion,
             'estado_id' => $incidencia->estado_id,
             'hora_inicio' => $nombreEstado == 'Pendiente' ? Carbon::now() : null,
-            'hora_fin' => $nombreEstado == 'En curso' ? Carbon::now() : null,
+            'hora_fin' => $nombreEstado == 'En curso' || $nombreEstado == 'Reabierta' ? Carbon::now() : null,
+            'fecha_actualizacion' => Carbon::now(),
         ]);
 
-        return redirect()->route('incidencias.index')->with('success', 'Estado de la incidencia cambiado exitosamente');
+        return redirect()->route('incidencias.show', $incidencia)->with('success', $mensaje);
+    }
+
+    /* Reasigna una incidencia a un user  */
+    public function reasignarIncidencia($incidenciaId, StoreIncidenciaRequest $request)
+    {
+        $user = $request->usuario;
+        $incidencia = Incidencia::find($incidenciaId);
+        $user = User::find($user);
+
+
+        if ($incidencia && $user) {
+            $incidencia->usuario_asignado = $user->id;
+            $incidencia->save();
+            return redirect()->route('incidencias.show', $incidencia)->with('success', 'Incidencia reasignada correctamente a ' . $user->nombre);
+        } else {
+            return redirect()->route('incidencias.show', $incidencia)->with('error', 'No se pudo reasignar la incidencia.');
+        }
     }
 
     /*

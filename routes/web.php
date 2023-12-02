@@ -33,7 +33,7 @@ Route::get('/', function () {
 
 //Página de inicio de sesión: donde se mostrarán las incidencias.
 Route::middleware(['auth'])->group(function () {
-    Route::get('/home', [IncidenciaController::class, 'index'])->name('home');
+    Route::get('/home', [IncidenciaController::class, 'index'])->name('home')->middleware('CheckBanned');
 });
 
 
@@ -53,6 +53,12 @@ Route::delete('/aspirantes/{aspirante}', [AspiranteController::class, 'destroy']
 Route::get('/aspirantes/{id}', [AspiranteController::class, 'show'])->name('aspirantes.show');
 Route::get('/descargar-pdf/{id}', [AspiranteController::class, 'download'])->name('descargar.pdf');
 
+//Rutas para el envio de correo para enviar el CV de los aspirantes:
+Route::get('/formulario/curriculum/{aspirante}', [AspiranteController::class, 'showForm'])->name('formulario.curriculum');
+Route::post('/formulario/curriculum', [AspiranteController::class, 'upload'])->name('upload.curriculum');
+
+
+
 //Rutas Departamentos:
 Route::resource('departamentos', DepartamentoController::class)->middleware(['auth', 'check.direction']);
 
@@ -64,7 +70,11 @@ Route::get('/incidencias{incidencia}', [IncidenciaController::class, 'show'])->n
 Route::put('/incidencias/{incidencia}/cambiar-estado', [IncidenciaController::class, 'cambiarEstado'])->name('incidencias.cambiar-estado');
 Route::get('/incidencias/editar/{incidencia}', [IncidenciaController::class, 'edit'])->name('incidencias.edit')->middleware(['auth', 'CheckDepartamentoSuperDire']);
 Route::put('/incidencias/update/{incidencia}', [IncidenciaController::class, 'update'])->name('incidencias.update');
+Route::put('/incidencias/cerrar/{incidencia}', [IncidenciaController::class, 'cerrarInc'])->name('incidencias.cerrar');
+Route::put('/incidencias/reabrir/{incidencia}', [IncidenciaController::class, 'reabrirInc'])->name('incidencias.reabrir');
 Route::get('/buscar-incidencia', [IncidenciaController::class, 'buscarIncidencia'])->name('buscar.incidencia');
+Route::put('/reasignar-incidencia/{incidencia}', [IncidenciaController::class, 'reasignarIncidencia'])->name('reasignar.incidencia');
+
 
 //Rutas Categorías:
 Route::resource('categorias', CategoriaController::class)->middleware(['auth', 'check.direction']);
@@ -87,6 +97,9 @@ Route::get('/usuarios/{user}', [UserController::class, 'show'])->name('users.sho
 Route::get('/usuarios/{user}/editar', [UserController::class, 'edit'])->name('users.edit');
 Route::put('/edit/{user}', [UserController::class, 'update'])->name('users.update');
 Route::get('/buscador/user', [UserController::class, 'buscadorUsuario'])->name('buscadorUser.index');
+Route::get('/usuario/addbanned/{user}', [UserController::class, 'addBanned'])->name('users.addbanned')->middleware(['auth', 'verified', 'check.direction']);
+Route::get('/usuario/outbanned/{user}', [UserController::class, 'outBanned'])->name('users.outbanned')->middleware(['auth', 'verified', 'check.direction']);
+
 
 //Busca los usuarios por un determinado departamento.
 Route::get('/usuarios-por-departamento/{departamentoId}', [UserController::class, 'usuariosPorDepartamento']);
@@ -97,6 +110,11 @@ Route::delete('/user/borrar/{user}', [UserController::class, 'borrarImagen'])->n
 
 //Generación del pdf como parte de trabajo:
 Route::get('/generate-pdf/{incidencia}', [PDFController::class, 'generatePDF'])->name('generate-pdf');
+
+//Mostrar politica de cookies, mediante el enlace "Mas información en el form de trabaja con nosotros."
+Route::get('/politica-cookies', function () {
+    return view('cookies.politica-cookies');
+})->name('politica.privacidad');
 
 
 require __DIR__.'/auth.php';

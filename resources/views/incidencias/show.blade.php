@@ -1,5 +1,19 @@
 <x-app-layout>
-    <section class="max-w-2xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800 mt-20 ">
+@php
+    $usuarios = $incidencia->departamento->users;
+@endphp
+    <div class="max-w-2xl h-9 mt-5 mb-2 mx-auto">
+        {{-- Mostrar los mensajes de exito. --}}
+        @if (session('success'))
+            <x-success-alert :status="session('success')" />
+        @endif
+
+        {{-- Mostrar los mensajes de error. --}}
+        @if (session('error'))
+            <x-error-alert :messages="session('error')" />
+        @endif
+    </div>
+    <section class="max-w-2xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800">
         <table class="min-w-full">
             <thead class="border-b">
                 <tr>
@@ -35,18 +49,32 @@
                                         'width': 'max-content'
                                     }">
                                     <!-- Contenido del menú desplegable -->
-                                    @if (auth()->user()->esDepartamentoDireccion() ||
-                                            auth()->user()->esDepartamentosupervision())
-                                        <li class="text-black w-full p-1 hover:bg-gray-200 font-normal text-start">
-                                            <a href="{{ route('incidencias.edit', $incidencia) }}">Editar</a>
-                                        </li>
-                                    @endif
+
                                     {{-- TODO: barajar la opción de cerrar incidencia directamente --}}
-                                    <li class="text-black w-full p-1 hover:bg-gray-200 font-normal">
-                                        <a href="{{ route('incidencias.edit', $incidencia) }}">Pasar a resuelta</a>
-                                    </li>
+                                    @if ($incidencia->estado_id != 3)
+                                        @if (auth()->user()->esDepartamentoDireccion() ||
+                                                auth()->user()->esDepartamentosupervision())
+                                            <li class="text-black w-full p-1 hover:bg-gray-200 font-normal text-start">
+                                                <a href="{{ route('incidencias.edit', $incidencia) }}">Editar</a>
+                                            </li>
+                                            
+
+                                            <button type="submit" class="text-black w-full p-1 hover:bg-gray-200 font-normal text-start"
+                                                data-modal-target="modalReasigmaniento{{ $usuarios }}_{{ $incidencia->id }}"
+                                                data-modal-toggle="modalReasigmaniento{{ $usuarios }}_{{ $incidencia->id }}">Reasignar</button>
+                                        @endif
+
+
+                                    @endif
 
                                     @if ($incidencia->estado_id == 3)
+                                        <form action="{{ route('incidencias.reabrir', $incidencia) }}" method="post">
+                                            @csrf
+                                            @method('put')
+                                            <li class="text-black w-full p-1 hover:bg-gray-200 font-normal text-start">
+                                                <button type="submit">Reabrir</button>
+                                            </li>
+                                        </form>
                                         <li class="text-black w-full p-1 hover:bg-gray-200 font-normal">
                                             <a href="{{ route('generate-pdf', $incidencia) }}" target="_blank"
                                                 class="btn btn-primary">
@@ -55,9 +83,8 @@
                                             </a>
                                         </li>
                                     @endif
-                                    <!-- Agrega más elementos según sea necesario -->
+                                    <!-- Agregar más elementos al desplegable según sea necesario -->
                                 </ul>
-
                             </div>
 
                             <div class="w-full">
@@ -159,13 +186,13 @@
                     @csrf
                     @method('PUT')
 
-                    @if ($incidencia->estado->nombre == 'En curso')
+                    @if ($incidencia->estado->nombre == 'En curso' || $incidencia->estado->nombre == 'Reabierta')
                         <tr class="border-t border-gray-200">
                             <th class="text-left w-48 text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Trabajo realizado:
                             </th>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <textarea name="descripcion" id="descripcion" rows="4"
+                                <textarea name="descripcion" id="descripcion" rows="4" placeholder="Describe aquí el trabajo realizado"
                                     class="'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent"></textarea>
                             </td>
                         </tr>
@@ -177,26 +204,42 @@
             <tfoot>
                 <tr>
                     <td colspan="2" class="text-center py-4">
-                        @if ($incidencia->estado->nombre != 'Finalizado')
-                            <a href="{{ route('incidencias.cambiar-estado', ['incidencia' => $incidencia->id]) }}">
-                                <button type="submit"
-                                    class="bg-neutral-800 hover:bg-gray-700 text-white font-bold w-32 py-3 rounded">
-                                    @if ($incidencia->estado->nombre == 'Pendiente')
-                                        Iniciar
-                                    @else
-                                        Finalizar
-                                    @endif
-                                </button>
-                            </a>
-                        @endif
 
+
+
+
+
+                        <div class="w-full relative h-32 flex flex-row items-center justify-center">
+                            <a href="{{ route('incidencias.index') }}" class="absolute left-6 py-2 mt-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                                    class="w-10 h-10 mb-2 mt-auto hover:scale-110">
+                                    <path
+                                        d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160zm352-160l-160 160c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L301.3 256 438.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0z" />
+                                </svg>
+                            </a>
+
+                            @if ($incidencia->estado->nombre != 'Finalizado')
+                                <a href="{{ route('incidencias.cambiar-estado', ['incidencia' => $incidencia->id]) }}">
+                                    <button type="submit"
+                                        class="bg-neutral-800 hover:bg-gray-700 text-white font-bold w-32 py-3 rounded">
+                                        @if ($incidencia->estado->nombre == 'Pendiente')
+                                            Iniciar
+                                        @else
+                                            Finalizar
+                                        @endif
+                                    </button>
+                                </a>
+                            @endif
+
+                            {{-- Boton que abre la modal, que muestra los historiales de la incidencia. --}}
+                            <button type="button"
+                                class="bg-neutral-800 hover:bg-gray-700 text-white font-bold w-32 py-3 rounded ml-3"
+                                data-modal-target="defaultModal" data-modal-toggle="defaultModal" Toggle modal>
+                                Ver Historial
+                            </button>
+
+                        </div>
                         </form>
-                        {{-- Boton que abre la modal, que muestra los historiales de la incidencia. --}}
-                        <button type="button"
-                            class="bg-neutral-800 hover:bg-gray-700 text-white font-bold w-32 py-3 rounded"
-                            data-modal-target="defaultModal" data-modal-toggle="defaultModal" Toggle modal>
-                            Ver Historial
-                        </button>
                     </td>
 
                 </tr>
@@ -229,7 +272,7 @@
                     </div>
 
                     <!-- Modal body -->
-                    <div class="p-6 space-y-6">
+                    <div class="p-6 space-y-6 overflow-y-auto max-h-[calc(100vh-200px)]">
 
                         @foreach ($historiales as $historial)
                             @if ($historial['estado_id'] == 1)
@@ -261,6 +304,22 @@
                                 </div>
                             @endif
 
+                            @if ($historial['estado_id'] == 4)
+                                <h5 class="text-s font-semibold text-gray-900 dark:text-white">
+                                    Reabierta.
+                                </h5>
+                                <div
+                                    class="flex items-center space-x-2 border-b border-gray-200 rounded-b dark:border-gray-600">
+
+
+                                    <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400 mb-6">
+                                        La incidencia ha sido reabierta con fecha: {{ $historial->fecha }} Finalizada a
+                                        las:
+                                        {{ $historial->hora_inicio }}.
+                                    </p>
+                                </div>
+                            @endif
+
                             @if ($historial['estado_id'] == 3)
                                 <h5 class="text-s font-semibold text-gray-900 dark:text-white">
                                     Finalizada.
@@ -277,6 +336,9 @@
                             @endif
                         @endforeach
 
+
+
+
                     </div>
                     <!-- Modal footer -->
                     <div
@@ -286,17 +348,31 @@
 
 
                         @if ($incidencia->estado_id == 3)
-                            <a href="{{ route('generate-pdf', $incidencia) }}" target="_blank"
-                                class="btn btn-primary">
-                                <button data-modal-hide="defaultModal" type="button"
-                                    class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Parte
-                                    de trabajo</button>
-                            </a>
+                            <button id="openParteTrabajo" type="button"
+                                class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Parte
+                                de trabajo</button>
                         @endif
+
+                        <script>
+                            // Agrega un evento de clic al botón "Parte de trabajo"
+                            document.getElementById('openParteTrabajo').addEventListener('click', function() {
+                                // Obtiene el ancho y el alto de la pantalla
+                                var screenWidth = window.screen.width;
+                                var screenHeight = window.screen.height;
+
+                                // Abre una nueva ventana (pop-up) que ocupa el 100% de la pantalla
+                                window.open("{{ route('generate-pdf', $incidencia) }}", "ParteDeTrabajo", "width=" + screenWidth +
+                                    ",height=" + screenHeight);
+                            });
+                        </script>
 
                     </div>
                 </div>
             </div>
         </div>
+
+
+    <!-- Ventana modal para crear un nuevo estado -->
+    @include('incidencias.modalReasignamiento')
     </section>
 </x-app-layout>

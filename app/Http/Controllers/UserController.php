@@ -25,7 +25,9 @@ class UserController extends Controller
     public function index()
     {
         $usuarios = User::all();
-        return view('users.index', ['usuarios' => $usuarios]);
+        $departamentos = Departamento::all();
+
+        return view('users.index', ['usuarios' => $usuarios, 'departamentos' => $departamentos]);
     }
 
 
@@ -70,9 +72,13 @@ class UserController extends Controller
 
         $usuario->departamentos()->attach($request->departamento); //Inserta el ultimo usuario registrado y su departamento en la tabla departamento_usuario
 
-        return redirect()->route('users.index');
+        return redirect()->route('users.index')->with('success', 'El usuario ha sido creado correctamente.');
     }
 
+
+    /*
+     *  Muestra la ficha del usuario.
+     */
     public function show(User $user)
     {
         return view('users.show', ['usuario' => $user]);
@@ -98,9 +104,6 @@ class UserController extends Controller
         $userId = $request->input('user_id');
         $nuevosDatos = $request->only(['nombre', 'primer_apellido', 'segundo_apellido', 'telefono', 'email', 'nif']); // Obtener datos para actualizar nombre
         $nuevosDepartamentos = $request->input('departamento'); // Obtener departamentos nuevos
-
-
-
         $usuario = $user;
         if ($usuario) {
             // Actualizar el nombre del usuario
@@ -111,10 +114,8 @@ class UserController extends Controller
 
             $usuario->departamentos()->sync($nuevosDepartamentos);
 
-            return "Usuario actualizado con éxito con los nuevos datos.";
+            return redirect()->route('users.index')->with('success', 'El usuario ha sido actualizado correctamente.');
         }
-
-        return "Usuario no encontrado.";
     }
 
 
@@ -128,6 +129,7 @@ class UserController extends Controller
         return redirect()->route('users.index');
     }
 
+    //Función para cambiar la foto de perfíl del usuario
     public function editarImagen(Request $request, User $user)
     {
         // Obtiene la imagen
@@ -139,6 +141,7 @@ class UserController extends Controller
         return view('users.show', ['usuario' => $user]);
     }
 
+    //Función para borrar la foto de perfíl del usuario.
     public function borrarImagen(Request $request, User $user)
     {
         // Verifica si el usuario tiene una imagen de perfil antes de intentar borrarla
@@ -155,13 +158,16 @@ class UserController extends Controller
         return view('users.show', ['usuario' => $user]);
     }
 
-
+    //Función para realizar la busqueda del usuario.
     public function buscadorUsuario(Request $request)
     {
+
         // Obtenemos los datos de búsqueda.
         $nombre = $request->input('nombre');
         $primer_apellido = $request->input('primer_apellido');
         $email = $request->input('email');
+        $departamento = $request->input('departamento');
+
 
         // Creamos la consulta SQL.
 
@@ -169,16 +175,23 @@ class UserController extends Controller
 
         $query = User::query();
 
-        if ($nombre !== '') {
+        if ($nombre !== null) {
             $query->where('nombre', 'ILIKE', '%' . strtolower($nombre) . '%');
         }
 
-        if ($primer_apellido !== '') {
+        if ($primer_apellido !== null) {
             $query->where('primer_apellido', 'ILIKE', '%' . strtolower($primer_apellido) . '%');
         }
 
-        if ($email !== '') {
+        if ($email !== null) {
             $query->where('email', 'ILIKE', '%' . strtolower($email) . '%');
+        }
+
+        if ($departamento !== null) {
+            $query->whereHas('departamentos', function ($query) use ($departamento) {
+                $query->where('departamento_id', $departamento);
+            });
+          
         }
 
         // Devolvemos los resultados de la búsqueda.
@@ -199,5 +212,26 @@ class UserController extends Controller
             // El departamento no fue encontrado
         }
         return response()->json($usuarios); // Asegúrate de devolver los datos en formato JSON
+    }
+
+    //Función para bloquear el acceso a usuarios.
+    public function addBanned(User $user)
+    {
+
+        $user->status = 0; // Asignar el nuevo valor directamente al atributo
+        $user->save(); // Guardar el modelo en la base de datos
+
+
+        return redirect()->route('users.index')->with('success', 'El usuario ha sido bloquedo exitosamente.');
+    }
+
+    //Función para bloquear el acceso a usuarios.
+    public function outBanned(User $user)
+    {
+        $user->status = 1; // Asignar el nuevo valor directamente al atributo
+        $user->save(); // Guardar el modelo en la base de datos
+
+
+        return redirect()->route('users.index')->with('success', 'El usuario ha sido desbloqueado exitosamente.');
     }
 }

@@ -11,15 +11,18 @@
 
 
 
-            {{-- Mostrar los mensajes de exito. --}}
-            @if (session('success'))
-                <x-success-alert class="mb-4" :status="session('success')" />
-            @endif
+            <div class="h-9">
+                {{-- Mostrar los mensajes de exito. --}}
+                @if (session('success'))
+                    <x-success-alert :status="session('success')" />
+                    <?php session()->forget('success'); ?>
+                @endif
 
-            {{-- Mostrar los mensajes de error. --}}
-            @if (session('error'))
-                <x-error-alert class="mb-4" :messages="session('error')" />
-            @endif
+                {{-- Mostrar los mensajes de error. --}}
+                @if (session('error'))
+                    <x-error-alert :messages="session('error')" />
+                @endif
+            </div>
 
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-3 text-gray-900 dark:text-gray-100">
@@ -94,10 +97,10 @@
                         <span class="sr-only">Cerrar ventana</span>
                     </button>
                     <div class="p-6 text-center">
-                        <svg aria-hidden="true" class="mx-auto mb-4 w-14 h-14 text-gray-400 dark:text-gray-200"
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 512 512" aria-hidden="true" class="mx-auto mb-4 w-10 h-10 text-red-400 dark:text-gray-200"
+                            fill="#ff0000" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <!--!Font Awesome Free 6.5.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
+                            <path fill="#d20404" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/>
                         </svg>
                         <h3 class="mb-5 text-lg font-normal text-black  dark:text-gray-400">¿Seguro que desea borrar
                             este

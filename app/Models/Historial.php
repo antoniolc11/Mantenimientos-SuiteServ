@@ -20,7 +20,8 @@ class Historial extends Model
         'ubicacion_id',
         'hora_inicio',
         'hora_fin',
-        'trabajo_realizado'
+        'trabajo_realizado',
+        'fecha_actualizacion',
     ];
 
     //Relación uno a muchos (inversa)

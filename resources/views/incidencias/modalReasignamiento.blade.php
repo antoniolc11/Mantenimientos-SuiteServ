@@ -1,5 +1,5 @@
-        <!-- Ventana modal para editar un departamento -->
-        <div id="modalEdit{{ $departamento->id }}" tabindex="-1" aria-hidden="true"
+        <!-- Ventana modal para editar un estado -->
+        <div id="modalReasigmaniento{{ $usuarios }}_{{ $incidencia->id }}" tabindex="-1" aria-hidden="true"
             class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
             <div class="relative  w-96 max-h-full">
                 <!-- Modal content -->
@@ -8,7 +8,7 @@
                     <div class="flex items-start justify-between p-1 border-b rounded-t dark:border-gray-600 bg-black">
                         <button type="button"
                             class="text-white bg-transparent  hover:text-gray-400 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-hide="modalEdit{{ $departamento->id }}">
+                            data-modal-hide="modalReasigmaniento{{ $usuarios }}_{{ $incidencia->id }}">
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 14 14">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -19,26 +19,19 @@
                     </div>
 
                     <!-- Modal body -->
-                    <form action="{{ route('departamentos.update', $departamento) }}" method="POST">
+                    <form action="{{ route('reasignar.incidencia',  $incidencia) }}" method="POST">
                         @method('put')
                         @csrf
-                        <div class="p-6 space-y-6">
-                            <div class="mb-6">
+                        <div class="p-6 space-y-6 text-center">
+                                <select name="usuario"
+                                    id="usuario"
+                                    class="border p-2 rounded appearance-none focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent px-3 py-2 leading-tight focus:shadow-outline">
 
-                                <x-input-label for="nombre" :value="__('Nombre departamento')"
-                                    class="block mb-2 text-lg font-bold text-gray-900 dark:text-white" />
-
-                                <x-text-input id="nombredepart" class="block mt-1 w-full" type="text"
-                                    name="nombre" value="{{ $departamento->nombre }}" required autofocus
-                                    autocomplete="nombre" />
-                                <x-input-error :messages="$errors->get('nombre')" class="mt-2" />
-                            </div>
-
-                            @error('nombre')
-                                <br>
-                                <small>*{{ $message }}</small>
-                                <br>
-                            @enderror
+                                <option value="">Selecciona un usuario</option>
+                                @foreach ($usuarios as $usuario)
+                                        <option value="{{ $usuario->id }}">{{ $usuario->nombre }}</option>
+                                @endforeach
+                                </select>
                         </div>
                         <!-- Modal footer -->
                         <div
@@ -51,11 +44,10 @@
                             <div class="w-4"></div>
 
                             <!-- Botón "Cancelar" -->
-                            <button data-modal-hide="modalEdit{{ $departamento->id }}" type="button"
+                            <button data-modal-hide="modalReasigmaniento{{ $usuarios }}_{{ $incidencia->id }}" type="button"
                                 class="cursor-pointer bg-red-600 hover:bg-gray-700 text-white font-bold w-24 py-2 rounded">Cancelar</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-

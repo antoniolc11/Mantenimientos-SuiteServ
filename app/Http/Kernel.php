@@ -68,5 +68,6 @@ class Kernel extends HttpKernel
         'check.supervision' => \App\Http\Middleware\CheckSupervisionDepartment::class,
         'CheckDepartamentoSuperDire' => \App\Http\Middleware\CheckDepartamentoSuperDire::class,
         'CheckDepartamentoRrhhDire' => \App\Http\Middleware\CheckDepartamentoRrhhDire::class,
+        'CheckBanned' => \App\Http\Middleware\CheckBanned::class,
     ];
 }

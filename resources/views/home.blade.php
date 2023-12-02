@@ -115,7 +115,7 @@
 
         <div class="w-auto mx-auto sm:px-6 lg:px-8 mt-5 mb-20">
             <div class="bg-white p-5 dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="text-gray-900 dark:text-gray-100">
+                <div class="text-gray-900 dark:text-gray-100 overflow-x-auto">
                     {{-- Muestra el botón para crear la nueva incidencia solo si es usuario de dirección o supervisión --}}
                     @if (auth()->user()->esDepartamentoDireccion() ||
                             auth()->user()->esDepartamentosupervision())
