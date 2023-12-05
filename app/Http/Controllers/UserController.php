@@ -99,8 +99,7 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
-        //return redirect()->route('users.index');
-
+        $urlPaginaAnterior = strtolower(rtrim(url()->previous(), '/'));
         $userId = $request->input('user_id');
         $nuevosDatos = $request->only(['nombre', 'primer_apellido', 'segundo_apellido', 'telefono', 'email', 'nif']); // Obtener datos para actualizar nombre
         $nuevosDepartamentos = $request->input('departamento'); // Obtener departamentos nuevos
@@ -114,7 +113,14 @@ class UserController extends Controller
 
             $usuario->departamentos()->sync($nuevosDepartamentos);
 
-            return redirect()->route('users.index')->with('success', 'El usuario ha sido actualizado correctamente.');
+            if (str_contains($urlPaginaAnterior, 'profile')) {
+                // Redirecciona a un sitio específico si venías de perfil
+                return redirect()->route('profile.edit')->with('success', 'Tus datos han sido actualizados correctamente.');
+            } else {
+                // En caso contrario, redirecciona a un sitio predeterminado
+                return redirect()->route('users.index')->with('success', 'El usuario ha sido actualizado correctamente.');
+            }
+
         }
     }
 
@@ -191,7 +197,7 @@ class UserController extends Controller
             $query->whereHas('departamentos', function ($query) use ($departamento) {
                 $query->where('departamento_id', $departamento);
             });
-          
+
         }
 
         // Devolvemos los resultados de la búsqueda.

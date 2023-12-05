@@ -1,11 +1,11 @@
 <section>
     <header>
         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-            {{ __('Profile Information') }}
+            {{ __('Información del perfil') }}
         </h2>
 
         <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-            {{ __("Update your account's profile information and email address.") }}
+            {{ __('Actualice la información de su perfil.') }}
         </p>
     </header>
 
@@ -13,52 +13,91 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
-        @csrf
-        @method('patch')
 
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
+
+    <form class="flex flex-col pt-3 md:pt-8" method="POST" action="{{ route('users.update', $user) }}">
+        @method('put')
+        @csrf {{-- agrega el campo oculto con el token (si no ponemos esto no valdrá el envio del formulario) --}}
+        <div class="grid grid-cols-1 gap-7  sm:grid-cols-2">
+            <!-- Nombre -->
+            <div class="mr-10">
+                <x-input-label for="nombre" :value="__('Nombre')" />
+                <x-text-input id="nombre" class="block mt-1 w-full" type="text" name="nombre" :value="old('nombre', $user->nombre)"
+                    required autofocus autocomplete="nombre" placeholder="Ingresa tu primer nombre" />
+                <x-input-error :messages="$errors->get('nombre')" class="mt-2" />
+            </div>
+
+            <!-- Primer apellido -->
+            <div class="mr-10">
+                <x-input-label for="primer_apellido" :value="__('Primer apellido')" />
+                <x-text-input id="primer_apellido" class="block mt-1 w-full" type="text" name="primer_apellido"
+                    :value="old('primer_apellido', $user->primer_apellido)" required autofocus autocomplete="primer_apellido"
+                    placeholder="Ingresa tu primer apellido" />
+                <x-input-error :messages="$errors->get('primer_apellido')" class="mt-2" />
+            </div>
+
+            <!-- Segundo apellido -->
+            <div class="mr-10">
+                <x-input-label for="segundo_apellido" :value="__('Segundo apellido')" />
+                <x-text-input id="segundo_apellido" class="block mt-1 w-full" type="text" name="segundo_apellido"
+                    :value="old('segundo_apellido', $user->segundo_apellido)" required autofocus autocomplete="segundo_apellido"
+                    placeholder="Ingresa tu segundo apellido" />
+                <x-input-error :messages="$errors->get('segundo_apellido')" class="mt-2" />
+            </div>
+
+            <!-- nif -->
+            <div class="mr-10">
+                <x-input-label for="nif" :value="__('Nif')" />
+                <x-text-input id="nif" class="block mt-1 w-full" type="text" name="nif" :value="old('nif', $user->nif)"
+                    required autofocus autocomplete="nif" placeholder="68741564R" />
+                <x-input-error :messages="$errors->get('nif')" class="mt-2" />
+            </div>
+
+            <!-- telefono -->
+            <div class="mr-10">
+                <x-input-label for="telefono" :value="__('Teléfono')" />
+                <x-text-input id="telefono" class="block mt-1 w-full" type="text" name="telefono" :value="old('telefono', $user->telefono)"
+                    required autofocus autocomplete="telefono" placeholder="654456654" />
+                <x-input-error :messages="$errors->get('telefono')" class="mt-2" />
+            </div>
+
+            <!-- Email Address -->
+            <div class="mr-10">
+                <x-input-label for="email" :value="__('Email')" />
+                <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $user->email)"
+                    required autocomplete="username" placeholder="your@email.com" />
+                <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            </div>
+
+
+
+            <!-- Departamento -->
+            <div class="">
+                <label for="departamento">Departamento:</label>
+                <select multiple name="departamento[]" id="departamento"
+                    class="block w-full px-4 py-2 mt-1 text-gray-700 bg-white border border-black rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent hover:border-gray-300 hover:bg-transparent">
+                    @foreach ($user->departamentos as $departamento)
+                        <option value="{{ $departamento->id }}" selected>{{ $departamento->nombre }}</option>
+                    @endforeach
+
+
+                    @foreach ($departamentos as $departamento)
+                        <option value="{{ $departamento->id }}">{{ $departamento->nombre }}</option>
+                    @endforeach
+                </select>
+                <x-input-error :messages="$errors->get('departamento')" class="mt-2" />
+
+                <script>
+                    new MultiSelectTag('departamento') // id
+                </script>
+            </div>
         </div>
 
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
-            <x-input-error class="mt-2" :messages="$errors->get('email')" />
 
-            @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
-                <div>
-                    <p class="text-sm mt-2 text-gray-800 dark:text-gray-200">
-                        {{ __('Your email address is unverified.') }}
-
-                        <button form="send-verification" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
-                            {{ __('Click here to re-send the verification email.') }}
-                        </button>
-                    </p>
-
-                    @if (session('status') === 'verification-link-sent')
-                        <p class="mt-2 font-medium text-sm text-green-600 dark:text-green-400">
-                            {{ __('A new verification link has been sent to your email address.') }}
-                        </p>
-                    @endif
-                </div>
-            @endif
-        </div>
-
-        <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
-
-            @if (session('status') === 'profile-updated')
-                <p
-                    x-data="{ show: true }"
-                    x-show="show"
-                    x-transition
-                    x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600 dark:text-gray-400"
-                >{{ __('Saved.') }}</p>
-            @endif
+        <div class="w-full relative mt-6 flex flex-row ">
+            <x-primary-button>{{ __('Guardar') }}</x-primary-button>
         </div>
     </form>
+
+
 </section>
