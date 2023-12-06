@@ -41,14 +41,13 @@ class UserController extends Controller
     }
 
 
-    public function store(Request $request): RedirectResponse
+ public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'nombre' => ['required', 'string', 'max:255'],
             'primer_apellido' => ['required', 'string', 'max:255'],
             'segundo_apellido' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
@@ -58,11 +57,16 @@ class UserController extends Controller
             'nif' => $request->nif,
             'telefono' => $request->telefono,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
-            //TODO poner la url de la imagen
+            'password' => Hash::make('asdf1369'),
         ]);
 
         //TODO: enviar email de confirmación de registro
+
+        // Generar y guardar el token de restablecimiento de contraseña
+        $token = Password::getRepository()->create($user);
+
+        // Enviar la notificación de restablecimiento de contraseña
+        $user->notify(new UserRegistered($token));
 
         event(new Registered($user));
 
@@ -72,7 +76,7 @@ class UserController extends Controller
 
         $usuario->departamentos()->attach($request->departamento); //Inserta el ultimo usuario registrado y su departamento en la tabla departamento_usuario
 
-        return redirect()->route('users.index')->with('success', 'El usuario ha sido creado correctamente.');
+        return redirect()->route('users.index')->with('success', 'El usuario ha sido creado y notificado correctamente.');
     }
 
 

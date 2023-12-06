@@ -9,7 +9,7 @@
             <tbody>
                 <tr>
                     <td class="break-words border-collapse" style="vertical-align: top;">
-                        <div class="mx-auto min-w-min max-w-screen-md break-words bg-gray-300">
+                        <div class="mx-auto min-w-min max-w-screen-md break-words bg-gray-400">
                             <table width="100%" cellpadding="0" cellspacing="0" border="0">
                                 <tr>
                                     <td class="p-0 text-center">
