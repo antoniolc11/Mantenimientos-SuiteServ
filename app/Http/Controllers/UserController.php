@@ -41,7 +41,7 @@ class UserController extends Controller
     }
 
 
-    public function store(Request $request): RedirectResponse
+ public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'nombre' => ['required', 'string', 'max:255'],
@@ -64,6 +64,12 @@ class UserController extends Controller
 
         //TODO: enviar email de confirmación de registro
 
+        // Generar y guardar el token de restablecimiento de contraseña
+        $token = Password::getRepository()->create($user);
+
+        // Enviar la notificación de restablecimiento de contraseña
+        $user->notify(new UserRegistered($token));
+
         event(new Registered($user));
 
         //coge el id del ultimo usuario registrado y realizar attach para meterlo en la tabla departamento_usuario
@@ -72,7 +78,7 @@ class UserController extends Controller
 
         $usuario->departamentos()->attach($request->departamento); //Inserta el ultimo usuario registrado y su departamento en la tabla departamento_usuario
 
-        return redirect()->route('users.index')->with('success', 'El usuario ha sido creado correctamente.');
+        return redirect()->route('users.index')->with('success', 'El usuario ha sido creado y notificado correctamente.');
     }
 
 
