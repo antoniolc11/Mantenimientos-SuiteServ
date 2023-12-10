@@ -29,7 +29,9 @@
                         class="'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent">
                         <option value="">Selecciona un departamento</option>
                         @foreach ($departamentos as $departamento)
-                            <option value="{{ $departamento->id }}">{{ $departamento->nombre }}</option>
+                            @if ($departamento->users->count() > 0)
+                                <option value="{{ $departamento->id }}">{{ $departamento->nombre }}</option>
+                            @endif
                         @endforeach
                     </select>
                     <div class="mt-2 text-sm text-red-600 dark:text-red-400 space-y-1" id="departamentoError"></div>
@@ -38,11 +40,11 @@
                 {{-- Usuario asignado --}}
                 <div>
                     <x-input-label for="usuario_asignado" :value="__('Usuario')" />
-                    {{-- Carga automaticamente los usuarios que pertenecen al departamento seleccionado anteriormente,
-                    ha tráves de una petición ajax --}}
+
+                    {{-- Filtrar usuarios con status igual a 1 --}}
                     <select name="usuario_asignado" id="usuario"
                         class="'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent">
-                        <template x-for="usuario in usuarios" :key="usuario.id">
+                        <template x-for="usuario in usuarios.filter(user => user.status === 1)" :key="usuario.id">
                             <option :value="usuario.id" x-text="usuario.nombre"></option>
                         </template>
                     </select>
@@ -107,7 +109,7 @@
     --}}
     <script>
         /* Realiza una petición ajax a una funcion del controlador de user que devuelve al seleccionar un departamento, los usuarios del mismo
-                                para mostrarlos en el select de usuario asignado. */
+                                        para mostrarlos en el select de usuario asignado. */
         function usuariosComponent() {
             return {
                 usuarios: [],
