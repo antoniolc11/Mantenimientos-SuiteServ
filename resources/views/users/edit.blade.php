@@ -7,7 +7,7 @@
 
         <h2 class="text-lg font-semibold text-gray-700 capitalize dark:text-white text-center mb-6">Edición de usuario
         </h2>
-        <form class="flex flex-col pt-3 md:pt-8" method="POST" action="{{ route('users.update', $usuario) }}">
+        <form id="usersRegistro" class="flex flex-col pt-3 md:pt-8" method="POST" action="{{ route('users.update', $usuario) }}">
             @method('put')
             @csrf {{-- agrega el campo oculto con el token (si no ponemos esto no valdrá el envio del formulario) --}}
             <div class="grid grid-cols-1 gap-6  sm:grid-cols-2">
@@ -15,7 +15,9 @@
                 <div>
                     <x-input-label for="nombre" :value="__('Nombre')" />
                     <x-text-input id="nombre" class="block mt-1 w-full" type="text" name="nombre" :value="old('nombre', $usuario->nombre)"
-                        required autofocus autocomplete="nombre" placeholder="Ingresa tu primer nombre" />
+                         autofocus autocomplete="nombre" placeholder="Ingresa tu primer nombre" />
+                        <div class="mt-2 text-sm text-red-600 dark:text-red-400 space-y-1" id="nombreError"></div>
+
                     <x-input-error :messages="$errors->get('nombre')" class="mt-2" />
                 </div>
 
@@ -23,8 +25,10 @@
                 <div>
                     <x-input-label for="primer_apellido" :value="__('Primer apellido')" />
                     <x-text-input id="primer_apellido" class="block mt-1 w-full" type="text" name="primer_apellido"
-                        :value="old('primer_apellido', $usuario->primer_apellido)" required autofocus autocomplete="primer_apellido"
+                        :value="old('primer_apellido', $usuario->primer_apellido)"  autofocus autocomplete="primer_apellido"
                         placeholder="Ingresa tu primer apellido" />
+                        <div class="mt-2 text-sm text-red-600 dark:text-red-400 space-y-1" id="ap1Error"></div>
+
                     <x-input-error :messages="$errors->get('primer_apellido')" class="mt-2" />
                 </div>
 
@@ -32,7 +36,7 @@
                 <div>
                     <x-input-label for="segundo_apellido" :value="__('Segundo apellido')" />
                     <x-text-input id="segundo_apellido" class="block mt-1 w-full" type="text" name="segundo_apellido"
-                        :value="old('segundo_apellido', $usuario->segundo_apellido)" required autofocus autocomplete="segundo_apellido"
+                        :value="old('segundo_apellido', $usuario->segundo_apellido)"  autofocus autocomplete="segundo_apellido"
                         placeholder="Ingresa tu segundo apellido" />
                     <x-input-error :messages="$errors->get('segundo_apellido')" class="mt-2" />
                 </div>
@@ -41,7 +45,9 @@
                 <div>
                     <x-input-label for="nif" :value="__('Nif')" />
                     <x-text-input id="nif" class="block mt-1 w-full" type="text" name="nif"
-                        :value="old('nif', $usuario->nif)" required autofocus autocomplete="nif" placeholder="68741564R" />
+                        :value="old('nif', $usuario->nif)"  autofocus autocomplete="nif" placeholder="68741564R" />
+                        <div class="mt-2 text-sm text-red-600 dark:text-red-400 space-y-1" id="nifError"></div>
+
                     <x-input-error :messages="$errors->get('nif')" class="mt-2" />
                 </div>
 
@@ -49,7 +55,9 @@
                 <div>
                     <x-input-label for="telefono" :value="__('Teléfono')" />
                     <x-text-input id="telefono" class="block mt-1 w-full" type="text" name="telefono"
-                        :value="old('telefono', $usuario->telefono)" required autofocus autocomplete="telefono" placeholder="654456654" />
+                        :value="old('telefono', $usuario->telefono)"  autofocus autocomplete="telefono" placeholder="654456654" />
+                        <div class="mt-2 text-sm text-red-600 dark:text-red-400 space-y-1" id="telefonoError"></div>
+
                     <x-input-error :messages="$errors->get('telefono')" class="mt-2" />
                 </div>
 
@@ -57,7 +65,9 @@
                 <div>
                     <x-input-label for="email" :value="__('Email')" />
                     <x-text-input id="email" class="block mt-1 w-full" type="email" name="email"
-                        :value="old('email', $usuario->email)" required autocomplete="username" placeholder="your@email.com" />
+                        :value="old('email', $usuario->email)"  autocomplete="username" placeholder="your@email.com" />
+                        <div class="mt-2 text-sm text-red-600 dark:text-red-400 space-y-1" id="emailError"></div>
+
                     <x-input-error :messages="$errors->get('email')" class="mt-2" />
                 </div>
 
@@ -77,6 +87,8 @@
                             <option value="{{ $departamento->id }}">{{ $departamento->nombre }}</option>
                         @endforeach
                     </select>
+                    <div class="mt-2 text-sm text-red-600 dark:text-red-400 space-y-1" id="departamentoError"></div>
+
                     <x-input-error :messages="$errors->get('departamento')" class="mt-2" />
 
                     <script>
@@ -107,4 +119,7 @@
 
         </div>
     </section>
+
+    <script src="{{ asset('js/validation_users.js') }}"></script>
+
 </x-app-layout>
