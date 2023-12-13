@@ -16,7 +16,7 @@
         <!-- Login Section -->
         <div class="w-full md:w-1/2 flex flex-col">
 
-            <div class="flex items-center justify-center md:justify-start  mt-24">
+            <div class="flex items-center justify-center md:justify-start  md:mt-16">
                 <div class="mx-auto">
                     <img src="{{ asset('imagenes/logo.png') }}" alt="Mi Logo" class="w-40 h-auto">
                 </div>
@@ -151,10 +151,6 @@
                         }
                     });
                 </script>
-
-
-
-
 
                 <div class="text-center pt-12 pb-6">
                     @if (Route::has('password.request'))

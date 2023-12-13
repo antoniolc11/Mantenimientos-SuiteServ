@@ -39,9 +39,11 @@
             // Mostrar el aviso de cookies solo si la cookie no ha sido aceptada
             cookieNoticeContainer.classList.remove('hidden');
             cookieNoticeContainer.classList.add('block');
+            form.classList.add('pointer-events-none');
 
             var acceptButton = document.getElementById('cn-accept-cookie');
             var closeButton = document.getElementById('cn-close-notice');
+
 
             if (acceptButton) {
                 acceptButton.addEventListener('click', function() {
@@ -61,6 +63,7 @@
                         "; path=/";
                     cookieNoticeContainer.classList.remove('block');
                     cookieNoticeContainer.classList.add('hidden');
+                    form.classList.remove('pointer-events-none');
 
 
                 });

@@ -155,7 +155,7 @@
                         @endif
                     </div>
 
-                    <div class="mr-6 ml-6 text-gray-900 dark:text-gray-100">
+                    <div class="mr-6 ml-6 text-gray-900 dark:text-gray-100 overflow-x-auto">
 
                         @if (auth()->user()->esDepartamentoDireccion() ||
                                 auth()->user()->esDepartamentosupervision())

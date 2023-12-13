@@ -24,7 +24,7 @@
                         <x-error-alert :messages="session('error')" />
                     @endif
                 </div>
-                <div class="p-6 text-gray-900 dark:text-gray-100">
+                <div class="p-6 text-gray-900 dark:text-gray-100 overflow-x-auto ">
 
                     <table id="tablaAspirantes" class="min-w-full text-center text-sm font-light">
                         <thead

@@ -38,7 +38,7 @@
                         </x-nav-link>
 
 
-{{--                         <x-nav-link :href="route('estados.index')" :active="request()->routeIs('estados.index')">
+                        {{--                         <x-nav-link :href="route('estados.index')" :active="request()->routeIs('estados.index')">
                             {{ __('Estados') }}
                         </x-nav-link> --}}
 
@@ -65,7 +65,16 @@
                             <div class="ml-1">
                                 <svg class="fill-current h-9 w-9 mt-2" xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 20 20">
-                                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#000000}</style><path d="M399 384.2C376.9 345.8 335.4 320 288 320H224c-47.4 0-88.9 25.8-111 64.2c35.2 39.2 86.2 63.8 143 63.8s107.8-24.7 143-63.8zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm256 16a72 72 0 1 0 0-144 72 72 0 1 0 0 144z"/></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="1em"
+                                        viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                                        <style>
+                                            svg {
+                                                fill: #000000
+                                            }
+                                        </style>
+                                        <path
+                                            d="M399 384.2C376.9 345.8 335.4 320 288 320H224c-47.4 0-88.9 25.8-111 64.2c35.2 39.2 86.2 63.8 143 63.8s107.8-24.7 143-63.8zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm256 16a72 72 0 1 0 0-144 72 72 0 1 0 0 144z" />
+                                    </svg>
                                 </svg>
                             </div>
                         </button>
@@ -115,16 +124,50 @@
         </div>
 
         <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
+        <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600 bg-gray-100 rounded-2xl">
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</div>
                 <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
             </div>
 
+
+
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
+                    {{ __('Perfil') }}
                 </x-responsive-nav-link>
+
+                <!-- Muestra en el menú nav los aspirantes solo para los usuarios con rol de dirección o RRHH -->
+                @if (auth()->user()->esDepartamentoDireccion() ||
+                        auth()->user()->esDepartamentoRrhh())
+                    <x-responsive-nav-link :href="route('aspirantes.index')" :active="request()->routeIs('aspirantes.index')">
+                        {{ __('Aspirantes') }}
+                    </x-responsive-nav-link>
+                @endif
+
+
+                @if (auth()->user()->esDepartamentoDireccion())
+                <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
+                    {{ __('Operarios') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('departamentos.index')" :active="request()->routeIs('departamentos.index')">
+                    {{ __('Departamentos') }}
+                </x-responsive-nav-link>
+
+
+                {{--                         <x-nav-link :href="route('estados.index')" :active="request()->routeIs('estados.index')">
+                    {{ __('Estados') }}
+                </x-nav-link> --}}
+
+                <x-responsive-nav-link :href="route('ubicaciones.index')" :active="request()->routeIs('ubicaciones.index')">
+                    {{ __('Ubicaciones') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('categorias.index')" :active="request()->routeIs('categorias.index')">
+                    {{ __('Categorias') }}
+                </x-responsive-nav-link>
+            @endif
 
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
@@ -133,9 +176,10 @@
                     <x-responsive-nav-link :href="route('logout')"
                         onclick="event.preventDefault();
                                         this.closest('form').submit();">
-                        {{ __('Log Out') }}
+                        {{ __('Cerrar cesión') }}
                     </x-responsive-nav-link>
                 </form>
+
             </div>
         </div>
     </div>

@@ -21,7 +21,7 @@
                         </div>
                         <div class="pt-6 md:pt-0 md:pl-6">
                             <select x-on:change="buscarIncidencia2" x-model="porestados" name="estado" id="estado"
-                                class="border p-2 rounded appearance-none focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent">
+                                class="w-full border p-2 rounded appearance-none focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent">
                                 <option value="">Selecciona estado</option>
                                 @foreach ($estados as $estado)
                                     <option value="{{ $estado->id }}">{{ $estado->nombre }}</option>
@@ -32,17 +32,17 @@
                         <div class="pt-6 md:pt-0 md:pl-6">
                             <select x-on:change="buscarIncidencia2" x-model="porprioridad" name="prioridad"
                                 id="prioridad"
-                                class="border p-2 rounded appearance-none focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent">
+                                class="w-full border p-2 rounded appearance-none focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent">
                                 <option value="">Selecciona prioridad</option>
                                 <option value="Baja">Baja</option>
                                 <option value="Media">Media</option>
                                 <option value="Alta">Alta</option>
                             </select>
                         </div>
-                        <div class="pt-6 md:pt-0 md:pl-6">
+                        <div class="pt-6  md:pt-0 md:pl-6">
                             <select x-on:change="buscarIncidencia2" x-model="porcategoria" name="categoria"
                                 id="categoria"
-                                class="border p-2 rounded appearance-none focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent">
+                                class="w-full border p-2 rounded appearance-none focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent">
                                 <option value="">Selecciona categoría</option>
                                 @foreach ($categorias as $categoria)
                                     <option value="{{ $categoria->id }}">{{ $categoria->nombre }}</option>
@@ -55,7 +55,7 @@
                             <div class="pt-6 md:pt-0 md:pl-6">
                                 <select x-on:change="buscarIncidencia2" x-model="pordepartamento" name="departamento"
                                     id="departamento"
-                                    class="border p-2 rounded appearance-none focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent">
+                                    class="w-full border p-2 rounded appearance-none focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent">
                                 <option value="">Selecciona departamento</option>
                                 @foreach ($departamentosall as $departamento)
                                     @if (auth()->user()->esDepartamentoDireccion() ||
