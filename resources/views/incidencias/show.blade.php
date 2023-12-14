@@ -14,7 +14,7 @@
         @endif
     </div>
     <section class="max-w-2xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800">
-        <table class="min-w-full">
+        <table class="min-w-full ">
             <thead class="border-b">
                 <tr>
                     <th colspan="2" class="text-center py-4 relative">
@@ -108,8 +108,7 @@
 
                 <tr class="border-t border-gray-200">
                     <th class="text-left w-48 text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha:</th>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        {{ $incidencia->fecha }}
+                    <td class="px-6 py-4 whitespace-nowrap">{{ \Carbon\Carbon::parse($incidencia->fecha)->format('d/m/Y') }}
                     </td>
                 </tr>
 
@@ -281,8 +280,8 @@
                                     class="flex items-center space-x-2 border-b  border-gray-200 rounded-b dark:border-gray-600">
 
                                     <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400 mb-6">
-                                        Sé genera la incidencia con fecha: {{ $historial->fecha }} a las:
-                                        {{ $historial->hora_inicio }}.
+                                        Sé genera la incidencia con fecha: {{ \Carbon\Carbon::parse($historial->fecha)->format('d/m/Y') }} a las:
+                                        {{ \Carbon\Carbon::parse($historial->hora_inicio)->format('H:i') }}.
                                     </p>
                                 </div>
                             @endif
@@ -295,8 +294,8 @@
                                     class="flex items-center space-x-2 border-b border-gray-200 rounded-b dark:border-gray-600">
 
                                     <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400 mb-6">
-                                        Sé inicia la incidencia con fecha: {{ $historial->fecha }} Iniciada a las:
-                                        {{ $historial->hora_inicio }}.
+                                        Sé inicia la incidencia con fecha: {{ \Carbon\Carbon::parse($historial->fecha)->format('d/m/Y') }}  Iniciada a las:
+                                        {{ \Carbon\Carbon::parse($historial->hora_inicio)->format('H:i') }}.
                                     </p>
 
                                 </div>
@@ -311,9 +310,9 @@
 
 
                                     <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400 mb-6">
-                                        La incidencia ha sido reabierta con fecha: {{ $historial->fecha }} Finalizada a
+                                        La incidencia ha sido reabierta con fecha: {{ \Carbon\Carbon::parse($historial->fecha)->format('d/m/Y') }}, por tener tareas por completar a
                                         las:
-                                        {{ $historial->hora_inicio }}.
+                                        {{ \Carbon\Carbon::parse($historial->hora_inicio)->format('H:i') }}.
                                     </p>
                                 </div>
                             @endif
@@ -327,8 +326,8 @@
 
 
                                     <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400 mb-6">
-                                        Sé finaliza la incidencia con fecha: {{ $historial->fecha }} Finalizada a las:
-                                        {{ $historial->hora_fin }}.
+                                        Sé finaliza la incidencia con fecha: {{ \Carbon\Carbon::parse($historial->fecha)->format('d/m/Y') }} Finalizada a las:
+                                        {{ \Carbon\Carbon::parse($historial->hora_fin)->format('H:i') }}.
                                     </p>
                                 </div>
                             @endif

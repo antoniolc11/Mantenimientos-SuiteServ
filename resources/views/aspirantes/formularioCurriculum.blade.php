@@ -85,15 +85,14 @@
                                                     <input type="hidden" name="aspirante_id"
                                                         value="{{ $aspirante->id }}">
 
-                                                    <!-- Email Address -->
+                                                    <!-- CV -->
                                                     <div>
                                                         <x-input-label for="curriculum" :value="__('Adjunta tu CV')" />
                                                         <x-text-input id="curriculum" class="block mt-1 w-full"
-                                                            type="file" name="curriculum" :value="old('curriculum')" required
+                                                            type="file" accept=".pdf, .doc, .docx" name="curriculum" :value="old('curriculum')" required
                                                             autofocus />
                                                         <x-input-error :messages="$errors->get('curriculum')" class="mt-2" />
                                                     </div>
-
 
                                                     <div
                                                         class="w-full relative h-32 flex flex-row items-center justify-center">
@@ -106,7 +105,6 @@
                                                                     d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160zm352-160l-160 160c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L301.3 256 438.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0z" />
                                                             </svg>
                                                         </a>
-
 
                                                         <div class="flex flex-col items-center">
                                                             <x-primary-button>

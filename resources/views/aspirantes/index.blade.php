@@ -53,12 +53,11 @@
                                 <!-- Aquí va tu estructura de tabla para mostrar los aspirantes -->
                                 @foreach ($aspirantes as $aspirante)
                                     <tr class="border-b dark:border-neutral-500">
-                                        <td class="whitespace-nowrap  px-6 py-4 font-medium"><a
-                                                href="{{ route('aspirantes.show', $aspirante) }}">{{ $aspirante->nif }}</a>
+                                        <td class="whitespace-nowrap  px-6 py-4 font-medium">
+                                               {{ $aspirante->nif }}
                                         </td>
                                         <td class="whitespace-nowrap  px-6 py-4">
-                                            <a
-                                                href="{{ route('aspirantes.show', $aspirante) }}">{{ $aspirante->nombre . ' ' . $aspirante->primer_apellido . ' ' . $aspirante->segundo_apellido }}</a>
+                                            {{ $aspirante->nombre . ' ' . $aspirante->primer_apellido . ' ' . $aspirante->segundo_apellido }}
                                         </td>
                                         </td>
                                         <td class="whitespace-nowrap  px-6 py-4">

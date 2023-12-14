@@ -9,7 +9,8 @@
         </td>
         <td class="whitespace-nowrap  px-6 py-4">{{ $incidencia->categoria->nombre }}
         </td>
-        <td class="whitespace-nowrap  px-6 py-4">{{ $incidencia->fecha }}</td>
+        <td class="whitespace-nowrap  px-6 py-4">{{ \Carbon\Carbon::parse($incidencia->fecha)->format('d/m/Y') }}
+        </td>
         <td class="whitespace-nowrap  px-6 py-4">{{ $incidencia->departamento->nombre }}
         </td>
         <td class="whitespace-nowrap  px-6 py-4">{{ $incidencia->creador->nombre }}

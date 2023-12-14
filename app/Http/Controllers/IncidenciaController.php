@@ -72,6 +72,9 @@ class IncidenciaController extends Controller
     public function show(Incidencia $incidencia)
     {
         $historiales = Historial::where('incidencia_id', $incidencia->id)->get();
+          // Aplicar saltos de línea cada 80 caracteres a la descripción
+        $incidencia->descripcion = wordwrap($incidencia->descripcion, 80, "\n", true);
+        
         return view('incidencias.show', ['incidencia' => $incidencia, 'historiales' => $historiales]);
     }
 

@@ -133,49 +133,87 @@
 
 
             <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
+                <x-responsive-nav-link class="flex flex-row items-center" :href="route('profile.edit')">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="18" viewBox="0 0 576 512"
+                        class="mr-3">
+                        <path fill="#030407"
+                            d="M0 96l576 0c0-35.3-28.7-64-64-64H64C28.7 32 0 60.7 0 96zm0 32V416c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V128H0zM64 405.3c0-29.5 23.9-53.3 53.3-53.3H234.7c29.5 0 53.3 23.9 53.3 53.3c0 5.9-4.8 10.7-10.7 10.7H74.7c-5.9 0-10.7-4.8-10.7-10.7zM176 192a64 64 0 1 1 0 128 64 64 0 1 1 0-128zm176 16c0-8.8 7.2-16 16-16H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H368c-8.8 0-16-7.2-16-16zm0 64c0-8.8 7.2-16 16-16H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H368c-8.8 0-16-7.2-16-16zm0 64c0-8.8 7.2-16 16-16H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H368c-8.8 0-16-7.2-16-16z" />
+                    </svg>
                     {{ __('Perfil') }}
                 </x-responsive-nav-link>
 
                 <!-- Muestra en el menú nav los aspirantes solo para los usuarios con rol de dirección o RRHH -->
                 @if (auth()->user()->esDepartamentoDireccion() ||
                         auth()->user()->esDepartamentoRrhh())
-                    <x-responsive-nav-link :href="route('aspirantes.index')" :active="request()->routeIs('aspirantes.index')">
+                    <x-responsive-nav-link class="flex flex-row items-center" :href="route('aspirantes.index')" :active="request()->routeIs('aspirantes.index')">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="16" width="20" viewBox="0 0 640 512"
+                            class="mr-3">
+                            <path fill="#000000"
+                                d="M224 0a128 128 0 1 1 0 256A128 128 0 1 1 224 0zM178.3 304h91.4c20.6 0 40.4 3.5 58.8 9.9C323 331 320 349.1 320 368c0 59.5 29.5 112.1 74.8 144H29.7C13.3 512 0 498.7 0 482.3C0 383.8 79.8 304 178.3 304zM352 368a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-80c-8.8 0-16 7.2-16 16v64c0 8.8 7.2 16 16 16h48c8.8 0 16-7.2 16-16s-7.2-16-16-16H512V304c0-8.8-7.2-16-16-16z" />
+                        </svg>
                         {{ __('Aspirantes') }}
                     </x-responsive-nav-link>
                 @endif
 
 
                 @if (auth()->user()->esDepartamentoDireccion())
-                <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
-                    {{ __('Operarios') }}
-                </x-responsive-nav-link>
+                    <x-responsive-nav-link class="flex flex-row items-center" :href="route('users.index')" :active="request()->routeIs('users.index')">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="16" width="20" viewBox="0 0 640 512"
+                            class="mr-3">
+                            <path fill="#000000"
+                                d="M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192h42.7c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96c-.2 0-.4 0-.7 0H21.3C9.6 320 0 310.4 0 298.7zM405.3 320c-.2 0-.4 0-.7 0c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7h42.7C592.2 192 640 239.8 640 298.7c0 11.8-9.6 21.3-21.3 21.3H405.3zM224 224a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zM128 485.3C128 411.7 187.7 352 261.3 352H378.7C452.3 352 512 411.7 512 485.3c0 14.7-11.9 26.7-26.7 26.7H154.7c-14.7 0-26.7-11.9-26.7-26.7z" />
+                        </svg>
 
-                <x-responsive-nav-link :href="route('departamentos.index')" :active="request()->routeIs('departamentos.index')">
-                    {{ __('Departamentos') }}
-                </x-responsive-nav-link>
+                        {{ __('Operarios') }}
+                    </x-responsive-nav-link>
 
 
-                {{--                         <x-nav-link :href="route('estados.index')" :active="request()->routeIs('estados.index')">
+                    <x-responsive-nav-link class="flex flex-row items-center" :href="route('departamentos.index')" :active="request()->routeIs('departamentos.index')">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="16" width="18" viewBox="0 0 576 512"
+                            class="mr-3">
+                            <path fill="#000000"
+                                d="M264.5 5.2c14.9-6.9 32.1-6.9 47 0l218.6 101c8.5 3.9 13.9 12.4 13.9 21.8s-5.4 17.9-13.9 21.8l-218.6 101c-14.9 6.9-32.1 6.9-47 0L45.9 149.8C37.4 145.8 32 137.3 32 128s5.4-17.9 13.9-21.8L264.5 5.2zM476.9 209.6l53.2 24.6c8.5 3.9 13.9 12.4 13.9 21.8s-5.4 17.9-13.9 21.8l-218.6 101c-14.9 6.9-32.1 6.9-47 0L45.9 277.8C37.4 273.8 32 265.3 32 256s5.4-17.9 13.9-21.8l53.2-24.6 152 70.2c23.4 10.8 50.4 10.8 73.8 0l152-70.2zm-152 198.2l152-70.2 53.2 24.6c8.5 3.9 13.9 12.4 13.9 21.8s-5.4 17.9-13.9 21.8l-218.6 101c-14.9 6.9-32.1 6.9-47 0L45.9 405.8C37.4 401.8 32 393.3 32 384s5.4-17.9 13.9-21.8l53.2-24.6 152 70.2c23.4 10.8 50.4 10.8 73.8 0z" />
+                        </svg>
+                        {{ __('Departamentos') }}
+                    </x-responsive-nav-link>
+
+
+                    {{--                         <x-nav-link :href="route('estados.index')" :active="request()->routeIs('estados.index')">
                     {{ __('Estados') }}
                 </x-nav-link> --}}
 
-                <x-responsive-nav-link :href="route('ubicaciones.index')" :active="request()->routeIs('ubicaciones.index')">
-                    {{ __('Ubicaciones') }}
-                </x-responsive-nav-link>
+                    <x-responsive-nav-link class="flex flex-row items-center" :href="route('ubicaciones.index')" :active="request()->routeIs('ubicaciones.index')">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="16" width="12" viewBox="0 0 384 512"
+                            class="mr-3">
+                            <path fill="#000000"
+                                d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
+                        </svg>
+                        {{ __('Ubicaciones') }}
+                    </x-responsive-nav-link>
 
-                <x-responsive-nav-link :href="route('categorias.index')" :active="request()->routeIs('categorias.index')">
-                    {{ __('Categorias') }}
-                </x-responsive-nav-link>
-            @endif
+                    <x-responsive-nav-link class="flex flex-row items-center" :href="route('categorias.index')" :active="request()->routeIs('categorias.index')">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="16" width="18" viewBox="0 0 576 512"
+                            class="mr-3">
+                            <path fill="#000000"
+                                d="M208 80c0-26.5 21.5-48 48-48h64c26.5 0 48 21.5 48 48v64c0 26.5-21.5 48-48 48h-8v40H464c30.9 0 56 25.1 56 56v32h8c26.5 0 48 21.5 48 48v64c0 26.5-21.5 48-48 48H464c-26.5 0-48-21.5-48-48V368c0-26.5 21.5-48 48-48h8V288c0-4.4-3.6-8-8-8H312v40h8c26.5 0 48 21.5 48 48v64c0 26.5-21.5 48-48 48H256c-26.5 0-48-21.5-48-48V368c0-26.5 21.5-48 48-48h8V280H112c-4.4 0-8 3.6-8 8v32h8c26.5 0 48 21.5 48 48v64c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V368c0-26.5 21.5-48 48-48h8V288c0-30.9 25.1-56 56-56H264V192h-8c-26.5 0-48-21.5-48-48V80z" />
+                        </svg>
+                        {{ __('Categorias') }}
+                    </x-responsive-nav-link>
+                @endif
 
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
 
-                    <x-responsive-nav-link :href="route('logout')"
+                    <x-responsive-nav-link class="flex flex-row items-center" :href="route('logout')"
                         onclick="event.preventDefault();
                                         this.closest('form').submit();">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16"
+                            viewBox="0 0 512 512"
+                            class="mr-3">
+                            <path fill="#000000"
+                                d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z" />
+                        </svg>
                         {{ __('Cerrar cesión') }}
                     </x-responsive-nav-link>
                 </form>

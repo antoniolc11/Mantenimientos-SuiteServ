@@ -115,7 +115,7 @@
 
         <div class="w-auto mx-auto sm:px-6 lg:px-8 mt-5 mb-20">
             <div class="bg-white p-5 dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="text-gray-900 dark:text-gray-100 overflow-x-auto">
+                <div class="text-gray-900 dark:text-gray-100 ">
                     {{-- Muestra el botón para crear la nueva incidencia solo si es usuario de dirección o supervisión --}}
                     @if (auth()->user()->esDepartamentoDireccion() ||
                             auth()->user()->esDepartamentosupervision())
@@ -128,30 +128,33 @@
                     @endif
 
 
+                    <div class="overflow-x-auto">
 
-                    {{-- Tabla que muestra las incidencias. --}}
-                    <table id="tablaIncidencias" class="min-w-full text-center text-sm font-light">
-                        <thead
-                            class="border-b bg-neutral-800 font-medium text-white dark:border-neutral-500 dark:bg-neutral-900">
-                            <tr>
-                                <th scope="col" class=" px-6 py-4">Nº incidencia</th>
-                                <th scope="col" class=" px-6 py-4">Prioridad</th>
-                                <th scope="col" class=" px-6 py-4">Categoría</th>
-                                <th scope="col" class=" px-6 py-4">Fecha</th>
-                                <th scope="col" class=" px-6 py-4">Departamento</th>
-                                <th scope="col" class=" px-6 py-4">Creador</th>
-                                @if (auth()->user()->esDepartamentoDireccion() ||
-                                        auth()->user()->esDepartamentosupervision())
-                                    <th scope="col" class=" px-6 py-4">Asignada</th>
-                                @endif
-                                <th scope="col" class=" px-6 py-4">Estado</th>
-                                <th scope="col" class=" px-6 py-4">Ubicación</th>
-                            </tr>
-                        </thead>
-                        <tbody x-html="resultados">
-                            {{-- Aquí si muestran los resultados de la tabla --}}
-                        </tbody>
-                    </table>
+                        {{-- Tabla que muestra las incidencias. --}}
+                        <table id="tablaIncidencias" class="min-w-full text-center text-sm font-light">
+                            <thead
+                                class="border-b bg-neutral-800 font-medium text-white dark:border-neutral-500 dark:bg-neutral-900">
+                                <tr>
+                                    <th scope="col" class=" px-6 py-4">Nº incidencia</th>
+                                    <th scope="col" class=" px-6 py-4">Prioridad</th>
+                                    <th scope="col" class=" px-6 py-4">Categoría</th>
+                                    <th scope="col" class=" px-6 py-4">Fecha</th>
+                                    <th scope="col" class=" px-6 py-4">Departamento</th>
+                                    <th scope="col" class=" px-6 py-4">Creador</th>
+                                    @if (auth()->user()->esDepartamentoDireccion() ||
+                                            auth()->user()->esDepartamentosupervision())
+                                        <th scope="col" class=" px-6 py-4">Asignada</th>
+                                    @endif
+                                    <th scope="col" class=" px-6 py-4">Estado</th>
+                                    <th scope="col" class=" px-6 py-4">Ubicación</th>
+                                </tr>
+                            </thead>
+                            <tbody x-html="resultados">
+                                {{-- Aquí si muestran los resultados de la tabla --}}
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
             </div>
         </div>
