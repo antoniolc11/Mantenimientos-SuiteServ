@@ -1,7 +1,7 @@
 <x-app-layout>
-@php
-    $usuarios = $incidencia->departamento->users;
-@endphp
+    @php
+        $usuarios = $incidencia->departamento->users;
+    @endphp
     <div class="max-w-2xl h-9 mt-5 mb-2 mx-auto">
         {{-- Mostrar los mensajes de exito. --}}
         @if (session('success'))
@@ -14,7 +14,7 @@
         @endif
     </div>
     <section class="max-w-2xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800">
-        <table class="min-w-full">
+        <table class="min-w-full ">
             <thead class="border-b">
                 <tr>
                     <th colspan="2" class="text-center py-4 relative">
@@ -57,9 +57,10 @@
                                             <li class="text-black w-full p-1 hover:bg-gray-200 font-normal text-start">
                                                 <a href="{{ route('incidencias.edit', $incidencia) }}">Editar</a>
                                             </li>
-                                            
 
-                                            <button type="submit" class="text-black w-full p-1 hover:bg-gray-200 font-normal text-start"
+
+                                            <button type="submit"
+                                                class="text-black w-full p-1 hover:bg-gray-200 font-normal text-start"
                                                 data-modal-target="modalReasigmaniento{{ $usuarios }}_{{ $incidencia->id }}"
                                                 data-modal-toggle="modalReasigmaniento{{ $usuarios }}_{{ $incidencia->id }}">Reasignar</button>
                                         @endif
@@ -107,8 +108,7 @@
 
                 <tr class="border-t border-gray-200">
                     <th class="text-left w-48 text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha:</th>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        {{ $incidencia->fecha }}
+                    <td class="px-6 py-4 whitespace-nowrap">{{ \Carbon\Carbon::parse($incidencia->fecha)->format('d/m/Y') }}
                     </td>
                 </tr>
 
@@ -181,7 +181,7 @@
                 </tr>
 
 
-                <form method="POST"
+                <form id="finIncidencia" method="POST"
                     action="{{ route('incidencias.cambiar-estado', ['incidencia' => $incidencia->id]) }}">
                     @csrf
                     @method('PUT')
@@ -194,21 +194,17 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <textarea name="descripcion" id="descripcion" rows="4" placeholder="Describe aquí el trabajo realizado"
                                     class="'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent"></textarea>
+                                <div class="mt-2 text-sm text-red-600 dark:text-red-400 space-y-1"
+                                    id="descripcionError"></div>
                             </td>
+
                         </tr>
                     @endif
-
-
             </thead>
 
             <tfoot>
                 <tr>
                     <td colspan="2" class="text-center py-4">
-
-
-
-
-
                         <div class="w-full relative h-32 flex flex-row items-center justify-center">
                             <a href="{{ route('incidencias.index') }}" class="absolute left-6 py-2 mt-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
@@ -219,7 +215,8 @@
                             </a>
 
                             @if ($incidencia->estado->nombre != 'Finalizado')
-                                <a href="{{ route('incidencias.cambiar-estado', ['incidencia' => $incidencia->id]) }}">
+                                <a
+                                    href="{{ route('incidencias.cambiar-estado', ['incidencia' => $incidencia->id]) }}">
                                     <button type="submit"
                                         class="bg-neutral-800 hover:bg-gray-700 text-white font-bold w-32 py-3 rounded">
                                         @if ($incidencia->estado->nombre == 'Pendiente')
@@ -283,8 +280,8 @@
                                     class="flex items-center space-x-2 border-b  border-gray-200 rounded-b dark:border-gray-600">
 
                                     <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400 mb-6">
-                                        Sé genera la incidencia con fecha: {{ $historial->fecha }} a las:
-                                        {{ $historial->hora_inicio }}.
+                                        Sé genera la incidencia con fecha: {{ \Carbon\Carbon::parse($historial->fecha)->format('d/m/Y') }} a las:
+                                        {{ \Carbon\Carbon::parse($historial->hora_inicio)->format('H:i') }}.
                                     </p>
                                 </div>
                             @endif
@@ -297,8 +294,8 @@
                                     class="flex items-center space-x-2 border-b border-gray-200 rounded-b dark:border-gray-600">
 
                                     <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400 mb-6">
-                                        Sé inicia la incidencia con fecha: {{ $historial->fecha }} Iniciada a las:
-                                        {{ $historial->hora_inicio }}.
+                                        Sé inicia la incidencia con fecha: {{ \Carbon\Carbon::parse($historial->fecha)->format('d/m/Y') }}  Iniciada a las:
+                                        {{ \Carbon\Carbon::parse($historial->hora_inicio)->format('H:i') }}.
                                     </p>
 
                                 </div>
@@ -313,9 +310,9 @@
 
 
                                     <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400 mb-6">
-                                        La incidencia ha sido reabierta con fecha: {{ $historial->fecha }} Finalizada a
+                                        La incidencia ha sido reabierta con fecha: {{ \Carbon\Carbon::parse($historial->fecha)->format('d/m/Y') }}, por tener tareas por completar a
                                         las:
-                                        {{ $historial->hora_inicio }}.
+                                        {{ \Carbon\Carbon::parse($historial->hora_inicio)->format('H:i') }}.
                                     </p>
                                 </div>
                             @endif
@@ -329,8 +326,8 @@
 
 
                                     <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400 mb-6">
-                                        Sé finaliza la incidencia con fecha: {{ $historial->fecha }} Finalizada a las:
-                                        {{ $historial->hora_fin }}.
+                                        Sé finaliza la incidencia con fecha: {{ \Carbon\Carbon::parse($historial->fecha)->format('d/m/Y') }} Finalizada a las:
+                                        {{ \Carbon\Carbon::parse($historial->hora_fin)->format('H:i') }}.
                                     </p>
                                 </div>
                             @endif
@@ -372,7 +369,76 @@
         </div>
 
 
-    <!-- Ventana modal para crear un nuevo estado -->
-    @include('incidencias.modalReasignamiento')
+        <!-- Ventana modal para reasignar la incidencia a otro usuario -->
+        @include('incidencias.modalReasignamiento')
     </section>
+
+
+
+    <script>
+        // Validación del formulario de alta de incidencias.
+        document.addEventListener('DOMContentLoaded', function() {
+            // Se obtienen referencias a los campos del formulario
+            var descripcionInput = document.getElementById('descripcion');
+            // Se agrega un event listener al formulario para el evento de envío
+
+            document.getElementById('finIncidencia').addEventListener('submit', function(event) {
+                // Si la validación del formulario no pasa, se evita que se envíe el formulario
+                if (!validateForm()) {
+                    event.preventDefault();
+                }
+            });
+
+            // Función que realiza la validación del formulario
+            function validateForm() {
+                var descripcion = descripcionInput.value.trim();
+
+                // Se limpian los mensajes de error existentes
+                clearErrorMessages();
+
+                var errors = [];
+
+                // Validación del campo "descripción"
+                validateDescripcion(descripcion, errors);
+
+                // Se muestran los mensajes de error, si los hay
+                displayErrors(errors);
+
+                // El formulario es válido si no hay errores
+                return errors.length === 0;
+            }
+
+            // Función que valida el campo de desc
+            function validateDescripcion(descripcion, errors) {
+                if (descripcion.trim() === '') {
+                    errors.push('Por favor, ingresa una descripción.');
+                } else if (descripcion.length < 10) {
+                    errors.push('La descripción debe tener al menos 30 caracteres.');
+                }
+            }
+
+
+            // Función que muestra los mensajes de error en los contenedores correspondientes
+            function displayErrors(errors) {
+                for (var i = 0; i < errors.length; i++) {
+                    var errorContainerId = 'descripcionError'; // Contenedor predeterminado
+
+                    if (errors[i].toLowerCase().includes('descripción')) {
+                        errorContainerId = 'descripcionError';
+                    }
+
+                    // Se obtiene el contenedor de error correspondiente y se crea un elemento de párrafo con el mensaje de error
+                    var errorContainer = document.getElementById(errorContainerId);
+                    var errorMessage = document.createElement('p');
+                    errorMessage.textContent = errors[i];
+                    errorContainer.appendChild(errorMessage);
+                }
+            }
+
+            // Función para limpiar los mensajes de error existentes en los contenedores
+            function clearErrorMessages() {
+                document.getElementById('descripcionError').textContent = '';
+            }
+        });
+    </script>
 </x-app-layout>

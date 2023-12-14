@@ -125,6 +125,10 @@ class AspiranteController extends Controller
             return redirect()->back()->with('error', 'Aspirante no encontrado.');
         }
 
+        if ($aspirante->curriculum) {
+            return redirect()->route('login')->with('success', 'Ya as enviado tu curriculum anteriormente, por favor espera una respuesta por parte de nuestro departamento de RRHH.');
+        }
+
         return view('aspirantes.formularioCurriculum', ['aspirante' => $aspirante]);
     }
 

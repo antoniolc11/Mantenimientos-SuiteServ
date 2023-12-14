@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use Illuminate\Support\Facades\Response;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\Departamento;
@@ -169,20 +169,16 @@ class UserController extends Controller
     }
 
     //Función para realizar la busqueda del usuario.
+
     public function buscadorUsuario(Request $request)
     {
-
         // Obtenemos los datos de búsqueda.
         $nombre = $request->input('nombre');
         $primer_apellido = $request->input('primer_apellido');
         $email = $request->input('email');
         $departamento = $request->input('departamento');
 
-
         // Creamos la consulta SQL.
-
-        // Creamos la consulta SQL.
-
         $query = User::query();
 
         if ($nombre !== null) {
@@ -201,13 +197,15 @@ class UserController extends Controller
             $query->whereHas('departamentos', function ($query) use ($departamento) {
                 $query->where('departamento_id', $departamento);
             });
-
         }
 
-        // Devolvemos los resultados de la búsqueda.
-        $view = view('users._busquedaUsuarios', ['usuarios' => $query->get()]);
-        return $view->render();
+        // Obtén los resultados de la búsqueda.
+        $usuarios = $query->orderBy('nombre')->get();
+
+        // Devuelve los resultados en formato JSON.
+        return Response::json(['usuarios' => $usuarios]);
     }
+
 
     /* Consulta los usuarios que pertenecen a un determinado departamento pasado por parametro, para cargar el desplegable
         al seleccionar el departamento, cuando se va a crear una incidencia. */
@@ -231,9 +229,7 @@ class UserController extends Controller
         $user->status = 0; // Asignar el nuevo valor directamente al atributo
         $user->save(); // Guardar el modelo en la base de datos
 
-
-        return redirect()->route('users.index')->with('success', 'El usuario ha sido bloquedo exitosamente.');
-    }
+        return response()->json(['message' => 'El usuario ha sido bloqueado exitosamente', 'user' => $user]);    }
 
     //Función para bloquear el acceso a usuarios.
     public function outBanned(User $user)
@@ -242,6 +238,7 @@ class UserController extends Controller
         $user->save(); // Guardar el modelo en la base de datos
 
 
-        return redirect()->route('users.index')->with('success', 'El usuario ha sido desbloqueado exitosamente.');
+        return response()->json(['message' => 'El usuario ha sido desbloqueado exitosamente.', 'user' => $user]);
+        //return redirect()->route('users.index')->with('success', 'El usuario ha sido desbloqueado exitosamente.');
     }
 }

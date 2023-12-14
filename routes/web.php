@@ -97,8 +97,8 @@ Route::get('/usuarios/{user}', [UserController::class, 'show'])->name('users.sho
 Route::get('/usuarios/{user}/editar', [UserController::class, 'edit'])->name('users.edit');
 Route::put('/edit/{user}', [UserController::class, 'update'])->name('users.update');
 Route::get('/buscador/user', [UserController::class, 'buscadorUsuario'])->name('buscadorUser.index');
-Route::get('/usuario/addbanned/{user}', [UserController::class, 'addBanned'])->name('users.addbanned')->middleware(['auth', 'verified', 'check.direction']);
-Route::get('/usuario/outbanned/{user}', [UserController::class, 'outBanned'])->name('users.outbanned')->middleware(['auth', 'verified', 'check.direction']);
+Route::post('/usuario/addbanned/{user}', [UserController::class, 'addBanned'])->name('users.addbanned')->middleware(['auth', 'verified', 'check.direction']);
+Route::post('/usuario/outbanned/{user}', [UserController::class, 'outBanned'])->name('users.outbanned')->middleware(['auth', 'verified', 'check.direction']);
 
 
 //Busca los usuarios por un determinado departamento.

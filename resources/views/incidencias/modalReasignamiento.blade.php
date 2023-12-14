@@ -25,11 +25,10 @@
                         <div class="p-6 space-y-6 text-center">
                                 <select name="usuario"
                                     id="usuario"
-                                    class="border p-2 rounded appearance-none focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent px-3 py-2 leading-tight focus:shadow-outline">
+                                    class="w-full border p-2 rounded appearance-none focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent px-3 py-2 leading-tight focus:shadow-outline">
 
-                                <option value="">Selecciona un usuario</option>
                                 @foreach ($usuarios as $usuario)
-                                        <option value="{{ $usuario->id }}">{{ $usuario->nombre }}</option>
+                                <option  {{ $incidencia->usuario_asignado == $usuario->id ? 'selected' : '' }} value="{{ $usuario->id }}">{{ $usuario->nombre }}</option>
                                 @endforeach
                                 </select>
                         </div>
