@@ -62,20 +62,27 @@
                                             <button type="submit"
                                                 class="text-black w-full p-1 hover:bg-gray-200 font-normal text-start"
                                                 data-modal-target="modalReasigmaniento{{ $usuarios }}_{{ $incidencia->id }}"
-                                                data-modal-toggle="modalReasigmaniento{{ $usuarios }}_{{ $incidencia->id }}">Reasignar</button>
+                                                data-modal-toggle="modalReasigmaniento{{ $usuarios }}_{{ $incidencia->id }}">Reasignar
+                                            </button>
                                         @endif
 
 
+                                        <li class="text-black w-full p-1 hover:bg-gray-200 font-normal text-start">
+                                            <button type="submit"
+                                                data-modal-toggle="cerrar-modal{{ $incidencia->id }}">Pasar a
+                                                resuelta</button>
+                                        </li>
+
                                     @endif
 
+                                    @include('incidencias.partials.cerrarIncConfirm')
+                                    @include('incidencias.partials.reabrirConfirm')
+
                                     @if ($incidencia->estado_id == 3)
-                                        <form action="{{ route('incidencias.reabrir', $incidencia) }}" method="post">
-                                            @csrf
-                                            @method('put')
-                                            <li class="text-black w-full p-1 hover:bg-gray-200 font-normal text-start">
-                                                <button type="submit">Reabrir</button>
-                                            </li>
-                                        </form>
+                                        <li class="text-black w-full p-1 hover:bg-gray-200 font-normal text-start">
+                                            <button type="submit"
+                                                data-modal-toggle="reabrir-modal{{ $incidencia->id }}">Reabrir</button>
+                                        </li>
                                         <li class="text-black w-full p-1 hover:bg-gray-200 font-normal">
                                             <a href="{{ route('generate-pdf', $incidencia) }}" target="_blank"
                                                 class="btn btn-primary">
@@ -108,7 +115,8 @@
 
                 <tr class="border-t border-gray-200">
                     <th class="text-left w-48 text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha:</th>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ \Carbon\Carbon::parse($incidencia->fecha)->format('d/m/Y') }}
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        {{ \Carbon\Carbon::parse($incidencia->fecha)->format('d/m/Y') }}
                     </td>
                 </tr>
 
@@ -280,7 +288,8 @@
                                     class="flex items-center space-x-2 border-b  border-gray-200 rounded-b dark:border-gray-600">
 
                                     <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400 mb-6">
-                                        Sé genera la incidencia con fecha: {{ \Carbon\Carbon::parse($historial->fecha)->format('d/m/Y') }} a las:
+                                        Sé genera la incidencia con fecha:
+                                        {{ \Carbon\Carbon::parse($historial->fecha)->format('d/m/Y') }} a las:
                                         {{ \Carbon\Carbon::parse($historial->hora_inicio)->format('H:i') }}.
                                     </p>
                                 </div>
@@ -294,7 +303,8 @@
                                     class="flex items-center space-x-2 border-b border-gray-200 rounded-b dark:border-gray-600">
 
                                     <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400 mb-6">
-                                        Sé inicia la incidencia con fecha: {{ \Carbon\Carbon::parse($historial->fecha)->format('d/m/Y') }}  Iniciada a las:
+                                        Sé inicia la incidencia con fecha:
+                                        {{ \Carbon\Carbon::parse($historial->fecha)->format('d/m/Y') }} Iniciada a las:
                                         {{ \Carbon\Carbon::parse($historial->hora_inicio)->format('H:i') }}.
                                     </p>
 
@@ -310,7 +320,9 @@
 
 
                                     <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400 mb-6">
-                                        La incidencia ha sido reabierta con fecha: {{ \Carbon\Carbon::parse($historial->fecha)->format('d/m/Y') }}, por tener tareas por completar a
+                                        La incidencia ha sido reabierta con fecha:
+                                        {{ \Carbon\Carbon::parse($historial->fecha)->format('d/m/Y') }}, por tener
+                                        tareas por completar a
                                         las:
                                         {{ \Carbon\Carbon::parse($historial->hora_inicio)->format('H:i') }}.
                                     </p>
@@ -326,7 +338,9 @@
 
 
                                     <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400 mb-6">
-                                        Sé finaliza la incidencia con fecha: {{ \Carbon\Carbon::parse($historial->fecha)->format('d/m/Y') }} Finalizada a las:
+                                        Sé finaliza la incidencia con fecha:
+                                        {{ \Carbon\Carbon::parse($historial->fecha)->format('d/m/Y') }} Finalizada a
+                                        las:
                                         {{ \Carbon\Carbon::parse($historial->hora_fin)->format('H:i') }}.
                                     </p>
                                 </div>
@@ -441,4 +455,7 @@
             }
         });
     </script>
+
+
+
 </x-app-layout>

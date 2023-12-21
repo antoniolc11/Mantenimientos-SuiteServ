@@ -72,6 +72,11 @@
             </div>
         </div>
     </div>
+    <div class="fixed bottom-0 left-0 w-full bg-gray-200 p-4">
+        <div class="mx-auto max-w-screen-md">
+            {{ $departamentos->links('components.paginate') }}
+        </div>
+    </div>
 
     <!-- Ventana modal para crear un nuevo departamento -->
     @include('departamentos.create')

@@ -18,7 +18,7 @@ class AspiranteController extends Controller
      */
     public function index()
     {
-        $aspirantes = Aspirante::all();
+        $aspirantes = Aspirante::Paginate(8);
         return view('aspirantes.index', ['aspirantes' => $aspirantes]);
     }
 

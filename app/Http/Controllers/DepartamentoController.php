@@ -14,7 +14,7 @@ class DepartamentoController extends Controller
      */
     public function index()
     {
-        $departamentos = Departamento::all();
+        $departamentos = Departamento::Paginate(5);
         return view('departamentos.index', ['departamentos' => $departamentos]);
     }
 

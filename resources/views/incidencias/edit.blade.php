@@ -142,8 +142,4 @@
         }
     </script>
     <script src="{{ asset('js/validation_incidencia.js') }}"></script>
-
-
-
-
 </x-app-layout>
