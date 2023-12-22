@@ -187,17 +187,17 @@
                 }
             }
 
-            // Función que valida el campo de número de teléfono
+            // Función que valida el campo de número de teléfono en España
             function validateTel(telefono, errors) {
                 if (telefono.trim() === '') {
                     errors.push('Por favor, ingresa tu número de teléfono.');
                 } else {
-                    // Expresión regular para validar que el teléfono contenga solo dígitos
-                    var phoneRegex = /^\d+$/;
+                    // Expresión regular para validar el número de teléfono en España
+                    var phoneRegex = /^(\+34|0034|34)?[6789]\d{8}$/;
 
-                    // Validar que el teléfono solo contenga dígitos y tenga al menos 9 caracteres
-                    if (!phoneRegex.test(telefono) || telefono.length < 9) {
-                        errors.push('Por favor, ingresa un número de teléfono válido (9 dígitos).');
+                    // Validar que el teléfono cumpla con el patrón de España
+                    if (!phoneRegex.test(telefono)) {
+                        errors.push('Por favor, ingresa un número de teléfono válido en España.');
                     }
                 }
             }

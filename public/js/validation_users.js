@@ -89,12 +89,18 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Función de validación para el campo de teléfono
+    // Función que valida el campo de número de teléfono en España
     function validateTel(telefono, errors) {
         if (telefono.trim() === '') {
             errors.push('Por favor, ingresa tu número de teléfono.');
-        } else if (!phoneRegex.test(telefono)) {
-            errors.push('Por favor, ingresa un número de teléfono válido de 9 dígitos.');
+        } else {
+            // Expresión regular para validar el número de teléfono en España
+            var phoneRegex = /^(\+34|0034|34)?[6789]\d{8}$/;
+
+            // Validar que el teléfono cumpla con el patrón de España
+            if (!phoneRegex.test(telefono)) {
+                errors.push('Por favor, ingresa un número de teléfono válido en España.');
+            }
         }
     }
 
