@@ -35,6 +35,12 @@ class AspiranteController extends Controller
      */
     public function store(StoreAspiranteRequest $request)
     {
+        $nif = Aspirante::where('nif', $request->nif);
+        $email = Aspirante::where('email', $request->email);
+        if ($nif->exists() || $email->exists()) {
+            return redirect()->route('login')->with('error', 'Ya realizaste la solicitud, tus datos serán valorados pronto. ¡Gracias!');
+        }
+
         // Validación de campos del formulario.
         $request->validate([
             'nombre' => 'required|string|max:255',

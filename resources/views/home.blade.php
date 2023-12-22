@@ -1,7 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Home') }}
+            {{ __('Incidencias') }}
+            @if (!auth()->user()->esDepartamentoDireccion() && !auth()->user()->esDepartamentosupervision())
+                    @if ($numero != 0)
+                        <span class="text-red-500">({{ $numero }})</span>
+                    @endif
+            @endif
         </h2>
     </x-slot>
 

@@ -43,6 +43,12 @@ class UserController extends Controller
 
  public function store(Request $request): RedirectResponse
     {
+        $nif = User::where('nif', $request->nif);
+        $email = User::where('email', $request->email);
+        if ($nif->exists() || $email->exists()) {
+            return redirect()->route('users.index')->with('error', 'El usuario que intentas registrar ya existe.');
+        }
+
         $request->validate([
             'nombre' => ['required', 'string', 'max:255'],
             'primer_apellido' => ['required', 'string', 'max:255'],
