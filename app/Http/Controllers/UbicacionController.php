@@ -13,7 +13,7 @@ class UbicacionController extends Controller
      */
     public function index()
     {
-        $ubicaciones = Ubicacion::all();
+        $ubicaciones = Ubicacion::Paginate(10);
         return view('ubicaciones.index', ['ubicaciones' => $ubicaciones]);
     }
 

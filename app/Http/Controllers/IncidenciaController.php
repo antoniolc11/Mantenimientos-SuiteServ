@@ -25,8 +25,10 @@ class IncidenciaController extends Controller
         $estados = Estado::all();
         $categorias = Categoria::all();
         $departamentosall = Departamento::all();
+        $incidencias = Incidencia::whereNotIn('estado_id', [3])->where('usuario_asignado', $user->id);
+        $numero = $incidencias->count();
 
-        return view('home', compact(['estados', 'categorias', 'departamentosall']));
+        return view('home', compact(['estados', 'categorias', 'departamentosall', 'numero']));
     }
 
     /**
@@ -74,7 +76,7 @@ class IncidenciaController extends Controller
         $historiales = Historial::where('incidencia_id', $incidencia->id)->get();
           // Aplicar saltos de línea cada 80 caracteres a la descripción
         $incidencia->descripcion = wordwrap($incidencia->descripcion, 80, "\n", true);
-        
+
         return view('incidencias.show', ['incidencia' => $incidencia, 'historiales' => $historiales]);
     }
 
@@ -298,6 +300,7 @@ class IncidenciaController extends Controller
 
 
         $resultados = $user->esDepartamentoDireccion() || $user->esDepartamentoSupervision() ? $resultados : $resultados2;
+
         $view = view('incidencias._busqueda', ['incidencias' => $resultados]);
 
         return $view->render();

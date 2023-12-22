@@ -102,8 +102,11 @@
             </div>
         </div>
     </div>
-
-
+    <div class="fixed bottom-0 left-0 w-full bg-gray-200 p-4">
+        <div class="mx-auto max-w-screen-md">
+            {{ $aspirantes->links('components.paginate') }}
+        </div>
+    </div>
     <script>
         // Agrega un evento de clic a los botones "Descargar el Curriculum"
         document.querySelectorAll('.open-curriculum-button').forEach(function(button) {
@@ -175,4 +178,6 @@
             </div>
         </div>
     @endforeach
+
+
 </x-app-layout>
