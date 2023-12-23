@@ -63,7 +63,7 @@
 
                                     <!-- Sección para mostrar resultados -->
                                     <template x-else x-for="usuario in resultados" :key="usuario.id">
-                                        <tr class="border-b dark:border-neutral-500">
+                                        <tr class="border-b dark:border-neutral-500 hover:bg-gray-200">
                                             <!-- Celda para el NIF -->
                                             <td class="whitespace-nowrap  px-6 py-4 font-medium">
                                                 <a :href="`${routeShow.replace(':user_id', usuario.id)}`" x-text="usuario.nif"></a>

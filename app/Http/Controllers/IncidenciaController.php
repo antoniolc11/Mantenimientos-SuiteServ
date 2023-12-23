@@ -74,7 +74,7 @@ class IncidenciaController extends Controller
     public function show(Incidencia $incidencia)
     {
         $historiales = Historial::where('incidencia_id', $incidencia->id)->get();
-          // Aplicar saltos de línea cada 80 caracteres a la descripción
+        // Aplicar saltos de línea cada 80 caracteres a la descripción
         $incidencia->descripcion = wordwrap($incidencia->descripcion, 80, "\n", true);
 
         return view('incidencias.show', ['incidencia' => $incidencia, 'historiales' => $historiales]);
@@ -218,89 +218,53 @@ class IncidenciaController extends Controller
     */
     public function buscarIncidencia(Request $request)
     {
-        //Recoge los datos del formulario de busqueda.
+        // Recoge los datos del formulario de búsqueda.
         $numero = $request->input('search');
         $estado = $request->input('estado');
         $prioridad = $request->input('prioridad');
         $categoria = $request->input('categoria');
         $departamento = $request->input('departamento');
+        $user = User::find(auth()->user()->id);
+        $departamentos = $user->departamentos;
 
+        // Base query for users with direction or supervision roles.
+        $query = Incidencia::query()
+            ->where('numero', 'like', '%' . $numero . '%')
+            ->orderBy('prioridad', 'asc');
 
-        //$resultados = Incidencia::where('numero', 'like', '%' . $numero . '%');
-
-
-        $user = User::find(auth()->user()->id); //Realiza una consulta que obtiene el id del usuario logado.
-        $departamentos = $user->departamentos; //Realiza la busqueda de los departamentos a los que pertenece el usuario.
-
-
-        //$esDepartamentoDireccion = $user->departamentos->contains('nombre', 'Dirección');
-
-        if ($user->esDepartamentoDireccion() || $user->esDepartamentoSupervision()) {
-            //Consulta base para aplicar a los filtros de busqueda a los usuarios que son de dirección ni supervisión.
-            $query = Incidencia::query()->where('numero', 'like', '%' . $numero . '%')->orderBy('categoria_id')->get();
-        }
-
+        // Apply filters for users with direction or supervision roles.
         if (!$user->esDepartamentoDireccion() && !$user->esDepartamentoSupervision()) {
-            //Consulta base para aplicar a los filtros de busqueda a los usuarios que no son de dirección ni supervisión.
-            $query = Incidencia::query()->whereIn('departamento_id', $departamentos->pluck('id'))
-                ->with(['creador', 'asignado'])
-                ->where('numero', 'like', '%' . $numero . '%')
-                ->orderBy('categoria_id')
-                ->get();
+            $query->whereIn('departamento_id', $departamentos->pluck('id'))
+                ->with(['creador', 'asignado']);
         }
 
+        // Apply additional filters based on the provided parameters.
+        if ($estado !== null && $estado !== '') {
+            $query->where('estado_id', $estado);
+        }
+        if ($prioridad !== null && $prioridad !== '') {
+            $query->where('prioridad', $prioridad);
+        }
+        if ($categoria !== null && $categoria !== '') {
+            $query->where('categoria_id', $categoria);
+        }
+        if ($departamento !== null && $departamento !== '') {
+            $query->where('departamento_id', $departamento);
+        }
 
-
-        if ($estado !== null && $estado !== '' && $prioridad !== null && $prioridad !== '' && $categoria !== null && $categoria !== '' && $departamento !== null && $departamento !== '') {
-            $resultados = $query->where('estado_id', $estado)->where('prioridad', $prioridad)->where('categoria_id', $categoria)->where('departamento_id', $departamento);
-        } elseif ($estado !== null && $estado !== '' && $prioridad !== null && $prioridad !== '' && $categoria !== null && $categoria !== '') {
-            $resultados = $query->where('estado_id', $estado)->where('prioridad', $prioridad)->where('categoria_id', $categoria);
-        } elseif ($prioridad !== null && $prioridad !== '' && $categoria !== null && $categoria !== '' && $departamento !== null && $departamento !== '') {
-            $resultados = $query->where('prioridad', $prioridad)->where('categoria_id', $categoria)->where('departamento_id', $departamento);
-        } elseif ($estado !== null && $estado !== '' && $categoria !== null && $categoria !== '' && $departamento !== null && $departamento !== '') {
-            $resultados = $query->where('estado_id', $estado)->where('categoria_id', $categoria)->where('departamento_id', $departamento);
-        } elseif ($prioridad !== null && $prioridad !== '' && $estado !== null && $estado !== '' && $departamento !== null && $departamento !== '') {
-            $resultados = $query->where('estado_id', $estado)->where('prioridad', $prioridad)->where('departamento_id', $departamento);
-        } elseif ($prioridad !== null && $prioridad !== '' && $departamento !== '' && $departamento !== null) {
-            $resultados = $query->where('prioridad', $prioridad)->where('departamento_id', $departamento);
-        } elseif ($categoria !== null && $categoria !== '' && $departamento !== null && $departamento !== '') {
-            $resultados = $query->where('categoria_id', $categoria)->where('departamento_id', $departamento);
-        } elseif ($estado !== null && $estado !== '' && $departamento !== null && $departamento !== '') {
-            $resultados = $query->where('estado_id', $estado)->where('departamento_id', $departamento);
-        } elseif ($estado !== null && $estado !== '' && $prioridad !== null && $prioridad !== '') {
-            $resultados = $query->where('estado_id', $estado)->where('prioridad', $prioridad);
-        } elseif ($estado !== null && $estado !== ''  && $categoria !== null && $categoria !== '') {
-            $resultados = $query->where('estado_id', $estado)->where('categoria_id', $categoria);
-        } elseif ($prioridad !== null && $prioridad !== ''  && $categoria !== null && $categoria !== '') {
-            $resultados = $query->where('prioridad', $prioridad)->where('categoria_id', $categoria);
-        } elseif ($estado !== null && $estado !== '') {
-            $resultados = $query->where('estado_id', $estado);
-        } elseif ($prioridad !== null && $prioridad !== '') {
-            $resultados = $query->where('prioridad', $prioridad);
-        } elseif ($categoria !== null && $categoria !== '') {
-            $resultados = $query->where('categoria_id', $categoria);
-        } elseif ($departamento !== null && $departamento !== '') {
-            $resultados = $query->where('departamento_id', $departamento);
+        // Apply filter for non-null and non-empty values.
+        if (!empty($estado) || !empty($prioridad) || !empty($categoria) || !empty($departamento) || !empty($numero)) {
+            $resultados = $query->get();;
         } else {
-            if ($numero == null && $numero == '') {
-                $resultados = $query->whereNotIn('estado_id', [3]);
-            } else {
-                $resultados = $query;
-            }
+            $resultados = $query->whereNotIn('estado_id', [3])->get();
         }
 
-        //Comprueba las incidencias que pertenecen al usuario logado
-        $resultados2 = [];
-        foreach ($resultados as $incidencia) {
-            if ($incidencia->usuario_asignado === $user->id) {
-                $resultados2[] = $incidencia;
-            }
-        }
-
-
+        // Filter results for assigned incidents.
+        $resultados2 = $resultados->filter(function ($incidencia) use ($user) {
+            return $incidencia->usuario_asignado === $user->id;
+        });
 
         $resultados = $user->esDepartamentoDireccion() || $user->esDepartamentoSupervision() ? $resultados : $resultados2;
-
         $view = view('incidencias._busqueda', ['incidencias' => $resultados]);
 
         return $view->render();

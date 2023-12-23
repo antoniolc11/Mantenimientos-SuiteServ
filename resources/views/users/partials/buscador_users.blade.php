@@ -50,4 +50,8 @@
                         </div>
                     </form>
                     <script src="{{ asset('js/Buscador_users.js') }}"></script>
+                    <script>
+                        window.routeShow = "{{ route('users.show', ['user' => ':user_id']) }}";
+                        window.routeEdit = "{{ route('users.edit', ['user' => ':user_id']) }}";
+                    </script>
                 </div>

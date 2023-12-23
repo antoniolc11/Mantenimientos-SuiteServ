@@ -18,5 +18,14 @@ class DepartamentoSeeder extends Seeder
         Departamento::create(['nombre' => 'Recursos humanos']);
         Departamento::create(['nombre' => 'Informática']);
         Departamento::create(['nombre' => 'Telecomunicaciones']);
+        Departamento::create(['nombre' => 'Electricidad']);
+        Departamento::create(['nombre' => 'Fontanería']);
+        Departamento::create(['nombre' => 'Carpintería']);
+        Departamento::create(['nombre' => 'Frigorista']);
+        Departamento::create(['nombre' => 'Jarinería']);
+        Departamento::create(['nombre' => 'Limpieza']);
+        Departamento::create(['nombre' => 'Pintura']);
+        Departamento::create(['nombre' => 'Albañilería y Reparaciones Estructurales']);
+        Departamento::create(['nombre' => 'Eventos']);
     }
 }

@@ -37,6 +37,9 @@
                     data-modal-target="modalReasigmaniento{{ $usuarios }}_{{ $incidencia->id }}"
                     data-modal-toggle="modalReasigmaniento{{ $usuarios }}_{{ $incidencia->id }}">Reasignar
                 </button>
+
+                <!-- Ventana modal para reasignar la incidencia a otro usuario -->
+                @include('incidencias.partials.modalReasignamiento')
             @endif
 
 
@@ -44,15 +47,23 @@
                 <button type="submit" data-modal-toggle="cerrar-modal{{ $incidencia->id }}">Pasar a
                     resuelta</button>
             </li>
+            <!-- Ventana modal para confirmar cerrar una incidencia -->
+            @include('incidencias.partials.cerrarIncConfirm')
 
         @endif
 
 
 
         @if ($incidencia->estado_id == 3)
-            <li class="text-black w-full p-1 hover:bg-gray-200 font-normal text-start">
-                <button type="submit" data-modal-toggle="reabrir-modal{{ $incidencia->id }}">Reabrir</button>
-            </li>
+            @if (auth()->user()->esDepartamentoDireccion() ||
+                    auth()->user()->esDepartamentosupervision())
+                <li class="text-black w-full p-1 hover:bg-gray-200 font-normal text-start">
+                    <button type="submit" data-modal-toggle="reabrir-modal{{ $incidencia->id }}">Reabrir</button>
+                </li>
+
+                <!-- Ventana modal para confirmar reabrir una incidencia -->
+                @include('incidencias.partials.reabrirConfirm')
+            @endif
             <li class="text-black w-full p-1 hover:bg-gray-200 font-normal">
                 <a href="{{ route('generate-pdf', $incidencia) }}" target="_blank" class="btn btn-primary">
                     <button data-modal-hide="defaultModal" type="button">Parte
@@ -63,10 +74,3 @@
         <!-- Agregar más elementos al desplegable según sea necesario -->
     </ul>
 </div>
-
-<!-- Ventana modal para confirmar cerrar una incidencia -->
-@include('incidencias.partials.cerrarIncConfirm')
-<!-- Ventana modal para confirmar reabrir una incidencia -->
-@include('incidencias.partials.reabrirConfirm')
-<!-- Ventana modal para reasignar la incidencia a otro usuario -->
-@include('incidencias.partials.modalReasignamiento')

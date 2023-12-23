@@ -1,6 +1,6 @@
 @forelse ($incidencias as $incidencia)
     <!-- Tu código para mostrar cada incidencia -->
-    <tr class="border-b dark:border-neutral-500">
+    <tr class="border-b dark:border-neutral-500 hover:bg-gray-200">
         <td class="whitespace-nowrap  px-6 py-4 font-medium"><a
                 href="{{ route('incidencias.show', $incidencia) }}">{{ $incidencia->numero }}</a>
         </td>

@@ -14,7 +14,7 @@
             <x-error-alert :messages="session('error')" />
         @endif
     </div>
-    
+
     <section class="max-w-2xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800">
         <table class="min-w-full ">
             <thead class="border-b">

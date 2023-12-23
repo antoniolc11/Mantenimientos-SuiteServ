@@ -44,7 +44,7 @@
                         <tbody>
                             <!-- Aquí va tu estructura de tabla para mostrar los ubicaciones -->
                             @foreach ($ubicaciones as $ubicacion)
-                                <tr class="border-b dark:border-neutral-500">
+                                <tr class="border-b dark:border-neutral-500 hover:bg-gray-200">
                                     <td class="whitespace-nowrap  px-6 py-4">
                                         {{ $ubicacion->nombre }}
                                     </td>

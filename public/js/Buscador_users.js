@@ -1,6 +1,4 @@
 
-window.routeShow = "{{ route('users.show', ['user' => ':user_id']) }}";
-window.routeEdit = "{{ route('users.edit', ['user' => ':user_id']) }}";
 
 function buscarUsuario() {
     return {
