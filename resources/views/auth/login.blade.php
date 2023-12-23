@@ -1,21 +1,32 @@
+<!-- La estructura base del diseño de la página está utilizando el layout 'x-guest-layout' -->
+
 <x-guest-layout>
+
+    <!-- Sección principal que utiliza Alpine.js para manejar la visibilidad de un mensaje durante 5 segundos -->
     <div x-data="{ showMessage: true }" x-init="setTimeout(() => showMessage = false, 5000)" class="w-full">
+
+        <!-- Contenedor del mensaje con transiciones de entrada y salida -->
         <div x-show="showMessage" x-cloak x-transition:enter="transition ease-out duration-300"
             x-transition:enter-start="opacity-0 transform scale-90"
             x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-300"
             x-transition:leave-start="opacity-100 transform scale-100 h-auto"
             x-transition:leave-end="opacity-0 transform scale-90 h-0" class="alert alert-success">
 
-            <!-- Mostrar mensajes de sesión usando el componente x-auth-session-status -->
+
+            <!-- Mostrar mensajes de sesión utilizando el componente x-auth-session-status -->
+            <!-- El componente se utiliza para mostrar mensajes relacionados con la sesión -->
             <x-auth-session-status class="mb-4" :status="session('status')" />
+
+            <!-- También se muestra otro mensaje de sesión con la clave 'success' -->
             <x-auth-session-status class="mb-4" :status="session('success')" />
+
         </div>
     </div>
+
 
     <div class="w-full flex flex-wrap">
         <!-- Login Section -->
         <div class="w-full md:w-1/2 flex flex-col">
-
             <div class="flex items-center justify-center md:justify-start  md:mt-16">
                 <div class="mx-auto">
                     <img src="{{ asset('imagenes/logo.png') }}" alt="Mi Logo" class="w-40 h-auto">
@@ -32,6 +43,7 @@
                         <x-input-label for="email" :value="__('Email')" />
                         <x-text-input id="emailvalue" type="text" name="email" :value="old('email')"
                             placeholder="tu@email.com" autofocus autocomplete="username" />
+                        {{-- Mensajes de validaciones de js. --}}
                         <div class="mt-2 text-sm text-red-600 dark:text-red-400 space-y-1" id="emailError"></div>
 
                         <x-input-error :messages="$errors->get('email')" class="mt-2" />
@@ -63,95 +75,6 @@
                     </x-primary-button>
                 </form>
 
-
-                <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        // Se obtienen referencias a los campos de correo electrónico y contraseña
-                        var emailInput = document.getElementById('emailvalue');
-                        var passwordInput = document.getElementById('passwordvalue');
-
-                        // Se agrega un event listener al formulario para el evento de envío
-                        document.getElementById('loginForm').addEventListener('submit', function(event) {
-                            // Si la validación del formulario no pasa, se evita que se envíe el formulario
-                            if (!validateLoginForm()) {
-                                event.preventDefault();
-                            }
-                        });
-
-                        // Función que realiza la validación del formulario
-                        function validateLoginForm() {
-                            var email = emailInput.value;
-                            var password = passwordInput.value;
-
-                            clearErrorMessages();
-
-                            var errors = [];
-
-                            // Se llama a la función de validación para el correo electrónico
-                            validateEmail(email, errors);
-
-                            // Se llama a la función de validación para la contraseña
-                            validatePassword(password, errors);
-
-                            // Se muestran los mensajes de error, si los hay
-                            displayErrors(errors);
-
-                            // El formulario es válido si no hay errores
-                            return errors.length === 0;
-                        }
-
-                        // Función que valida el campo de correo electrónico
-                        function validateEmail(email, errors) {
-                            if (email.trim() === '') {
-                                errors.push('Por favor, ingresa tu correo electrónico.');
-                            } else {
-                                // Expresión regular para validar el formato del correo electrónico
-                                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-                                if (!emailRegex.test(email)) {
-                                    errors.push('Por favor, ingresa un correo electrónico válido.');
-                                }
-                            }
-                        }
-
-                        // Función que valida el campo de contraseña
-                        function validatePassword(password, errors) {
-                            if (password.trim() === '') {
-                                errors.push('Por favor, ingresa tu contraseña.');
-                            }
-                        }
-
-                        // Función que muestra los mensajes de error en los contenedores correspondientes
-                        function displayErrors(errors) {
-                            for (var i = 0; i < errors.length; i++) {
-                                var errorContainerId = 'emailError'; // Contenedor predeterminado
-
-                                // Se verifica si el mensaje de error incluye la palabra "contraseña"
-                                if (errors[i].toLowerCase().includes('contraseña')) {
-                                    errorContainerId = 'passwordError';
-                                }
-
-                                // Se verifica si el mensaje de error incluye la palabra "email"
-                                if (errors[i].toLowerCase().includes('email')) {
-                                    errorContainerId = 'emailError';
-                                }
-
-                                // Se obtiene el contenedor de error correspondiente y se crea un elemento de párrafo con el mensaje de error
-                                var errorContainer = document.getElementById(errorContainerId);
-                                var errorMessage = document.createElement('p');
-                                errorMessage.textContent = errors[i];
-                                errorContainer.appendChild(errorMessage);
-                            }
-                        }
-
-                        // Función para limpiar los mensajes de error existentes en los contenedores
-                        function clearErrorMessages() {
-                            document.getElementById('emailError').textContent = '';
-                            document.getElementById('passwordError').textContent = '';
-                        }
-                    });
-                </script>
-
                 <div class="text-center pt-12 pb-6">
                     @if (Route::has('password.request'))
                         <a class="underline font-semibold  text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
@@ -171,4 +94,7 @@
             <img class="object-cover w-full h-screen hidden md:block" src="https://source.unsplash.com/IXUM4cJynP0">
         </div>
     </div>
+
+    {{-- Validación de campos con js --}}
+    <script src="{{ asset('js/validation_login.js') }}"></script>
 </x-guest-layout>

@@ -1,10 +1,6 @@
 <x-app-layout>
-
     <section class="max-w-4xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800 mt-20">
-
         <!-- Register Section -->
-
-
         <h2 class="text-lg font-semibold text-gray-700 capitalize dark:text-white text-center mb-6">Ficha de registro
         </h2>
         <form id="usersRegistro" class="flex flex-col pt-3 md:pt-8" method="POST" action="{{ route('users.store') }}">
@@ -12,7 +8,7 @@
             <div class="grid grid-cols-1 gap-6  sm:grid-cols-2">
                 <!-- Nombre -->
                 <div>
-                    <x-input-label for="nombre" :value="__('Nombre')" />
+                    <x-input-label for="nombre" :value="__('Nombre*')" />
                     <x-text-input id="nombre" class="block mt-1 w-full" type="text" name="nombre" :value="old('nombre')"
                         autofocus autocomplete="nombre" placeholder="Ingresa tu primer nombre" />
                     <div class="mt-2 text-sm text-red-600 dark:text-red-400 space-y-1" id="nombreError"></div>
@@ -21,7 +17,7 @@
 
                 <!-- Primer apellido -->
                 <div>
-                    <x-input-label for="primer_apellido" :value="__('Primer apellido')" />
+                    <x-input-label for="primer_apellido" :value="__('Primer apellido*')" />
                     <x-text-input id="primer_apellido" class="block mt-1 w-full" type="text" name="primer_apellido"
                         :value="old('primer_apellido')" autofocus autocomplete="primer_apellido"
                         placeholder="Ingresa tu primer apellido" />
@@ -31,7 +27,7 @@
 
                 <!-- Segundo apellido -->
                 <div>
-                    <x-input-label for="segundo_apellido" :value="__('Segundo apellido')" />
+                    <x-input-label for="segundo_apellido" :value="__('Segundo apellido*')" />
                     <x-text-input id="segundo_apellido" class="block mt-1 w-full" type="text" name="segundo_apellido"
                         :value="old('segundo_apellido')" autofocus autocomplete="segundo_apellido"
                         placeholder="Ingresa tu segundo apellido" />
@@ -40,7 +36,7 @@
 
                 <!-- nif -->
                 <div>
-                    <x-input-label for="nif" :value="__('Nif')" />
+                    <x-input-label for="nif" :value="__('Nif*')" />
                     <x-text-input id="nif" class="block mt-1 w-full" type="text" name="nif"
                         :value="old('nif')" autofocus autocomplete="nif" placeholder="68741564R" />
                     <div class="mt-2 text-sm text-red-600 dark:text-red-400 space-y-1" id="nifError"></div>
@@ -50,7 +46,7 @@
 
                 <!-- telefono -->
                 <div>
-                    <x-input-label for="telefono" :value="__('Teléfono')" />
+                    <x-input-label for="telefono" :value="__('Teléfono*')" />
                     <x-text-input id="telefono" class="block mt-1 w-full" type="text" name="telefono"
                         :value="old('telefono')" autofocus autocomplete="telefono" placeholder="654456654" />
                     <div class="mt-2 text-sm text-red-600 dark:text-red-400 space-y-1" id="telefonoError"></div>
@@ -60,36 +56,16 @@
 
                 <!-- Email Address -->
                 <div>
-                    <x-input-label for="email" :value="__('Email')" />
+                    <x-input-label for="email" :value="__('Email*')" />
                     <x-text-input id="email" class="block mt-1 w-full" type="email" name="email"
                         :value="old('email')" autocomplete="username" placeholder="your@email.com" />
                     <div class="mt-2 text-sm text-red-600 dark:text-red-400 space-y-1" id="emailError"></div>
                     <x-input-error :messages="$errors->get('email')" class="mt-2" />
                 </div>
 
-                {{--                 <!-- Password -->
-                <div>
-                    <x-input-label for="password" :value="__('Password')" />
-
-                    <x-text-input id="password" class="block mt-1 w-full" type="password" name="password"
-                        autocomplete="new-password" />
-
-                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
-                </div>
-
-                <!-- Confirm Password -->
-                <div>
-                    <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-                    <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password"
-                        name="password_confirmation"  autocomplete="new-password" />
-
-                    <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-                </div> --}}
-
                 <!-- Departamento -->
                 <div>
-                    <label for="departamento">Departamento:</label>
+                    <label for="departamento">Departamento*</label>
                     <select multiple name="departamento[]" id="departamento">
                         @foreach ($departamentos as $departamento)
                             <option value="{{ $departamento->id }}">{{ $departamento->nombre }}</option>
@@ -98,12 +74,12 @@
                     <div class="mt-2 text-sm text-red-600 dark:text-red-400 space-y-1" id="departamentoError"></div>
                     <x-input-error :messages="$errors->get('departamento')" class="mt-2" />
 
+                    {{-- Script que permite asignar a un usuario mas de un departamentos --}}
                     <script>
                         new MultiSelectTag('departamento') // id
                     </script>
                 </div>
             </div>
-
 
             <div class="w-full relative h-32 flex flex-row items-center justify-center">
                 <a href="{{ route('users.index') }}" class="absolute left-6 py-2 mt-2">
@@ -114,7 +90,6 @@
                     </svg>
                 </a>
 
-
                 <div class="flex flex-col items-center">
                     <input type="submit" value="Registrar operario"
                         class="cursor-pointer bg-black hover:bg-gray-700 text-white font-bold w-44 py-3 mt-2 mb-2 rounded" />
@@ -122,11 +97,7 @@
 
             </div>
         </form>
-        </div>
-
-        </div>
     </section>
 
     <script src="{{ asset('js/validation_users.js') }}"></script>
-
 </x-app-layout>

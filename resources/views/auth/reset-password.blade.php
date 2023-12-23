@@ -34,7 +34,8 @@
                                                 <div class="text-base leading-6">
 
                                                     <p class="mb-6">
-                                                        <span class="font-bold">¡Bienvenido! </span>Parece que es la primera vez que inicias sesión en
+                                                        <span class="font-bold">¡Bienvenido! </span>Parece que es la
+                                                        primera vez que inicias sesión en
                                                         nuestra plataforma. Para garantizar la seguridad de tu cuenta,
                                                         necesitamos que establezcas una contraseña ahora.
 
@@ -84,27 +85,22 @@
                                                             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
                                                         </div>
 
-
-
                                                         <div class="flex flex-col items-center mt-8">
                                                             <x-primary-button>
                                                                 {{ __('Enviar') }}
                                                             </x-primary-button>
                                                         </div>
-
+                                                    </form>
                                                 </div>
-    </form>
-    </div>
-    </td>
-    </tr>
-    </tbody>
-    </table>
-
-    </div>
-    </td>
-    </tr>
-    </tbody>
-    </table>
-    </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </form>
 </x-guest-layout>
