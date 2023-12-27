@@ -9,7 +9,7 @@
             </path>
         </svg>
     </button>
-    <ul x-show="isOpen" @click.away="isOpen = false" class="absolute border mt-2 rounded shadow-lg bg-gray-100 p-1"
+    <ul x-show="isOpen" @click.away="isOpen = false" class="absolute border mt-2 rounded shadow-lg bg-gray-100 p-1 desplegable hidden"
         x-cloak x-transition:enter="transition-transform ease-out duration-300 transform"
         x-transition:enter-start="scale-75" x-transition:leave="transition-transform ease-in duration-300 transform"
         x-transition:leave-end="scale-75"
@@ -74,3 +74,9 @@
         <!-- Agregar más elementos al desplegable según sea necesario -->
     </ul>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var desplegable = document.querySelector('.desplegable');
+        desplegable.classList.remove('hidden');
+    });
+</script>

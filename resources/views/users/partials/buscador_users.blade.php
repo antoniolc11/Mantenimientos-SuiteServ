@@ -31,6 +31,7 @@
                                         x-model="email" x-on:keyup="buscarUsuario2" />
                                 </div>
 
+                                {{-- Campo de busqueda por departamento --}}
                                 <div class="flex flex-col">
                                     <x-input-label for="departamento" :value="__('Departamento')" />
                                     <select

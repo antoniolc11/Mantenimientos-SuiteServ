@@ -22,6 +22,7 @@
                 </div>
 
                 {{-- Seleeciona el departamento que va a tener la incidencia. --}}
+
                 <div>
                     <x-input-label for="departamento" :value="__('Departamento*')" />
                     <select name="departamento_id" id="departamento" x-model="departamentoId"
@@ -29,12 +30,22 @@
                         class="'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent">
                         <option value="">Selecciona un departamento</option>
                         @foreach ($departamentos as $departamento)
+                            @php
+                                // Filtrar usuarios con status igual a 1
+                                $usersWithStatus1 = $departamento->users->filter(function ($user) {
+                                    return $user->status == 1;
+                                });
+                            @endphp
                             @if ($departamento->users->count() > 0)
-                                <option value="{{ $departamento->id }}">{{ $departamento->nombre }}</option>
+                                    @if ($usersWithStatus1->count() > 0)
+                                        <option value="{{ $departamento->id }}">{{ $departamento->nombre }}</option>
+                                    @endif
                             @endif
                         @endforeach
                     </select>
                     <div class="mt-2 text-sm text-red-600 dark:text-red-400 space-y-1" id="departamentoError"></div>
+
+
                 </div>
 
                 {{-- Usuario asignado --}}
@@ -105,7 +116,7 @@
 
     <script>
         /* Realiza una petición ajax a una funcion del controlador de user que devuelve al seleccionar un departamento, los usuarios del mismo
-                                        para mostrarlos en el select de usuario asignado. */
+                                                            para mostrarlos en el select de usuario asignado. */
         function usuariosComponent() {
             return {
                 usuarios: [],

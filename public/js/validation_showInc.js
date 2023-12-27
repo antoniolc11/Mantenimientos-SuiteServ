@@ -34,7 +34,7 @@
             // Función que valida el campo de desc
             function validateDescripcion(descripcion, errors) {
                 if (descripcion.trim() === '') {
-                    errors.push('Por favor, ingresa una descripción.');
+                    errors.push('Por favor, describe el trabajo realizado en esta incidencia.');
                 } else if (descripcion.length < 10) {
                     errors.push('La descripción debe tener al menos 30 caracteres.');
                 }

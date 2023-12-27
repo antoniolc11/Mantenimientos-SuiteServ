@@ -1,5 +1,3 @@
-
-
 function buscarUsuario() {
     return {
         routeShow: window.routeShow,
@@ -8,6 +6,25 @@ function buscarUsuario() {
         departamento: '',
         nombre: '',
         resultados: [],
+        /* Paginacion usuarios */
+        resul: [],
+        paginaActual: 1,
+        usuariosPorPagina: 5, // Número de usuarios por página
+        totalUsuarios: 0, // Este valor debe ser actualizado con el total real de usuarios desde la respuesta del servidor
+
+
+        cambiarPagina(pagina) {
+            this.paginaActual = pagina;
+            // Lógica para obtener los usuarios de la página actual desde el array completo
+            // Puedes usar slice para obtener la porción correcta del array
+            this.resul = this.getResultadosPagina();
+        },
+
+        getResultadosPagina() {
+            const inicio = (this.paginaActual - 1) * this.usuariosPorPagina;
+            const fin = inicio + this.usuariosPorPagina;
+            return this.resultados.slice(inicio, fin);
+        },
 
         bloquearUsuario(usuario) {
             // Llamada a la API para bloquear al usuario
@@ -17,7 +34,9 @@ function buscarUsuario() {
                     usuario.status = 0;
 
                     // Luego, ejecutar la búsqueda nuevamente para actualizar la interfaz
-                    this.buscarUsuario2();
+                    console.log(this.paginaActual);
+                    //this.buscarUsuario2();
+
                     // Puedes realizar acciones adicionales si es necesario
                 })
                 .catch(error => {
@@ -32,7 +51,7 @@ function buscarUsuario() {
                     console.log('Usuario desbloqueado:', response.data);
                     usuario.status = 1;
                     // Luego, ejecutar la búsqueda nuevamente para actualizar la interfaz
-                    this.buscarUsuario2();
+                   // this.buscarUsuario2();
                     // Puedes realizar acciones adicionales si es necesario
                 })
                 .catch(error => {
@@ -43,6 +62,7 @@ function buscarUsuario() {
 
 
         buscarUsuario2() {
+            this.paginaActual = 1
             let nombre = this.nombre.trim()
 
             let primer_apellido = this.primer_apellido.trim()
@@ -62,6 +82,9 @@ function buscarUsuario() {
                 })
                 .then(response => {
                     this.resultados = response.data.usuarios;
+                    this.totalUsuarios = this.resultados.length; // Asegúrate de obtener este valor desde la respuesta del servidor
+                    this.resul = this.getResultadosPagina();
+
 
                 })
                 .catch(error => {
