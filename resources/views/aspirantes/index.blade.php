@@ -5,13 +5,8 @@
         </h2>
     </x-slot>
 
-
-
     <div class="py-12">
         <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
-
-
-
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="h-9">
                     {{-- Mostrar los mensajes de exito. --}}

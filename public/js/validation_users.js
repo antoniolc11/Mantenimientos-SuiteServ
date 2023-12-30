@@ -83,9 +83,24 @@ document.addEventListener('DOMContentLoaded', function () {
     // Función de validación para el campo de NIF
     function validateNif(nif, errors) {
         if (nif.trim() === '') {
-            errors.push('Por favor, ingresa tu NIF.');
-        } else if (!dniRegex.test(nif)) {
-            errors.push('Por favor, ingresa un NIF válido (8 dígitos seguidos de una letra).');
+            errors.push('Por favor, ingresa tu nif.');
+        } else {
+            // Expresión regular para validar el formato del nif en España (8 dígitos y una letra)
+            var dniRegex = /^[0-9]{8}[a-zA-Z]$/;
+
+            // Validar que el nif cumpla con el formato esperado
+            if (!dniRegex.test(nif)) {
+                errors.push('Por favor, ingresa un nif válido (8 dígitos seguidos de una letra).');
+            } else {
+                // Validar la letra del nif
+                var letras = 'TRWAGMYFPDXBNJZSQVHLCKE';
+                var letraDNI = nif.charAt(nif.length - 1).toUpperCase();
+                var digitosDNI = parseInt(nif.substring(0, nif.length - 1), 10);
+
+                if (letras.charAt(digitosDNI % 23) !== letraDNI) {
+                    errors.push('La letra del nif no es válida.');
+                }
+            }
         }
     }
 

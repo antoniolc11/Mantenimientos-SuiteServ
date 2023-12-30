@@ -43,7 +43,7 @@
         }
 
         .datostabla {
-            height: 1cm;
+            height: 0.8cm;
         }
 
         .trabajodesc {
@@ -51,7 +51,7 @@
         }
 
         .descripcion {
-            height: 9cm;
+            height: 7cm;
             vertical-align: top;
             /* Alineación superior */
             padding: 15px
@@ -83,6 +83,10 @@
                     <td colspan="2" class="datosincidencia">
                         {{ $incidencia->asignado->nombre . ' ' . $incidencia->asignado->primer_apellido . ' ' . $incidencia->asignado->segundo_apellido }}
                     </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="datostabla">Prioridad:</td>
+                    <td colspan="2" class="datosincidencia">{{ $incidencia->prioridad }}</td>
                 </tr>
                 <tr>
                     <td colspan="2" class="datostabla">Estado:</td>
