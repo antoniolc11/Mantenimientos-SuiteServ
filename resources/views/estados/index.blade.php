@@ -43,7 +43,7 @@
                         <tbody>
                             <!-- Aquí va tu estructura de tabla para mostrar los estados -->
                             @foreach ($estados as $estado)
-                                <tr class="border-b dark:border-neutral-500">
+                                <tr class="border-b dark:border-neutral-500 hover:bg-gray-200">
                                     <td class="whitespace-nowrap  px-6 py-4">
                                         {{ $estado->nombre }}
                                     </td>

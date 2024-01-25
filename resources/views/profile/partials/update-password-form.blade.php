@@ -9,7 +9,7 @@
         </p>
     </header>
 
-    <form method="post" action="{{ route('password.update') }}" class="mt-6 space-y-6">
+    <form id="resetForm" method="post" action="{{ route('password.update') }}" class="mt-6 space-y-6">
         @csrf
         @method('put')
 
@@ -23,12 +23,16 @@
             <x-input-label for="password" :value="__('Nueva contraseña')" />
             <x-text-input id="password" name="password" type="password" class="mt-1 block w-full" autocomplete="new-password" />
             <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
+                <div class="mt-2 text-sm text-red-600 dark:text-red-400 space-y-1" id="passwordError"></div>
+
         </div>
 
         <div>
             <x-input-label for="password_confirmation" :value="__('Confirmar contraseña')" />
             <x-text-input id="password_confirmation" name="password_confirmation" type="password" class="mt-1 block w-full" autocomplete="new-password" />
             <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2" />
+                <div class="mt-2 text-sm text-red-600 dark:text-red-400 space-y-1" id="passwordConfirm"></div>
+
         </div>
 
         <div class="flex items-center gap-4">
@@ -45,4 +49,7 @@
             @endif
         </div>
     </form>
+
+        {{-- Validación de campos con js --}}
+        <script src="{{ asset('js/validation_passwordReset.js') }}"></script>
 </section>

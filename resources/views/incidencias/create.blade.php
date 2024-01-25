@@ -12,7 +12,7 @@
             <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
                 {{-- Seleeciona la prioridad que va a tener la incidencia. --}}
                 <div>
-                    <x-input-label for="prioridad" :value="__('Prioridad')" />
+                    <x-input-label for="prioridad" :value="__('Prioridad*')" />
                     <select name="prioridad" id="prioridad"
                         class="'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent">
                         <option value="Alta" {{ old('prioridad') === 'Alta' ? 'selected' : '' }}>Alta</option>
@@ -22,24 +22,35 @@
                 </div>
 
                 {{-- Seleeciona el departamento que va a tener la incidencia. --}}
+
                 <div>
-                    <x-input-label for="departamento" :value="__('Departamento')" />
+                    <x-input-label for="departamento" :value="__('Departamento*')" />
                     <select name="departamento_id" id="departamento" x-model="departamentoId"
                         x-on:change="cargarUsuarios()"
                         class="'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent">
                         <option value="">Selecciona un departamento</option>
                         @foreach ($departamentos as $departamento)
+                            @php
+                                // Filtrar usuarios con status igual a 1
+                                $usersWithStatus1 = $departamento->users->filter(function ($user) {
+                                    return $user->status == 1;
+                                });
+                            @endphp
                             @if ($departamento->users->count() > 0)
-                                <option value="{{ $departamento->id }}">{{ $departamento->nombre }}</option>
+                                    @if ($usersWithStatus1->count() > 0)
+                                        <option value="{{ $departamento->id }}">{{ $departamento->nombre }}</option>
+                                    @endif
                             @endif
                         @endforeach
                     </select>
                     <div class="mt-2 text-sm text-red-600 dark:text-red-400 space-y-1" id="departamentoError"></div>
+
+
                 </div>
 
                 {{-- Usuario asignado --}}
                 <div>
-                    <x-input-label for="usuario_asignado" :value="__('Usuario')" />
+                    <x-input-label for="usuario_asignado" :value="__('Usuario*')" />
 
                     {{-- Filtrar usuarios con status igual a 1 --}}
                     <select name="usuario_asignado" id="usuario"
@@ -52,7 +63,7 @@
 
                 {{-- Ubicación --}}
                 <div>
-                    <x-input-label for="ubicacion" :value="__('Ubicación')" />
+                    <x-input-label for="ubicacion" :value="__('Ubicación*')" />
                     <select name="ubicacion_id" id="ubicacion"
                         class="'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent">
                         <option value="">Selecciona una ubicación</option>
@@ -65,7 +76,7 @@
 
                 {{-- Categoría --}}
                 <div>
-                    <x-input-label for="categoria" :value="__('Categoría')" />
+                    <x-input-label for="categoria" :value="__('Categoría*')" />
                     <select name="categoria_id" id="categoria"
                         class="'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent">
                         <option value="">Selecciona una categoría</option>
@@ -78,7 +89,7 @@
 
                 {{-- Descripción de la incidencia --}}
                 <div>
-                    <label class="text-gray-700 dark:text-gray-200" for="descripcion">Descripción</label>
+                    <label class="text-gray-700 dark:text-gray-200" for="descripcion">Descripción*</label>
                     <textarea name="descripcion" id="descripcion" rows="4"
                         placeholder="Describe el problema a solventar en la incidencia"
                         class="'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent"></textarea>
@@ -103,13 +114,9 @@
         </form>
     </section>
 
-    {{--
-        Carga los usuarios que pertenecen al departamento seleccionado y valida los campos:
-        Departamentos, Usuario, Ubicación, Categoría y descripción
-    --}}
     <script>
         /* Realiza una petición ajax a una funcion del controlador de user que devuelve al seleccionar un departamento, los usuarios del mismo
-                                        para mostrarlos en el select de usuario asignado. */
+                                                            para mostrarlos en el select de usuario asignado. */
         function usuariosComponent() {
             return {
                 usuarios: [],

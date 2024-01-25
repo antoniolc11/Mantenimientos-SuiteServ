@@ -20,9 +20,7 @@
                         <!--!Font Awesome Free 6.5.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
                         <path fill="#d20404" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/>
                     </svg>
-                    <h3 class="mb-5 text-lg font-normal text-black  dark:text-gray-400">¿Seguro que desea pasar a finalizada la incidencia?
-                        este
-                        incidencia?</h3>
+                    <h3 class="mb-5 text-lg font-normal text-black  dark:text-gray-400">¿Seguro que desea pasar a finalizada la incidencia?</h3>
                     <form action="{{ route('incidencias.cerrar', $incidencia) }}" method="POST"
                         class="inline">
                         @method('put')

@@ -39,7 +39,7 @@ class PDFController extends Controller
 
         $trabajo_realizado = Historial::where('incidencia_id', $incidencia->id)
             ->where('estado_id', 3)
-            ->orderByDesc('fecha_actualizacion') // Ajusta 'fecha' al nombre real de la columna temporal que estás utilizando
+            ->orderByDesc('fecha_actualizacion') 
             ->pluck('trabajo_realizado')
             ->first();
 

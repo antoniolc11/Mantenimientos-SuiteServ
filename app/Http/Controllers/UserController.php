@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Response;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\Aspirante;
 use App\Models\Departamento;
 use App\Models\User;
 use App\Notifications\UserRegistered;
@@ -41,20 +42,28 @@ class UserController extends Controller
     }
 
 
- public function store(Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
+        $request->validate([
+            'nombre' => 'required|string|max:255',
+            'primer_apellido' => 'required|string|max:255',
+            'segundo_apellido' => 'nullable|string|max:255',
+            'nif' => 'required|string|max:9|min:9|regex:/^[0-9]+[A-Za-z]$/i',
+            'telefono' => 'required|string|max:9',
+            'email' => 'required|email|max:255',
+            'departamento' => 'required|array',
+            'departamento.*' => 'numeric',
+        ]);
+
         $nif = User::where('nif', $request->nif);
         $email = User::where('email', $request->email);
-        if ($nif->exists() || $email->exists()) {
-            return redirect()->route('users.index')->with('error', 'El usuario que intentas registrar ya existe.');
+        if ($nif->exists()) {
+            return redirect()->route('users.index')->with('error', 'El dni que intentas registrar ya existe en el sistema.');
         }
 
-        $request->validate([
-            'nombre' => ['required', 'string', 'max:255'],
-            'primer_apellido' => ['required', 'string', 'max:255'],
-            'segundo_apellido' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
-        ]);
+        if ($email->exists()) {
+            return redirect()->route('users.index')->with('error', 'El email que intentas registrar ya existe en el sistema.');
+        }
 
         $user = User::create([
             'nombre' => $request->nombre,
@@ -81,6 +90,13 @@ class UserController extends Controller
         $usuario = User::latest()->first(); //ordena el resultado descendentemente y coge el primero de la lista.
 
         $usuario->departamentos()->attach($request->departamento); //Inserta el ultimo usuario registrado y su departamento en la tabla departamento_usuario
+
+
+
+        if ($aspirante = Aspirante::where('nif', $usuario->nif)->first()) {
+            $aspirante->delete();
+        }
+
 
         return redirect()->route('users.index')->with('success', 'El usuario ha sido creado y notificado correctamente.');
     }
@@ -109,6 +125,18 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
+        $request->validate([
+            'nombre' => 'required|string|max:255',
+            'primer_apellido' => 'required|string|max:255',
+            'segundo_apellido' => 'nullable|string|max:255',
+            'nif' => 'required|string|max:9|min:9|regex:/^[0-9]+[A-Za-z]$/i',
+            'telefono' => 'required|string|max:9',
+            'email' => 'required|email|max:255',
+            'departamento' => 'required|array',
+            'departamento.*' => 'numeric',
+        ]);
+
+
         $urlPaginaAnterior = strtolower(rtrim(url()->previous(), '/'));
         $userId = $request->input('user_id');
         $nuevosDatos = $request->only(['nombre', 'primer_apellido', 'segundo_apellido', 'telefono', 'email', 'nif']); // Obtener datos para actualizar nombre
@@ -130,7 +158,6 @@ class UserController extends Controller
                 // En caso contrario, redirecciona a un sitio predeterminado
                 return redirect()->route('users.index')->with('success', 'El usuario ha sido actualizado correctamente.');
             }
-
         }
     }
 
@@ -235,7 +262,8 @@ class UserController extends Controller
         $user->status = 0; // Asignar el nuevo valor directamente al atributo
         $user->save(); // Guardar el modelo en la base de datos
 
-        return response()->json(['message' => 'El usuario ha sido bloqueado exitosamente', 'user' => $user]);    }
+        return response()->json(['message' => 'El usuario ha sido bloqueado exitosamente', 'user' => $user]);
+    }
 
     //Función para bloquear el acceso a usuarios.
     public function outBanned(User $user)
@@ -246,5 +274,12 @@ class UserController extends Controller
 
         return response()->json(['message' => 'El usuario ha sido desbloqueado exitosamente.', 'user' => $user]);
         //return redirect()->route('users.index')->with('success', 'El usuario ha sido desbloqueado exitosamente.');
+    }
+
+    public function viewIncidencias(User $user)
+    {
+        $incidencias = $user->incidencias()->paginate(7); // Cambia 10 por el número de elementos por página que desees mostrar
+
+        return view('users.viewIncidencias', ['incidencias' => $incidencias]);
     }
 }

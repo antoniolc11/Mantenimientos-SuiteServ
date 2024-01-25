@@ -1,10 +1,10 @@
 @forelse ($incidencias as $incidencia)
     <!-- Tu código para mostrar cada incidencia -->
-    <tr class="border-b dark:border-neutral-500">
+    <tr class="border-b dark:border-neutral-500 hover:bg-gray-200">
         <td class="whitespace-nowrap  px-6 py-4 font-medium"><a
                 href="{{ route('incidencias.show', $incidencia) }}">{{ $incidencia->numero }}</a>
         </td>
-        <td class="whitespace-nowrap  px-6 py-4"><span
+        <td class="whitespace-nowrap  px-6 py-4 text-center"><span
                 class="h-5 w-5 inline-block rounded-full {{ $incidencia->prioridadColor() }}"></span>
         </td>
         <td class="whitespace-nowrap  px-6 py-4">{{ $incidencia->categoria->nombre }}

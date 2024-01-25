@@ -55,7 +55,8 @@ class User extends Authenticatable implements CanResetPassword
 
     //Relación uno a muchos
     public function incidencias(){
-        return $this->hasMany(Incidencia::class);
+        return $this->hasMany(Incidencia::class, 'usuario_asignado', 'id')->orderBy('fecha', 'desc');
+       // return $this->hasMany(Incidencia::class);
     }
 
     //Relación muchos a muchos

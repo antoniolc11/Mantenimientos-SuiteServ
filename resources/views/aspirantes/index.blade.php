@@ -5,13 +5,8 @@
         </h2>
     </x-slot>
 
-
-
     <div class="py-12">
         <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
-
-
-
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="h-9">
                     {{-- Mostrar los mensajes de exito. --}}
@@ -52,9 +47,9 @@
                             @else
                                 <!-- Aquí va tu estructura de tabla para mostrar los aspirantes -->
                                 @foreach ($aspirantes as $aspirante)
-                                    <tr class="border-b dark:border-neutral-500">
+                                    <tr class="border-b dark:border-neutral-500 hover:bg-gray-200">
                                         <td class="whitespace-nowrap  px-6 py-4 font-medium">
-                                               {{ $aspirante->nif }}
+                                            {{ $aspirante->nif }}
                                         </td>
                                         <td class="whitespace-nowrap  px-6 py-4">
                                             {{ $aspirante->nombre . ' ' . $aspirante->primer_apellido . ' ' . $aspirante->segundo_apellido }}
@@ -78,13 +73,19 @@
                                                     </svg>
                                                     CV
                                                 </button>
-                                                @else
-                                                    <p>N/C</p>
+                                            @else
+                                                <p>N/C</p>
                                             @endif
                                         </td>
 
                                         <td class="px-6 text-center">
 
+
+                                            <button data-modal-toggle="altaAspiranteModal{{ $aspirante->id }}"
+                                                title="Dar de alta" type="submit">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="w-6 h-6 mr-2 inline max-w-xs transition duration-300 ease-in-out hover:-scale-x-125" >
+                                                    <path fill="#2a8b1d" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM135.1 217.4l107.1-99.9c3.8-3.5 8.7-5.5 13.8-5.5s10.1 2 13.8 5.5l107.1 99.9c4.5 4.2 7.1 10.1 7.1 16.3c0 12.3-10 22.3-22.3 22.3H304v96c0 17.7-14.3 32-32 32H240c-17.7 0-32-14.3-32-32V256H150.3C138 256 128 246 128 233.7c0-6.2 2.6-12.1 7.1-16.3z"/></svg>
+                                            </button>
 
                                             <button data-modal-toggle="popup-modal{{ $aspirante->id }}"
                                                 title="Descartar" type="submit">
@@ -121,7 +122,8 @@
                     var screenHeight = window.screen.height;
 
                     // Abre una nueva ventana (pop-up) que ocupa el 100% de la pantalla
-                    window.open(curriculumLink, "Curriculum", "width=" + screenWidth + ",height=" + screenHeight);
+                    window.open(curriculumLink, "Curriculum", "width=" + screenWidth + ",height=" +
+                        screenHeight);
                 } else {
                     console.error("Data attribute data-curriculum-link not found on the button:", this);
                 }
@@ -132,7 +134,49 @@
 
 
     @foreach ($aspirantes as $aspirante)
-        <!-- Ventana modal para editar un aspirante -->
+        {{-- Ventana modal para dar de alta al aspirante --}}
+        <div id="altaAspiranteModal{{ $aspirante->id }}" tabindex="-1"
+            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 md:inset-0 h-modal md:h-full">
+            <div class="relative p-4 w-full max-w-md h-full md:h-auto">
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 ">
+                    <button type="button"
+                        class="absolute top-3 right-2.5 text-black bg-transparent  hover:text-gray-500 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
+                        data-modal-toggle="altaAspiranteModal{{ $aspirante->id }}">
+                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="sr-only">Cerrar ventana</span>
+                    </button>
+                    <div class="p-6 text-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-hidden="true"
+                            class="mx-auto mb-4 w-10 h-10 text-red-400 dark:text-gray-200" fill="#ff0000"
+                            stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <!--!Font Awesome Free 6.5.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
+                            <path fill="#d20404"
+                                d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z" />
+                        </svg>
+                        <h3 class="mb-5 text-lg font-normal text-black  dark:text-gray-400">¿Seguro que desea dar de alta
+                            este
+                            aspirante?</h3>
+                        <form action="{{ route('aspirante.ascender', $aspirante) }}" method="GET" class="inline">
+                            @csrf
+
+                            <button data-modal-toggle="altaAspiranteModal{{ $aspirante->id }}" type="submit"
+                                class="text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
+                                Sí, seguro
+                            </button>
+                            <button data-modal-toggle="altaAspiranteModal{{ $aspirante->id }}" type="button"
+                                class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">No,
+                                cancelar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         {{-- Ventana modal para borrar al aspirante --}}
         <div id="popup-modal{{ $aspirante->id }}" tabindex="-1"

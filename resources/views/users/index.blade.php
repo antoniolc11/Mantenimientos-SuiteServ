@@ -5,151 +5,19 @@
         </h2>
     </x-slot>
 
-
-
     <div class="py-12">
         <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
+            <div x-data="buscarUsuario" x-init="buscarUsuario2">
+                {{-- Buscador de usuarios --}}
+                @include('users.partials.buscador_users')
 
-            <div class="" x-data="buscarUsuario" x-init="buscarUsuario2">
-                <div class="container mb-3 mx-auto flex justify-center items-center p-2  md:p-0 ">
-                    <!--
-                      Formulario de busqueda de usuarios, por nombre, primer apellido y email.
-                     -->
-                    <form action="{{ route('buscadorUser.index') }}" method="GET" x-on:submit="event.preventDefault();">
-                        <div class="border border-gray-300 p-4 grid grid-cols-1 gap-6 bg-white shadow-lg rounded-lg">
-                            <div class="flex flex-col md:flex-row gap-4">
-                                {{-- Campo de busqueda por nombre --}}
-                                <div class="flex flex-col">
-                                    <x-input-label for="nombre" :value="__('Nombre')" />
-                                    <x-text-input id="nombre" class="block mt-2" type="text" name="nombre"
-                                        :value="old('nombre')" required autofocus autocomplete="nombre"
-                                        placeholder="Ingresa un nombre" x-model="nombre" x-on:keyup="buscarUsuario2" />
-                                </div>
-
-                                {{-- Campo de busqueda por primer apellido --}}
-                                <div class="flex flex-col">
-                                    <x-input-label for="primer_apellido" :value="__('Primer apellido')" />
-                                    <x-text-input id="primer_apellido" class="block mt-2 w-full" type="text"
-                                        name="primer_apellido" :value="old('primer_apellido')" required autofocus
-                                        autocomplete="primer_apellido" placeholder="Ingresa el primer apellido"
-                                        x-model="primer_apellido" x-on:keyup="buscarUsuario2" />
-                                </div>
-
-                                {{-- Campo de busqueda por email --}}
-                                <div class="flex flex-col">
-                                    <x-input-label for="email" :value="__('Email')" />
-                                    <x-text-input id="email" class="block mt-2 w-full" type="email" name="email"
-                                        :value="old('email')" required autocomplete="username" placeholder="tu@email.com"
-                                        x-model="email" x-on:keyup="buscarUsuario2" />
-                                </div>
-
-                                <div class="flex flex-col">
-                                    <x-input-label for="departamento" :value="__('Departamento')" />
-                                    <select
-                                        class="block mt-2  shadow appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight border focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent"
-                                        x-on:change="buscarUsuario2" x-model="departamento" name="departamento"
-                                        id="departamento"
-                                        class="py-2 px-3 block  h-9 w-full border  rounded appearance-none focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent">
-                                        <option value="{{ null }}">Selecciona departamento</option>
-                                        @foreach ($departamentos as $departamento)
-                                            <option value="{{ $departamento->id }}">{{ $departamento->nombre }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-
-                            </div>
-                        </div>
-                    </form>
-
-                    <div>
-                        <script>
-                            window.routeShow = "{{ route('users.show', ['user' => ':user_id']) }}";
-                            window.routeEdit = "{{ route('users.edit', ['user' => ':user_id']) }}";
-
-                            function buscarUsuario() {
-                                return {
-                                    routeShow: window.routeShow,
-                                    primer_apellido: '',
-                                    email: '',
-                                    departamento: '',
-                                    nombre: '',
-                                    resultados: [],
-
-                                    bloquearUsuario(usuario) {
-                                        // Llamada a la API para bloquear al usuario
-                                        axios.post(`/usuario/addbanned/${usuario.id}`)
-                                            .then(response => {
-                                                console.log('Usuario bloqueado:', response.data);
-                                                usuario.status = 0;
-
-                                                // Luego, ejecutar la búsqueda nuevamente para actualizar la interfaz
-                                                this.buscarUsuario2();
-                                                // Puedes realizar acciones adicionales si es necesario
-                                            })
-                                            .catch(error => {
-                                                console.error('Error al bloquear usuario:', error);
-                                            });
-                                    },
-
-                                    desbloquearUsuario(usuario) {
-                                        // Llamada a la API para desbloquear al usuario
-                                        axios.post(`/usuario/outbanned/${usuario.id}`)
-                                            .then(response => {
-                                                console.log('Usuario desbloqueado:', response.data);
-                                                usuario.status = 1;
-                                                // Luego, ejecutar la búsqueda nuevamente para actualizar la interfaz
-                                                this.buscarUsuario2();
-                                                // Puedes realizar acciones adicionales si es necesario
-                                            })
-                                            .catch(error => {
-                                                console.error('Error al desbloquear usuario:', error);
-                                            });
-                                    },
-
-
-
-                                    buscarUsuario2() {
-                                        let nombre = this.nombre.trim()
-
-                                        let primer_apellido = this.primer_apellido.trim()
-                                        let email = this.email.trim()
-                                        let departamento = this.departamento.trim()
-
-                                        // Realiza una llamada AJAX a tu servidor para buscar usuario por nombre
-
-                                        axios.get(`/buscador/user`, {
-                                                params: {
-                                                    nombre: nombre,
-                                                    primer_apellido: this.primer_apellido,
-                                                    email: this.email,
-                                                    departamento: this.departamento,
-                                                }
-
-                                            })
-                                            .then(response => {
-                                                this.resultados = response.data.usuarios;
-
-                                            })
-                                            .catch(error => {
-                                                console.error(error);
-                                            });
-                                    }
-                                };
-                            }
-                        </script>
-                    </div>
-                </div>
-
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg" style="height: 450px;">
+                    {{-- Mostrar los mensajes de exito y error. --}}
                     <div class="h-9">
-                        {{-- Mostrar los mensajes de exito. --}}
                         @if (session('success'))
                             <x-success-alert :status="session('success')" />
-                            <?php session()->forget('success'); ?>
                         @endif
 
-                        {{-- Mostrar los mensajes de error. --}}
                         @if (session('error'))
                             <x-error-alert :messages="session('error')" />
                         @endif
@@ -181,51 +49,59 @@
                                 </thead>
 
                                 <tbody>
-                                    {{-- El contenido de la tabla de usuarios se encuentra en la vista llamada _busquedaUsuarios --}}
-
-                                    <template x-if="resultados.length === 0">
-                                        <tr>
-                                            <td colspan="6" class="h-full">
-                                                <div class="flex items-center justify-center h-full mt-6 mb-6">
-                                                    <p class="text-center font-bold text-gray-800">No hay usuarios aún</p>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </template>
-                                    <template x-else x-for="usuario in resultados" :key="usuario.id">
-
-                                        <tr class="border-b dark:border-neutral-500">
+                                    <!-- Sección para mostrar resultados -->
+                                    <template x-else x-for="usuario in resul" :key="usuario.id">
+                                        <tr class="border-b dark:border-neutral-500 hover:bg-gray-200">
+                                            <!-- Celda para el NIF -->
                                             <td class="whitespace-nowrap  px-6 py-4 font-medium">
                                                 <a :href="`${routeShow.replace(':user_id', usuario.id)}`"
                                                     x-text="usuario.nif"></a>
                                             </td>
 
+                                            <!-- Celda para el nombre completo -->
                                             <td class="whitespace-nowrap  px-6 py-4 font-medium">
                                                 <a :href="`${routeShow.replace(':user_id', usuario.id)}`"
                                                     x-text="`${usuario.nombre} ${usuario.primer_apellido} ${usuario.segundo_apellido}`"></a>
                                             </td>
-                                            <td class="whitespace-nowrap  px-6 py-4 font-medium" x-text="usuario.telefono">
-                                            </td>
 
+                                            <!-- Celda para el teléfono -->
+                                            <td class="whitespace-nowrap  px-6 py-4 font-medium"
+                                                x-text="usuario.telefono"></td>
+
+                                            <!-- Celda para el correo electrónico -->
                                             <td class="whitespace-nowrap  px-6 py-4 font-medium" x-text="usuario.email">
                                             </td>
+
+                                            <!-- Celda para botones de acción -->
                                             <td>
                                                 <div class="w-full text-center">
+                                                    <!-- Botón de editar -->
                                                     <a :href="`${routeEdit.replace(':user_id', usuario.id)}`">
                                                         <button title="Editar" type="submit">
                                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                                 class="hover:scale-110 h-6 w-6 text-green-500 hover:text-green-700"
                                                                 viewBox="0 0 512 512">
+                                                                <!-- Icono de editar -->
                                                                 <path
                                                                     d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z" />
                                                             </svg>
                                                         </button>
                                                     </a>
 
+                                                    <!-- Botón para ver el historial de incidencias del usuario -->
+                                                    <a :href="`${routeview.replace(':user_id', usuario.id)}`">
+                                                        <button title="Ver historial de incidencias" type="submit"  class="hover:scale-110 h-6 w-6 text-green-500 hover:text-green-700 ml-4">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                                                                <path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z"/>
+                                                            </svg>
+                                                        </button>
+                                                    </a>
+
+                                                    <!-- Botones de bloquear/desbloquear -->
                                                     <template x-if="usuario.status === 1">
-                                                        <!-- Botón para bloquear el perfil del usuario -->
                                                         <button title="Bloquear" @click="bloquearUsuario(usuario)"
                                                             class="ml-4">
+                                                            <!-- Icono de bloquear -->
                                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                                 class="hover:scale-110 h-6 w-6 text-green-500 hover:text-green-700"
                                                                 viewBox="0 0 512 512">
@@ -235,9 +111,9 @@
                                                         </button>
                                                     </template>
                                                     <template x-if="usuario.status === 0">
-                                                        <!-- Botón para desbloquear el perfil del usuario -->
                                                         <button title="Desbloquear" @click="desbloquearUsuario(usuario)"
                                                             class="ml-4">
+                                                            <!-- Icono de desbloquear -->
                                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                                 class="hover:scale-110 h-6 w-6 text-green-500 hover:text-green-700"
                                                                 viewBox="0 0 448 512">
@@ -250,11 +126,66 @@
                                             </td>
                                         </tr>
                                     </template>
+                                    <!-- Fin de la sección -->
+                                    <!-- Sección para manejar cuando no hay resultados -->
+                                    <template x-if="resultados.length === 0">
+                                        <tr>
+                                            <td colspan="6" class="h-full">
+                                                <div class="flex items-center justify-center h-full mt-6 mb-6">
+                                                    <p class="text-center font-bold text-gray-800">No hay usuarios que
+                                                        mostrar</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                    <!-- Fin de la sección -->
                                 </tbody>
+
                             </table>
 
                         </div>
 
+                    </div>
+                </div>
+                <!-- Paginación -->
+                <div class="flex flex-col items-center mt-7" x-show="totalUsuarios > usuariosPorPagina">
+                    <!-- Help text -->
+
+                    <span class="text-sm text-gray-700 dark:text-gray-400">
+                        Mostrando
+                        <span class="font-semibold text-gray-900 dark:text-white" x-text="paginaActual">
+
+                        </span>
+
+                        de
+                        <span class="font-semibold text-gray-900 dark:text-white"
+                            x-text="Math.ceil(totalUsuarios / usuariosPorPagina)">
+
+                        </span>
+                        Páginas
+                    </span>
+                    <!-- Buttons -->
+                    <div class="inline-flex mt-2 xs:mt-0">
+                        <button
+                            class="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-500 rounded-l cursor-not-allowed"
+                            disabled x-show="paginaActual === 1">
+                            Anterior
+                        </button>
+
+                        <button @click="cambiarPagina(paginaActual - 1)" x-show="paginaActual != 1"
+                            class="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 rounded-l hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                            Anterior
+                        </button>
+
+                        <button
+                            class="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-500 rounded-e cursor-not-allowed"
+                            disabled x-show="paginaActual === Math.ceil(totalUsuarios / usuariosPorPagina)">
+                            Siguiente
+                        </button>
+
+                        <button @click="cambiarPagina(paginaActual + 1)"
+                            x-show="paginaActual != Math.ceil(totalUsuarios / usuariosPorPagina)"
+                            class="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded-e hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Siguiente</button>
                     </div>
                 </div>
             </div>
