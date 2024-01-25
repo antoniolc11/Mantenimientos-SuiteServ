@@ -53,6 +53,18 @@ class IncidenciaController extends Controller
      */
     public function store(StoreIncidenciaRequest $request)
     {
+        // Validaciones
+        $request->validate([
+            'usuario_creador' => 'required|numeric',
+            'estado_id' => 'required|numeric',
+            'prioridad' => 'required|in:Baja,Media,Alta',
+            'departamento_id' => 'required|numeric',
+            'usuario_asignado' => 'nullable|numeric',
+            'ubicacion_id' => 'required|numeric',
+            'categoria_id' => 'required|numeric',
+            'descripcion' => 'required|string',
+        ]);
+
         $incidencia = Incidencia::create($request->all());
 
         // Crear un registro en la tabla de historial
@@ -106,6 +118,18 @@ class IncidenciaController extends Controller
      */
     public function update(UpdateIncidenciaRequest $request, Incidencia $incidencia)
     {
+        // Validaciones
+        $request->validate([
+            'usuario_creador' => 'required|numeric',
+            'estado_id' => 'required|numeric',
+            'prioridad' => 'required|in:Baja,Media,Alta',
+            'departamento_id' => 'required|numeric',
+            'usuario_asignado' => 'nullable|numeric',
+            'ubicacion_id' => 'required|numeric',
+            'categoria_id' => 'required|numeric',
+            'descripcion' => 'required|string',
+        ]);
+
         $incidencia->update($request->all());
 
         return redirect()->route('incidencias.show', $incidencia)->with('success', 'Incidencia modificada con exito.');
@@ -165,8 +189,10 @@ class IncidenciaController extends Controller
     /* Cambia de estado cada vez que se actualiza el formulario del show de incidencias */
     public function cambiarEstado(StoreIncidenciaRequest $request, Incidencia $incidencia)
     {
+        // Obtiene el nombre del estado actual de la incidencia
         $nombreEstado = $incidencia->estado->nombre;
 
+        // Cambia el estado a 'En curso' si estaba 'Pendiente'
         if ($nombreEstado == 'Pendiente') {
             $estado = Estado::where('nombre', 'En curso')->first();
             $incidencia->estado_id = $estado->id;
@@ -174,6 +200,7 @@ class IncidenciaController extends Controller
             $mensaje = "Estado de la incidencia cambiado a {$estado->nombre}";
         }
 
+        // Cierra la incidencia si estaba en 'En curso' o 'Reabierta'
         if ($nombreEstado == 'En curso' || $nombreEstado == 'Reabierta') {
             $estado = Estado::where('nombre', 'Finalizado')->first();
             $incidencia->estado_id = $estado->id;
@@ -183,34 +210,46 @@ class IncidenciaController extends Controller
 
         // Crea un nuevo registro en la tabla de historial
         Historial::create([
-            'incidencia_id' => $incidencia->id,
-            'user_id'  => $incidencia->usuario_asignado,
-            'trabajo_realizado' => $nombreEstado == 'Pendiente' ? $incidencia->descripcion : $request->descripcion,
-            'estado_id' => $incidencia->estado_id,
-            'hora_inicio' => $nombreEstado == 'Pendiente' ? Carbon::now() : null,
-            'hora_fin' => $nombreEstado == 'En curso' || $nombreEstado == 'Reabierta' ? Carbon::now() : null,
+            'incidencia_id'       => $incidencia->id,
+            'user_id'             => $incidencia->usuario_asignado,
+            'trabajo_realizado'  => $nombreEstado == 'Pendiente' ? $incidencia->descripcion : $request->descripcion,
+            'estado_id'           => $incidencia->estado_id,
+            'hora_inicio'         => $nombreEstado == 'Pendiente' ? Carbon::now() : null,
+            'hora_fin'            => $nombreEstado == 'En curso' || $nombreEstado == 'Reabierta' ? Carbon::now() : null,
             'fecha_actualizacion' => Carbon::now(),
         ]);
 
+        // Redirige a la vista de detalles de la incidencia con un mensaje de éxito
         return redirect()->route('incidencias.show', $incidencia)->with('success', $mensaje);
     }
+
 
     /* Reasigna una incidencia a un user  */
     public function reasignarIncidencia($incidenciaId, StoreIncidenciaRequest $request)
     {
-        $user = $request->usuario;
+        // Obtener el ID del usuario proporcionado en la solicitud
+        $usuarioId = $request->usuario;
+
+        // Buscar la incidencia correspondiente al ID proporcionado
         $incidencia = Incidencia::find($incidenciaId);
-        $user = User::find($user);
 
+        // Buscar al usuario correspondiente al ID proporcionado
+        $usuario = User::find($usuarioId);
 
-        if ($incidencia && $user) {
-            $incidencia->usuario_asignado = $user->id;
+        // Verificar si se encontraron tanto la incidencia como el usuario
+        if ($incidencia && $usuario) {
+            // Asignar el ID del usuario a la incidencia y guardar los cambios
+            $incidencia->usuario_asignado = $usuario->id;
             $incidencia->save();
-            return redirect()->route('incidencias.show', $incidencia)->with('success', 'Incidencia reasignada correctamente a ' . $user->nombre);
+
+            // Redirigir a la vista de detalles de la incidencia con un mensaje de éxito
+            return redirect()->route('incidencias.show', $incidencia)->with('success', 'Incidencia reasignada correctamente a ' . $usuario->nombre);
         } else {
+            // Si no se encuentran la incidencia o el usuario, redirigir con un mensaje de error
             return redirect()->route('incidencias.show', $incidencia)->with('error', 'No se pudo reasignar la incidencia.');
         }
     }
+
 
     /*
         Metodo que realiza la logíca del formulario de busqueda de la pagina /home, donde se podrá filtrar los resultados por
@@ -224,21 +263,31 @@ class IncidenciaController extends Controller
         $prioridad = $request->input('prioridad');
         $categoria = $request->input('categoria');
         $departamento = $request->input('departamento');
+
+        // Obtiene el usuario autenticado.
         $user = User::find(auth()->user()->id);
         $departamentos = $user->departamentos;
 
-        // Base query for users with direction or supervision roles.
+        // Consulta base para incidencias con roles de dirección o supervisión.
         $query = Incidencia::query()
             ->where('numero', 'like', '%' . $numero . '%')
+            ->orderByRaw("
+                CASE
+                    WHEN prioridad = 'Alta' THEN 1
+                    WHEN prioridad = 'Media' THEN 2
+                    WHEN prioridad = 'Baja' THEN 3
+                    ELSE 4
+                END
+            ")
             ->orderBy('prioridad', 'asc');
 
-        // Apply filters for users with direction or supervision roles.
+        // Aplica filtros para usuarios con roles de dirección o supervisión.
         if (!$user->esDepartamentoDireccion() && !$user->esDepartamentoSupervision()) {
             $query->whereIn('departamento_id', $departamentos->pluck('id'))
                 ->with(['creador', 'asignado']);
         }
 
-        // Apply additional filters based on the provided parameters.
+        // Aplica filtros adicionales basados en los parámetros proporcionados.
         if ($estado !== null && $estado !== '') {
             $query->where('estado_id', $estado);
         }
@@ -252,21 +301,23 @@ class IncidenciaController extends Controller
             $query->where('departamento_id', $departamento);
         }
 
-        // Apply filter for non-null and non-empty values.
+        // Aplica filtro para valores no nulos y no vacíos.
         if (!empty($estado) || !empty($prioridad) || !empty($categoria) || !empty($departamento) || !empty($numero)) {
             $resultados = $query->get();;
         } else {
             $resultados = $query->whereNotIn('estado_id', [3])->get();
         }
 
-        // Filter results for assigned incidents.
+        // Filtra resultados para incidencias asignadas.
         $resultados2 = $resultados->filter(function ($incidencia) use ($user) {
             return $incidencia->usuario_asignado === $user->id;
         });
 
+        // Determina los resultados finales según el rol del usuario.
         $resultados = $user->esDepartamentoDireccion() || $user->esDepartamentoSupervision() ? $resultados : $resultados2;
-        $view = view('incidencias._busqueda', ['incidencias' => $resultados]);
 
+        // Crea la vista con los resultados y la renderiza.
+        $view = view('incidencias._busqueda', ['incidencias' => $resultados]);
         return $view->render();
     }
 }

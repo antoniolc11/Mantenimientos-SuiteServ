@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Response;
 use App\Http\Requests\StoreAspiranteRequest;
 use App\Http\Requests\UpdateAspiranteRequest;
 use App\Models\Aspirante;
+use App\Models\User;
+use App\Models\Departamento;
 use Illuminate\Support\Facades\Storage;
 use App\Mail\SendCurriculum;
 use Illuminate\Support\Facades\Mail;
@@ -37,7 +39,8 @@ class AspiranteController extends Controller
     {
         $nif = Aspirante::where('nif', $request->nif);
         $email = Aspirante::where('email', $request->email);
-        if ($nif->exists() || $email->exists()) {
+        $telefono = Aspirante::where('telefono', $request->telefono);
+        if ($nif->exists() || $email->exists() || $telefono->exists()) {
             return redirect()->route('login')->with('error', 'Ya realizaste la solicitud, tus datos serán valorados pronto. ¡Gracias!');
         }
 
@@ -156,5 +159,17 @@ class AspiranteController extends Controller
 
         // Después de manejar la subida, podrías redirigir al aspirante a una página de agradecimiento
         return redirect()->route('login')->with('success', 'Tu registro en nuestro sistema se ha completado correctamente. ¡Gracias!');
+    }
+
+        /**
+     * Metodo que mete en la plantilla de operarios a los trabajadores
+     */
+    public function ascenderAspirante(Aspirante $aspirante)
+    {
+        if ($aspirante->curriculum == null) {
+            return redirect()->route('aspirantes.index')->with('error', 'No puedes ascender a un aspirante sin curriculum.');
+        }
+        $departamentos = Departamento::all();
+        return view('users.create', ['aspirante' => $aspirante, 'departamentos' => $departamentos]);
     }
 }

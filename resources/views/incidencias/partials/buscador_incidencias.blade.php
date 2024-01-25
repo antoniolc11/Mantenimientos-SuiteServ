@@ -7,14 +7,14 @@
         <div class="border border-gray-300 p-6 bg-white shadow-lg rounded-lg ">
             <div class="flex flex-col md:flex-row">
                 {{-- Busqueda por numero de incidencia --}}
-                <div class="flex">
+                <div class="flex-1">
                     <x-text-input type="text" placeholder="Nº de incidencia" name="search" type="text"
                         x-model="searchTerm" x-on:keyup="buscarIncidencia2"
                         class="border p-2 rounded appearance-none focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent" />
                 </div>
 
                 {{-- Busqueda por estado --}}
-                <div class="pt-6 md:pt-0 md:pl-6">
+                <div class="flex-1 pt-6 md:pt-0 md:pl-6">
                     <select x-on:change="buscarIncidencia2" x-model="porestados" name="estado" id="estado"
                         class="w-full border p-2 rounded appearance-none focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent">
                         <option value="">Selecciona estado</option>
@@ -25,7 +25,7 @@
                 </div>
 
                 {{-- Busqueda por prioridad --}}
-                <div class="pt-6 md:pt-0 md:pl-6">
+                <div class="flex-1 pt-6 md:pt-0 md:pl-6">
                     <select x-on:change="buscarIncidencia2" x-model="porprioridad" name="prioridad" id="prioridad"
                         class="w-full border p-2 rounded appearance-none focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent">
                         <option value="">Selecciona prioridad</option>
@@ -36,7 +36,7 @@
                 </div>
 
                 {{-- Busqueda por categoria --}}
-                <div class="pt-6  md:pt-0 md:pl-6">
+                <div class="flex-1 pt-6  md:pt-0 md:pl-6">
                     <select x-on:change="buscarIncidencia2" x-model="porcategoria" name="categoria" id="categoria"
                         class="w-full border p-2 rounded appearance-none focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent">
                         <option value="">Selecciona categoría</option>
@@ -50,7 +50,7 @@
                 @if (auth()->user()->esDepartamentoDireccion() ||
                         auth()->user()->esDepartamentosupervision() ||
                         auth()->user()->tieneMasDeUnDepartamento())
-                    <div class="pt-6 md:pt-0 md:pl-6">
+                    <div class="flex-1 pt-6 md:pt-0 md:pl-6">
                         <select x-on:change="buscarIncidencia2" x-model="pordepartamento" name="departamento"
                             id="departamento"
                             class="w-full border p-2 rounded appearance-none focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent">

@@ -54,5 +54,6 @@
                     <script>
                         window.routeShow = "{{ route('users.show', ['user' => ':user_id']) }}";
                         window.routeEdit = "{{ route('users.edit', ['user' => ':user_id']) }}";
+                        window.routeview = "{{ route('users.view', ['user' => ':user_id']) }}";
                     </script>
                 </div>

@@ -142,7 +142,7 @@
                 <tr>
                     <td colspan="2" class="text-center py-4">
                         <div class="w-full relative h-32 flex flex-row items-center justify-center">
-                            <a href="{{ route('incidencias.index') }}" class="absolute left-6 py-2 mt-2">
+                            <a href="{{ url()->previous() }}" class="absolute left-6 py-2 mt-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
                                     class="w-10 h-10 mb-2 mt-auto hover:scale-110">
                                     <path

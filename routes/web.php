@@ -10,6 +10,7 @@ use App\Http\Controllers\HistorialController;
 use App\Http\Controllers\IncidenciaController;
 use App\Http\Controllers\UbicacionController;
 use App\Http\Controllers\PDFController;
+use App\Models\Aspirante;
 use App\Models\Incidencia;
 use App\Models\Ubicacion;
 use App\Models\User;
@@ -52,6 +53,7 @@ Route::get('/aspirantes/create', [AspiranteController::class, 'create'])->name('
 Route::delete('/aspirantes/{aspirante}', [AspiranteController::class, 'destroy'])->name('aspirantes.destroy');
 Route::get('/aspirantes/{id}', [AspiranteController::class, 'show'])->name('aspirantes.show');
 Route::get('/descargar-pdf/{id}', [AspiranteController::class, 'download'])->name('descargar.pdf');
+Route::get('/ascender/{aspirante}', [AspiranteController::class, 'ascenderAspirante'])->name('aspirante.ascender');
 
 //Rutas para el envio de correo para enviar el CV de los aspirantes:
 Route::get('/formulario/curriculum/{aspirante}', [AspiranteController::class, 'showForm'])->name('formulario.curriculum');
@@ -99,6 +101,7 @@ Route::put('/edit/{user}', [UserController::class, 'update'])->name('users.updat
 Route::get('/buscador/user', [UserController::class, 'buscadorUsuario'])->name('buscadorUser.index');
 Route::post('/usuario/addbanned/{user}', [UserController::class, 'addBanned'])->name('users.addbanned')->middleware(['auth', 'verified', 'check.direction']);
 Route::post('/usuario/outbanned/{user}', [UserController::class, 'outBanned'])->name('users.outbanned')->middleware(['auth', 'verified', 'check.direction']);
+Route::get('/usuarios.view/{user}', [UserController::class, 'viewIncidencias'])->name('users.view')->middleware(['auth', 'verified', 'check.direction']);
 
 
 //Busca los usuarios por un determinado departamento.

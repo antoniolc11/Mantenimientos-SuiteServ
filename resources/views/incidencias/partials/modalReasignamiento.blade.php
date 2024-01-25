@@ -19,18 +19,19 @@
                     </div>
 
                     <!-- Modal body -->
-                    <form action="{{ route('reasignar.incidencia',  $incidencia) }}" method="POST">
+                    <form action="{{ route('reasignar.incidencia', $incidencia) }}" method="POST">
                         @method('put')
                         @csrf
                         <div class="p-6 space-y-6 text-center">
-                                <select name="usuario"
-                                    id="usuario"
-                                    class="w-full border p-2 rounded appearance-none focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent px-3 py-2 leading-tight focus:shadow-outline">
-
+                            <select name="usuario" id="usuario"
+                                class="w-full border p-2 rounded appearance-none focus:outline-none focus:ring focus:ring-black focus:ring-opacity-100 focus:border-transparent px-3 py-2 leading-tight focus:shadow-outline">
                                 @foreach ($usuarios as $usuario)
-                                <option  {{ $incidencia->usuario_asignado == $usuario->id ? 'selected' : '' }} value="{{ $usuario->id }}">{{ $usuario->nombre }}</option>
+                                    @if ($usuario->status === 1)
+                                        <option {{ $incidencia->usuario_asignado == $usuario->id ? 'selected' : '' }}
+                                            value="{{ $usuario->id }}">{{ $usuario->nombre }}</option>
+                                    @endif
                                 @endforeach
-                                </select>
+                            </select>
                         </div>
                         <!-- Modal footer -->
                         <div
@@ -43,7 +44,8 @@
                             <div class="w-4"></div>
 
                             <!-- Botón "Cancelar" -->
-                            <button data-modal-hide="modalReasigmaniento{{ $usuarios }}_{{ $incidencia->id }}" type="button"
+                            <button data-modal-hide="modalReasigmaniento{{ $usuarios }}_{{ $incidencia->id }}"
+                                type="button"
                                 class="cursor-pointer bg-red-600 hover:bg-gray-700 text-white font-bold w-24 py-2 rounded">Cancelar</button>
                         </div>
                     </form>

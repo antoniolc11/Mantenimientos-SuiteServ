@@ -9,7 +9,7 @@
                 <!-- Nombre -->
                 <div>
                     <x-input-label for="nombre" :value="__('Nombre*')" />
-                    <x-text-input id="nombre" class="block mt-1 w-full" type="text" name="nombre" :value="old('nombre')"
+                    <x-text-input id="nombre" class="block mt-1 w-full" type="text" name="nombre" :value="old('nombre', isset($aspirante) ? $aspirante->nombre : '')"
                         autofocus autocomplete="nombre" placeholder="Ingresa tu primer nombre" />
                     <div class="mt-2 text-sm text-red-600 dark:text-red-400 space-y-1" id="nombreError"></div>
                     <x-input-error :messages="$errors->get('nombre')" class="mt-2" />
@@ -19,7 +19,7 @@
                 <div>
                     <x-input-label for="primer_apellido" :value="__('Primer apellido*')" />
                     <x-text-input id="primer_apellido" class="block mt-1 w-full" type="text" name="primer_apellido"
-                        :value="old('primer_apellido')" autofocus autocomplete="primer_apellido"
+                    :value="old('primer_apellido', isset($aspirante) ? $aspirante->primer_apellido : '')" autofocus autocomplete="primer_apellido"
                         placeholder="Ingresa tu primer apellido" />
                     <div class="mt-2 text-sm text-red-600 dark:text-red-400 space-y-1" id="ap1Error"></div>
                     <x-input-error :messages="$errors->get('primer_apellido')" class="mt-2" />
@@ -29,7 +29,7 @@
                 <div>
                     <x-input-label for="segundo_apellido" :value="__('Segundo apellido*')" />
                     <x-text-input id="segundo_apellido" class="block mt-1 w-full" type="text" name="segundo_apellido"
-                        :value="old('segundo_apellido')" autofocus autocomplete="segundo_apellido"
+                    :value="old('segundo_apellido', isset($aspirante) ? $aspirante->segundo_apellido : '')" autofocus autocomplete="segundo_apellido"
                         placeholder="Ingresa tu segundo apellido" />
                     <x-input-error :messages="$errors->get('segundo_apellido')" class="mt-2" />
                 </div>
@@ -38,7 +38,7 @@
                 <div>
                     <x-input-label for="nif" :value="__('Nif*')" />
                     <x-text-input id="nif" class="block mt-1 w-full" type="text" name="nif"
-                        :value="old('nif')" autofocus autocomplete="nif" placeholder="68741564R" />
+                    :value="old('nif', isset($aspirante) ? $aspirante->nif : '')" autofocus autocomplete="nif" placeholder="68741564R" />
                     <div class="mt-2 text-sm text-red-600 dark:text-red-400 space-y-1" id="nifError"></div>
 
                     <x-input-error :messages="$errors->get('nif')" class="mt-2" />

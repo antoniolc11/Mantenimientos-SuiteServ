@@ -90,7 +90,7 @@
                                                         <x-input-label for="curriculum" :value="__('Adjunta tu CV')" />
                                                         <x-text-input id="curriculum" class="block mt-1 w-full"
                                                             type="file" accept=".pdf, .doc, .docx" name="curriculum" :value="old('curriculum')" required
-                                                            autofocus />
+                                                            maxlength="5242880" autofocus />
                                                         <x-input-error :messages="$errors->get('curriculum')" class="mt-2" />
                                                     </div>
 

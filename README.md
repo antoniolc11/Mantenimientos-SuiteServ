@@ -21,3 +21,10 @@ Casos de uso: "solicitar trabajar con la empresa", "adjuntar CV", "dar de alta a
 # Elemento de innovación
 
 -Uso del framework web Laravel
+
+# Instalación
+
+Se puede desplegar de forma automática ejecutando el script que se encuentra dentro de la ruta /propuesta/scripts/despliegue.sh,
+antes de ejecutar hay que editar en este archivo el nombre de correo y su password y la contraseña de la base de datos.
+
+

@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -14,7 +15,7 @@ return new class extends Migration
         Schema::create('incidencias', function (Blueprint $table) {
             $table->id();
             $table->string('numero')->unique();
-            $table->date('fecha')->default(now());
+            $table->date('fecha')->default(DB::raw('CURRENT_DATE'));
             $table->bigInteger('usuario_creador');
             $table->bigInteger('usuario_asignado');
             $table->text('descripcion');
