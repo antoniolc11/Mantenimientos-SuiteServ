@@ -95,6 +95,8 @@ class UserController extends Controller
 
         if ($aspirante = Aspirante::where('nif', $usuario->nif)->first()) {
             $aspirante->delete();
+            return redirect()->route('aspirantes.index')->with('success', 'El aspirante ha sido ascendido y notificado correctamente.');
+
         }
 
 

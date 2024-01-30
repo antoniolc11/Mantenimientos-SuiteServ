@@ -99,7 +99,7 @@
 
 
             <div class="w-full relative h-32 flex flex-row items-center justify-center">
-                <a href="{{route('users.index')}}" class="absolute left-6 py-2 mt-2">
+                <a href="{{url()->previous()}}" class="absolute left-6 py-2 mt-2">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
                         class="w-12 h-12 mb-2 mt-auto hover:scale-110">
                         <path

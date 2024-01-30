@@ -5,13 +5,13 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-12 overflow-x-auto" x-data="buscarUsuario" x-init="buscarUsuario2">
         <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
-            <div x-data="buscarUsuario" x-init="buscarUsuario2">
+            <div>
                 {{-- Buscador de usuarios --}}
                 @include('users.partials.buscador_users')
 
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg" style="height: 450px;">
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg" style="height: 450px; overflow-y: auto;">
                     {{-- Mostrar los mensajes de exito y error. --}}
                     <div class="h-9">
                         @if (session('success'))
@@ -73,8 +73,8 @@
                                             </td>
 
                                             <!-- Celda para botones de acción -->
-                                            <td>
-                                                <div class="w-full text-center">
+                                            <td class="">
+                                                <div class="w-full text-center flex items-center">
                                                     <!-- Botón de editar -->
                                                     <a :href="`${routeEdit.replace(':user_id', usuario.id)}`">
                                                         <button title="Editar" type="submit">
@@ -147,47 +147,47 @@
 
                     </div>
                 </div>
-                <!-- Paginación -->
-                <div class="flex flex-col items-center mt-7" x-show="totalUsuarios > usuariosPorPagina">
-                    <!-- Help text -->
+            </div>
+        </div>
+        <!-- Paginación -->
+        <div class="flex flex-col items-center bottom-0 left-0 w-full bg-gray-100 p-4" x-show="totalUsuarios > usuariosPorPagina">
+            <!-- Help text -->
 
-                    <span class="text-sm text-gray-700 dark:text-gray-400">
-                        Mostrando
-                        <span class="font-semibold text-gray-900 dark:text-white" x-text="paginaActual">
+            <span class="text-sm text-gray-700 dark:text-gray-400">
+                Mostrando
+                <span class="font-semibold text-gray-900 dark:text-white" x-text="paginaActual">
 
-                        </span>
+                </span>
 
-                        de
-                        <span class="font-semibold text-gray-900 dark:text-white"
-                            x-text="Math.ceil(totalUsuarios / usuariosPorPagina)">
+                de
+                <span class="font-semibold text-gray-900 dark:text-white"
+                    x-text="Math.ceil(totalUsuarios / usuariosPorPagina)">
 
-                        </span>
-                        Páginas
-                    </span>
-                    <!-- Buttons -->
-                    <div class="inline-flex mt-2 xs:mt-0">
-                        <button
-                            class="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-500 rounded-l cursor-not-allowed"
-                            disabled x-show="paginaActual === 1">
-                            Anterior
-                        </button>
+                </span>
+                Páginas
+            </span>
+            <!-- Buttons -->
+            <div class="inline-flex mt-2 xs:mt-0">
+                <button
+                    class="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-500 rounded-l cursor-not-allowed"
+                    disabled x-show="paginaActual === 1">
+                    Anterior
+                </button>
 
-                        <button @click="cambiarPagina(paginaActual - 1)" x-show="paginaActual != 1"
-                            class="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 rounded-l hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                            Anterior
-                        </button>
+                <button @click="cambiarPagina(paginaActual - 1)" x-show="paginaActual != 1"
+                    class="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 rounded-l hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                    Anterior
+                </button>
 
-                        <button
-                            class="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-500 rounded-e cursor-not-allowed"
-                            disabled x-show="paginaActual === Math.ceil(totalUsuarios / usuariosPorPagina)">
-                            Siguiente
-                        </button>
+                <button
+                    class="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-500 rounded-e cursor-not-allowed"
+                    disabled x-show="paginaActual === Math.ceil(totalUsuarios / usuariosPorPagina)">
+                    Siguiente
+                </button>
 
-                        <button @click="cambiarPagina(paginaActual + 1)"
-                            x-show="paginaActual != Math.ceil(totalUsuarios / usuariosPorPagina)"
-                            class="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded-e hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Siguiente</button>
-                    </div>
-                </div>
+                <button @click="cambiarPagina(paginaActual + 1)"
+                    x-show="paginaActual != Math.ceil(totalUsuarios / usuariosPorPagina)"
+                    class="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded-e hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Siguiente</button>
             </div>
         </div>
 </x-app-layout>

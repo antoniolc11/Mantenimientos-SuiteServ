@@ -72,6 +72,7 @@
         <div class="mx-auto max-w-screen-md">
             {{ $incidencias->links('components.paginate') }}
         </div>
+        {{Route::currentRouteName()}}
     </div>
 
 </x-app-layout>
