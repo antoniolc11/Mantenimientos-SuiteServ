@@ -3,7 +3,7 @@
 <x-guest-layout>
 
     <!-- Sección principal que utiliza Alpine.js para manejar la visibilidad de un mensaje durante 5 segundos -->
-    <div x-data="{ showMessage: true }" x-init="setTimeout(() => showMessage = false, 5000)" class="w-full">
+    <div x-data="{ showMessage: true }" x-init="setTimeout(() => showMessage = false, 5000)" class="mx-auto z-50 fixed top-0 left-0 right-0">
 
         <!-- Contenedor del mensaje con transiciones de entrada y salida -->
         <div x-show="showMessage" x-cloak x-transition:enter="transition ease-out duration-300"
@@ -27,7 +27,7 @@
     <div class="w-full flex flex-wrap">
         <!-- Login Section -->
         <div class="w-full md:w-1/2 flex flex-col">
-            <div class="flex items-center justify-center md:justify-start  md:mt-16">
+            <div class="flex items-center justify-center md:justify-start  md:mt-12">
                 <div class="mx-auto">
                     <img src="{{ asset('imagenes/logo.png') }}" alt="Mi Logo" class="w-40 h-auto">
                 </div>

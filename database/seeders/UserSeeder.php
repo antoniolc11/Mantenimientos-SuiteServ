@@ -16,12 +16,16 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-         // Obtener Departamentos existentes
-         $depart_direccion = Departamento::where('nombre', 'Dirección')->first();
-         $depart_supervision = Departamento::where('nombre', 'Supervisión')->first();
-         $depart_RRHH = Departamento::where('nombre', 'Recursos humanos')->first();
-         $depart_informatica = Departamento::where('nombre', 'Informática')->first();
-         $depart_telecomunicaciones = Departamento::where('nombre', 'Telecomunicaciones')->first();
+        // Obtener Departamentos existentes
+        $depart_direccion = Departamento::where('nombre', 'Dirección')->first();
+        $depart_supervision = Departamento::where('nombre', 'Supervisión')->first();
+        $depart_RRHH = Departamento::where('nombre', 'Recursos humanos')->first();
+        $depart_informatica = Departamento::where('nombre', 'Informática')->first();
+        $depart_telecomunicaciones = Departamento::where('nombre', 'Telecomunicaciones')->first();
+        $depart_electricidad = Departamento::where('nombre', 'Electricidad')->first();
+        $depart_fontaneria = Departamento::where('nombre', 'Fontanería')->first();
+
+
 
         //Usuarios del departamento de dirección.
 
@@ -197,5 +201,93 @@ class UserSeeder extends Seeder
             'status' => 1,
         ]);
         $usuario->departamentos()->attach($depart_telecomunicaciones->id);
+
+        //Usuarios del departamento de electricidad.
+
+        // Usuario 2
+        $usuario2 = User::create([
+            'nombre' => 'María',
+            'primer_apellido' => 'González',
+            'segundo_apellido' => 'López',
+            'nif' => '51896432S',
+            'telefono' => 612345678,
+            'email' => 'maria@suiteserv.com',
+            'password' => Hash::make('1234'),
+            'status' => 1,
+        ]);
+
+        $usuario2->departamentos()->attach($depart_electricidad->id);
+
+        // Usuario 3
+        $usuario3 = User::create([
+            'nombre' => 'Carlos',
+            'primer_apellido' => 'Pérez',
+            'segundo_apellido' => 'Martínez',
+            'nif' => '78965412T',
+            'telefono' => 665432189,
+            'email' => 'carlos@suiteserv.com',
+            'password' => Hash::make('1234'),
+            'status' => 1,
+        ]);
+
+        $usuario3->departamentos()->attach($depart_electricidad->id);
+
+        // Usuario 4
+        $usuario4 = User::create([
+            'nombre' => 'Laura',
+            'primer_apellido' => 'Fernández',
+            'segundo_apellido' => 'Sánchez',
+            'nif' => '36987451U',
+            'telefono' => 699887766,
+            'email' => 'laura@suiteserv.com',
+            'password' => Hash::make('1234'),
+            'status' => 1,
+        ]);
+
+        $usuario4->departamentos()->attach($depart_electricidad->id);
+
+        //Usuarios del departamento de fontanería.
+
+        // Usuario 5
+        $usuario5 = User::create([
+            'nombre' => 'Ana',
+            'primer_apellido' => 'Martínez',
+            'segundo_apellido' => 'López',
+            'nif' => '25896314X',
+            'telefono' => 611223344,
+            'email' => 'ana@suiteserv.com',
+            'password' => Hash::make('1234'),
+            'status' => 1,
+        ]);
+
+        $usuario5->departamentos()->attach($depart_fontaneria->id);
+
+        // Usuario 6
+        $usuario6 = User::create([
+            'nombre' => 'Javier',
+            'primer_apellido' => 'Gómez',
+            'segundo_apellido' => 'Fernández',
+            'nif' => '14785236Y',
+            'telefono' => 677889900,
+            'email' => 'javier@suiteserv.com',
+            'password' => Hash::make('1234'),
+            'status' => 1,
+        ]);
+
+        $usuario6->departamentos()->attach($depart_fontaneria->id);
+
+        // Usuario 7
+        $usuario7 = User::create([
+            'nombre' => 'Elena',
+            'primer_apellido' => 'Pérez',
+            'segundo_apellido' => 'González',
+            'nif' => '36987415Z',
+            'telefono' => 688877766,
+            'email' => 'elena@suiteserv.com',
+            'password' => Hash::make('1234'),
+            'status' => 1,
+        ]);
+
+        $usuario7->departamentos()->attach($depart_fontaneria->id);
     }
 }

@@ -31,6 +31,13 @@ class DepartamentoController extends Controller
      */
     public function store(StoreDepartamentoRequest $request)
     {
+        // Validar si la Departamento ya existe
+        $existingDepart = Departamento::where('nombre', $request->input('nombre'))->first();
+
+        if ($existingDepart) {
+            // La Departamento ya existe, redireccionar con un mensaje de error
+            return redirect()->route('departamentos.index')->with('error', 'El Departamento ' . $request->input('nombre') . ' ya fue creado anteriormente.');
+        }
         $departamento = Departamento::create($request->all());
         return redirect()->route('departamentos.index')->with('success', 'El departamento se ha creado correctamente.');
     }
@@ -59,6 +66,14 @@ class DepartamentoController extends Controller
         $request->validate([
             'nombre' => 'required',
         ]);
+
+        // Validar si la Departamento ya existe
+        $existingDepart = Departamento::where('nombre', $request->input('nombre'))->first();
+
+        if ($existingDepart) {
+            // La Departamento ya existe, redireccionar con un mensaje de error
+            return redirect()->route('departamentos.index')->with('error', 'El Departamento ' . $request->input('nombre') . ' ya fue creado anteriormente.');
+        }
 
         $departamento->update($request->all());
 
