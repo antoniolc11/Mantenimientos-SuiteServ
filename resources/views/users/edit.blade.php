@@ -1,11 +1,24 @@
 <x-app-layout>
 
-    <section class="max-w-4xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800 mt-20">
+    <section class="max-w-4xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800 mt-14">
+        <div class="h-9 mb-2">
+            {{-- Mostrar los mensajes de exito. --}}
+            @if (session('success'))
+                <x-success-alert :status="session('success')" />
+                <?php session()->forget('success'); ?>
+            @endif
+
+            {{-- Mostrar los mensajes de error. --}}
+            @if (session('error'))
+                <x-error-alert :messages="session('error')" />
+            @endif
+        </div>
+
 
         <!-- Register Section -->
 
 
-        <h2 class="text-lg font-semibold text-gray-700 capitalize dark:text-white text-center mb-6">Edición de usuario
+        <h2 class="text-lg font-semibold text-gray-700 capitalize dark:text-white text-center mb-6">Edición de usuario 
         </h2>
         <form id="usersRegistro" class="flex flex-col pt-3 md:pt-8" method="POST" action="{{ route('users.update', $usuario) }}">
             @method('put')
@@ -118,8 +131,8 @@
         </div>
 
         </div>
+
     </section>
 
     <script src="{{ asset('js/validation_users.js') }}"></script>
-
 </x-app-layout>

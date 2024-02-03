@@ -12,6 +12,8 @@ use App\Models\Departamento;
 use Illuminate\Support\Facades\Storage;
 use App\Mail\SendCurriculum;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rule;
+
 
 class AspiranteController extends Controller
 {
@@ -40,13 +42,30 @@ class AspiranteController extends Controller
         $nif = Aspirante::where('nif', $request->nif);
         $email = Aspirante::where('email', $request->email);
         $telefono = Aspirante::where('telefono', $request->telefono);
-        if ($nif->exists() || $email->exists() || $telefono->exists()) {
+/*         if ($nif->exists() || $email->exists() || $telefono->exists()) {
             return redirect()->route('login')->with('error', 'Ya realizaste la solicitud, tus datos serán valorados pronto. ¡Gracias!');
         }
-
+ */
         // Validación de campos del formulario.
         $request->validate([
             'nombre' => 'required|string|max:255',
+            'primer_apellido' => 'required|string|max:255',
+            'segundo_apellido' => 'nullable|string|max:255',
+            'nif' => [
+                'required',
+                'string',
+                'max:9',
+                'min:9',
+                'regex:/^[0-9]+[A-Za-z]$/i',
+                Rule::unique('aspirantes')->ignore($request->id),
+            ],
+            'telefono' => 'required|string|max:9',
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('aspirantes')->ignore($request->id),
+            ],
         ]);
 
         $aspirante = new Aspirante([
@@ -70,7 +89,7 @@ class AspiranteController extends Controller
             Mail::to($aspirante->email)->send($mail);
         }
 
-        return redirect()->route('login')->with('success', 'Tu solicitud se ha mandado correctamente. ¡Gracias!');
+        return redirect()->route('login')->with('success', 'Tu solicitud se ha mandado correctamente, revisa su email para completar el registro. ¡Gracias!');
     }
 
     /**
@@ -161,7 +180,7 @@ class AspiranteController extends Controller
         return redirect()->route('login')->with('success', 'Tu registro en nuestro sistema se ha completado correctamente. ¡Gracias!');
     }
 
-        /**
+    /**
      * Metodo que mete en la plantilla de operarios a los trabajadores
      */
     public function ascenderAspirante(Aspirante $aspirante)

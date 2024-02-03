@@ -30,6 +30,15 @@ class UbicacionController extends Controller
      */
     public function store(StoreUbicacionRequest $request)
     {
+        // Validar si la ubicación ya existe
+        $existingUbicacion = Ubicacion::where('nombre', $request->input('nombre'))->first();
+
+        if ($existingUbicacion) {
+            // La ubicación ya existe, redireccionar con un mensaje de error
+            return redirect()->route('departamentos.index')->with('error', 'La ubicación ' . $request->input('nombre') . ' ya fue creada anteriormente.');
+        }
+
+
         $ubicacion = Ubicacion::create($request->all());
         return redirect()->route('ubicaciones.index')->with('success', 'La ubicación se ha creado correctamente.');
     }

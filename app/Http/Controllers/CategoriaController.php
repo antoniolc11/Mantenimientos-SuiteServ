@@ -30,7 +30,18 @@ class CategoriaController extends Controller
      */
     public function store(StoreCategoriaRequest $request)
     {
+        // Validar si la categoría ya existe
+        $existingCategoria = Categoria::where('nombre', $request->input('nombre'))->first();
+
+        if ($existingCategoria) {
+            // La categoría ya existe, redireccionar con un mensaje de error
+            return redirect()->route('categorias.index')->with('error', 'La categoría ya existe.');
+        }
+
+        // La categoría no existe, crearla
         $categorias = Categoria::create($request->all());
+
+        // Redireccionar con un mensaje de éxito
         return redirect()->route('categorias.index')->with('success', 'La categoría se ha creado correctamente.');
     }
 
@@ -58,6 +69,14 @@ class CategoriaController extends Controller
         $request->validate([
             'nombre' => 'required',
         ]);
+
+        // Validar si la categoría ya existe
+        $existingCategoria = Categoria::where('nombre', $request->input('nombre'))->first();
+
+        if ($existingCategoria) {
+            // La categoría ya existe, redireccionar con un mensaje de error
+            return redirect()->route('categorias.index')->with('error', 'La categoría ya existe.');
+        }
 
         $categoria->update($request->all());
 

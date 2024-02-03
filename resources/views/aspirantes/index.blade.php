@@ -34,7 +34,7 @@
                             </tr>
                         </thead>
 
-                        <tbody>
+                        <tbody class="text-left">
 
                             @if ($aspirantes->isEmpty())
                                 <tr>
@@ -225,6 +225,5 @@
             </div>
         </div>
     @endforeach
-
 
 </x-app-layout>

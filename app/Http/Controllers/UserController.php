@@ -7,6 +7,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\Aspirante;
 use App\Models\Departamento;
+use App\Models\Incidencia;
 use App\Models\User;
 use App\Notifications\UserRegistered;
 use Illuminate\Auth\Events\Registered;
@@ -16,6 +17,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
+
 
 class UserController extends Controller
 {
@@ -44,13 +47,26 @@ class UserController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        // Validar los datos enviados en la solicitud
         $request->validate([
             'nombre' => 'required|string|max:255',
             'primer_apellido' => 'required|string|max:255',
             'segundo_apellido' => 'nullable|string|max:255',
-            'nif' => 'required|string|max:9|min:9|regex:/^[0-9]+[A-Za-z]$/i',
+            'nif' => [
+                'required',
+                'string',
+                'max:9',
+                'min:9',
+                'regex:/^[0-9]+[A-Za-z]$/i',
+                Rule::unique('users')->ignore($request->id),
+            ],
             'telefono' => 'required|string|max:9',
-            'email' => 'required|email|max:255',
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('users')->ignore($request->id),
+            ],
             'departamento' => 'required|array',
             'departamento.*' => 'numeric',
         ]);
@@ -96,7 +112,6 @@ class UserController extends Controller
         if ($aspirante = Aspirante::where('nif', $usuario->nif)->first()) {
             $aspirante->delete();
             return redirect()->route('aspirantes.index')->with('success', 'El aspirante ha sido ascendido y notificado correctamente.');
-
         }
 
 
@@ -127,37 +142,92 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
+        // Validar los datos enviados en la solicitud
         $request->validate([
             'nombre' => 'required|string|max:255',
             'primer_apellido' => 'required|string|max:255',
             'segundo_apellido' => 'nullable|string|max:255',
-            'nif' => 'required|string|max:9|min:9|regex:/^[0-9]+[A-Za-z]$/i',
+            'nif' => [
+                'required',
+                'string',
+                'max:9',
+                'min:9',
+                'regex:/^[0-9]+[A-Za-z]$/i',
+                Rule::unique('users')->ignore($user->id),
+            ],
             'telefono' => 'required|string|max:9',
-            'email' => 'required|email|max:255',
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('users')->ignore($user->id),
+            ],
             'departamento' => 'required|array',
             'departamento.*' => 'numeric',
         ]);
 
 
+        // Obtener la URL de la página anterior y el ID del usuario
         $urlPaginaAnterior = strtolower(rtrim(url()->previous(), '/'));
-        $userId = $request->input('user_id');
-        $nuevosDatos = $request->only(['nombre', 'primer_apellido', 'segundo_apellido', 'telefono', 'email', 'nif']); // Obtener datos para actualizar nombre
-        $nuevosDepartamentos = $request->input('departamento'); // Obtener departamentos nuevos
+        //$userId = $request->input('user_id');
+
+
+
+        // Obtener los nuevos datos del usuario desde la solicitud
+        $nuevosDatos = $request->only(['nombre', 'primer_apellido', 'segundo_apellido', 'telefono', 'email', 'nif']);
+
+        // Obtener los nuevos departamentos asociados al usuario desde la solicitud
+        $nuevosDepartamentos = $request->input('departamento');
+
+        // Obtener el usuario que se va a actualizar
         $usuario = $user;
+
+        // Comprobar si se va a quitar al usuario de un departamento en el que tiene alguna incidencia asignada
+
+        // Obtener los departamentos actuales del usuario
+        $userdepart = $user->departamentos;
+
+        // Obtener los departamentos que se van a modificar según la solicitud
+        $departmodify = $request->departamento;
+
+        // Iterar sobre los departamentos actuales del usuario
+        foreach ($userdepart as $departamento) {
+
+            // Verificar si el departamento actual no está en la lista de departamentos a modificar
+            if (!in_array($departamento->id, $departmodify)) {
+
+                // Contar las incidencias asignadas al usuario en el departamento actual que no estén cerradas (estado_id <> 3)
+                $conteoIncidencias = Incidencia::where('usuario_asignado', $user->id)
+                    ->where('departamento_id', $departamento->id)
+                    ->where('estado_id', '<>', 3)
+                    ->count();
+
+                // Si hay incidencias pendientes en el departamento actual, mostrar un mensaje de error y redirigir a la página de edición de usuarios
+                if ($conteoIncidencias > 0) {
+                    return redirect()
+                        ->route('users.edit', $user->id)
+                        ->with('error', 'El usuario aún tiene incidencias pendientes en el departamento ' . $departamento->nombre . '. Debes reasignar las incidencias antes de quitar el departamento al usuario.');
+                }
+            }
+        }
+
+        // Si no hay incidencias pendientes, el código continúa su ejecución sin redirección.
+
+
         if ($usuario) {
-            // Actualizar el nombre del usuario
+
+            // Actualizar el nombre del usuario con los nuevos datos
             $usuario->update($nuevosDatos);
 
-            // Actualizar los departamentos asociados al usuario
-
-
+            // Actualizar los departamentos asociados al usuario utilizando la relación "sync"
             $usuario->departamentos()->sync($nuevosDepartamentos);
 
+            // Redireccionar a una página específica dependiendo de la página anterior
             if (str_contains($urlPaginaAnterior, 'profile')) {
-                // Redirecciona a un sitio específico si venías de perfil
+                // Redireccionar a la página de edición de perfil con un mensaje de éxito
                 return redirect()->route('profile.edit')->with('success', 'Tus datos han sido actualizados correctamente.');
             } else {
-                // En caso contrario, redirecciona a un sitio predeterminado
+                // Redireccionar a la página de índice de usuarios con un mensaje de éxito
                 return redirect()->route('users.index')->with('success', 'El usuario ha sido actualizado correctamente.');
             }
         }
