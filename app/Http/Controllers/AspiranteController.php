@@ -22,7 +22,7 @@ class AspiranteController extends Controller
      */
     public function index()
     {
-        $aspirantes = Aspirante::Paginate(5);
+        $aspirantes = Aspirante::orderBy('nombre')->paginate(5);
         return view('aspirantes.index', ['aspirantes' => $aspirantes]);
     }
 
